@@ -1,0 +1,99 @@
+.order-timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.order-timeline__step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.order-timeline__dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-muted);
+  color: var(--color-muted-foreground);
+  border: 2px solid var(--color-muted);
+  z-index: 1;
+  transition: background var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
+
+  .icon { width: 14px; height: 14px; }
+}
+
+.order-timeline__step.is-done .order-timeline__dot {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.order-timeline__step.is-current .order-timeline__dot {
+  background: #fff;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.order-timeline__step.is-cancelled .order-timeline__dot {
+  background: var(--color-destructive);
+  border-color: var(--color-destructive);
+  color: #fff;
+}
+
+.order-timeline__step::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--color-muted);
+  z-index: 0;
+}
+
+.order-timeline__step:first-child::before {
+  display: none;
+}
+
+.order-timeline__step.is-done::before {
+  background: var(--color-accent);
+}
+
+.order-timeline__label {
+  margin-top: var(--space-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted-foreground);
+}
+
+.order-timeline__step.is-done .order-timeline__label,
+.order-timeline__step.is-current .order-timeline__label {
+  color: var(--color-foreground);
+}
+
+.order-timeline__date {
+  font-size: 0.6875rem;
+  color: var(--color-muted-foreground);
+  margin-top: 2px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--color-muted);
+
+  &:last-child { border-bottom: none; }
+}
+
+.info-row__label {
+  color: var(--color-muted-foreground);
+}

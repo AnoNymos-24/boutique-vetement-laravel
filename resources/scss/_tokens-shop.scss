@@ -1,0 +1,57 @@
+// Design tokens boutique — synchronisés avec design-system/boutique-front-office/MASTER.md
+// Palette distincte du back-office (voir _tokens.scss) : chaleureuse, éditoriale, orientée mode.
+
+:root {
+  // Couleurs
+  --shop-color-primary: #be185d;
+  --shop-color-primary-hover: #9d174d;
+  --shop-color-on-primary: #ffffff;
+  --shop-color-secondary: #ec4899;
+  --shop-color-accent: #d97706;
+  --shop-color-accent-hover: #b45309;
+  --shop-color-on-accent: #ffffff;
+  --shop-color-background: #fdf2f8;
+  --shop-color-foreground: #0f172a;
+  --shop-color-muted: #fbf1f5;
+  --shop-color-muted-foreground: #64748b;
+  --shop-color-border: #f7e3eb;
+  --shop-color-card: #ffffff;
+  --shop-color-destructive: #dc2626;
+  --shop-color-ring: #be185d;
+
+  // Typographie
+  --shop-font-display: 'Playfair Display', Georgia, serif;
+  --shop-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --shop-font-mono: 'Fira Code', 'Courier New', monospace;
+
+  // Espacement (densité 3/10 — spacieux)
+  --shop-space-xs: 0.25rem;
+  --shop-space-sm: 0.5rem;
+  --shop-space-md: 1rem;
+  --shop-space-lg: 1.5rem;
+  --shop-space-xl: 2.5rem;
+  --shop-space-2xl: 4rem;
+  --shop-space-3xl: 6rem;
+
+  // Rayons — plus doux qu'en admin, cohérent avec l'ambiance boutique
+  --shop-radius-sm: 8px;
+  --shop-radius-md: 12px;
+  --shop-radius-lg: 20px;
+  --shop-radius-pill: 999px;
+
+  // Ombres
+  --shop-shadow-sm: 0 1px 2px rgba(190, 24, 93, 0.06);
+  --shop-shadow-md: 0 4px 16px rgba(190, 24, 93, 0.08);
+  --shop-shadow-lg: 0 12px 32px rgba(190, 24, 93, 0.14);
+  --shop-shadow-xl: 0 24px 48px rgba(190, 24, 93, 0.18);
+
+  // Mouvement
+  --shop-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --shop-duration-fast: 180ms;
+  --shop-duration-base: 260ms;
+  --shop-duration-slow: 420ms;
+
+  // Layout
+  --shop-header-height: 72px;
+  --shop-content-max: 1280px;
+}

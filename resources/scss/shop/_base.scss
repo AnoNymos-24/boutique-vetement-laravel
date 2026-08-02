@@ -1,0 +1,124 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body.shop {
+  margin: 0;
+  background: var(--shop-color-background);
+  color: var(--shop-color-foreground);
+  font-family: var(--shop-font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.shop h1, body.shop h2, body.shop h3, body.shop h4, body.shop p, body.shop figure {
+  margin: 0;
+}
+
+body.shop ul, body.shop ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body.shop a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body.shop button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+body.shop input, body.shop select, body.shop textarea {
+  font: inherit;
+  color: inherit;
+}
+
+body.shop img, body.shop svg {
+  display: block;
+  max-width: 100%;
+}
+
+body.shop :focus-visible {
+  outline: 2px solid var(--shop-color-ring);
+  outline-offset: 2px;
+}
+
+body.shop [x-cloak] {
+  display: none !important;
+}
+
+.shop-h1 {
+  font-family: var(--shop-font-display);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.shop-h2 {
+  font-family: var(--shop-font-display);
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.shop-h3 {
+  font-family: var(--shop-font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.shop-eyebrow {
+  font-family: var(--shop-font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--shop-color-primary);
+}
+
+.shop-price {
+  font-family: var(--shop-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.shop-text-muted {
+  color: var(--shop-color-muted-foreground);
+}
+
+.shop-container {
+  max-width: var(--shop-content-max);
+  margin: 0 auto;
+  padding: 0 var(--shop-space-lg);
+}
+
+@media (max-width: 640px) {
+  .shop-container {
+    padding: 0 var(--shop-space-md);
+  }
+}

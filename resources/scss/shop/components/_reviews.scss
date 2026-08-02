@@ -1,0 +1,60 @@
+// Réutilise le composant Blade <x-star-rating> (classe .star-rating), restylé aux tokens boutique.
+.star-rating {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star-rating__star {
+  width: 16px;
+  height: 16px;
+  color: var(--shop-color-border);
+
+  &.is-filled {
+    color: var(--shop-color-accent);
+  }
+}
+
+.shop-review-card {
+  padding: var(--shop-space-lg);
+  background: #fff;
+  border-radius: var(--shop-radius-lg);
+  box-shadow: var(--shop-shadow-sm);
+}
+
+.shop-review-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--shop-space-sm);
+}
+
+.shop-review-card__author {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.shop-review-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--shop-color-primary);
+  background: var(--shop-color-muted);
+  padding: 0.1875rem 0.5rem;
+  border-radius: var(--shop-radius-pill);
+
+  svg { width: 12px; height: 12px; }
+}
+
+.shop-review-card__comment {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin-top: var(--shop-space-sm);
+}
+
+.shop-review-card__date {
+  font-size: 0.75rem;
+  color: var(--shop-color-muted-foreground);
+  margin-top: var(--shop-space-sm);
+}

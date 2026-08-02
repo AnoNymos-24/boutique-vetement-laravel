@@ -1,0 +1,22 @@
+// Réutilise le composant Blade <x-modal> (classes .modal-overlay/.modal-panel), restylé aux tokens boutique.
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--shop-space-xl);
+  z-index: 100;
+}
+
+.modal-panel {
+  background: #fff;
+  border-radius: var(--shop-radius-lg);
+  box-shadow: var(--shop-shadow-xl);
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+}

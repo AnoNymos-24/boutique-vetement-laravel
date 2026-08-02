@@ -1,0 +1,18 @@
+@use 'tokens-shop';
+
+@use 'shop/base';
+
+@use 'shop/components/buttons';
+@use 'shop/components/header';
+@use 'shop/components/product-card';
+@use 'shop/components/forms';
+@use 'shop/components/gallery';
+@use 'shop/components/catalog';
+@use 'shop/components/account';
+@use 'shop/components/modal';
+@use 'shop/components/auth';
+@use 'shop/components/cart';
+@use 'shop/components/timeline';
+@use 'shop/components/reviews';
+
+@use 'shop/utilities';

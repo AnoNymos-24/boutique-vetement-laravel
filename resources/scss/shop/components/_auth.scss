@@ -1,0 +1,16 @@
+.auth-overlay {
+  min-height: calc(100vh - var(--shop-header-height) - 240px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--shop-space-2xl) var(--shop-space-lg);
+}
+
+.auth-overlay__card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: var(--shop-radius-lg);
+  box-shadow: var(--shop-shadow-xl);
+  padding: var(--shop-space-2xl);
+}

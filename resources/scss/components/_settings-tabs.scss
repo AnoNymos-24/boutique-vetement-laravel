@@ -1,0 +1,30 @@
+.settings-tabs {
+  display: flex;
+  gap: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-2xl);
+}
+
+.settings-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted-foreground);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+
+  .icon { width: 16px; height: 16px; }
+
+  &:hover {
+    color: var(--color-foreground);
+  }
+
+  &.is-active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+}

@@ -1,0 +1,169 @@
+.shop-field {
+  margin-bottom: var(--shop-space-lg);
+}
+
+.shop-label {
+  display: block;
+  margin-bottom: var(--shop-space-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--shop-color-foreground);
+}
+
+.shop-input,
+.shop-select,
+.shop-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1px solid var(--shop-color-border);
+  border-radius: var(--shop-radius-md);
+  font-size: 0.9375rem;
+  color: var(--shop-color-foreground);
+  transition: border-color var(--shop-duration-fast) var(--shop-ease-out),
+              box-shadow var(--shop-duration-fast) var(--shop-ease-out);
+
+  &::placeholder {
+    color: var(--shop-color-muted-foreground);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--shop-color-primary);
+    box-shadow: 0 0 0 3px rgba(190, 24, 93, 0.1);
+  }
+
+  &.has-error {
+    border-color: var(--shop-color-destructive);
+  }
+}
+
+.shop-error,
+.form-error {
+  margin-top: var(--shop-space-sm);
+  font-size: 0.8125rem;
+  color: var(--shop-color-destructive);
+}
+
+.shop-hint {
+  margin-top: var(--shop-space-sm);
+  font-size: 0.8125rem;
+  color: var(--shop-color-muted-foreground);
+}
+
+// Sélecteur de variante (taille / couleur) — pilotes par le vrai stock
+.variant-picker {
+  margin-bottom: var(--shop-space-lg);
+}
+
+.variant-picker__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--shop-space-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.variant-picker__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--shop-space-sm);
+}
+
+.variant-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--shop-space-xs);
+  padding: 0.625rem 1.125rem;
+  border-radius: var(--shop-radius-pill);
+  border: 1.5px solid var(--shop-color-border);
+  background: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--shop-duration-fast) var(--shop-ease-out);
+
+  &:hover:not(:disabled) {
+    border-color: var(--shop-color-primary);
+  }
+
+  &.is-selected {
+    background: var(--shop-color-primary);
+    border-color: var(--shop-color-primary);
+    color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+}
+
+// Étapes du tunnel de commande
+.checkout-steps {
+  display: flex;
+  align-items: center;
+  gap: var(--shop-space-sm);
+  margin-bottom: var(--shop-space-xl);
+}
+
+.checkout-step {
+  display: flex;
+  align-items: center;
+  gap: var(--shop-space-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--shop-color-muted-foreground);
+}
+
+.checkout-step__index {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--shop-color-muted);
+  color: var(--shop-color-muted-foreground);
+  font-size: 0.75rem;
+}
+
+.checkout-step.is-active {
+  color: var(--shop-color-primary);
+
+  .checkout-step__index {
+    background: var(--shop-color-primary);
+    color: #fff;
+  }
+}
+
+.checkout-step.is-done .checkout-step__index {
+  background: var(--shop-color-accent);
+  color: #fff;
+}
+
+.checkout-step__sep {
+  width: 24px;
+  height: 1.5px;
+  background: var(--shop-color-border);
+}
+
+.payment-method-card {
+  display: flex;
+  align-items: center;
+  gap: var(--shop-space-md);
+  padding: var(--shop-space-md) var(--shop-space-lg);
+  border-radius: var(--shop-radius-md);
+  border: 1.5px solid var(--shop-color-border);
+  cursor: pointer;
+  transition: border-color var(--shop-duration-fast) var(--shop-ease-out);
+
+  input { position: absolute; opacity: 0; }
+
+  &:has(input:checked) {
+    border-color: var(--shop-color-primary);
+    background: var(--shop-color-muted);
+  }
+}

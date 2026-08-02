@@ -1,0 +1,81 @@
+// Les pages d'auth sortent volontairement du style "dense dashboard" :
+// c'est le premier contact, on peut se permettre plus de respiration.
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 960px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.auth-shell__panel {
+  display: none;
+  background: linear-gradient(160deg, var(--color-foreground) 0%, #1e293b 55%, var(--color-primary) 100%);
+  color: #fff;
+  padding: var(--space-3xl);
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+
+  @media (min-width: 960px) {
+    display: flex;
+  }
+}
+
+.auth-shell__panel::before {
+  content: '';
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(5, 150, 105, 0.35), transparent 70%);
+  top: -160px;
+  right: -160px;
+}
+
+.auth-shell__quote {
+  max-width: 380px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  position: relative;
+}
+
+.auth-shell__form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  padding: var(--space-3xl);
+}
+
+.auth-card__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-2xl);
+}
+
+.auth-card__title {
+  margin-bottom: var(--space-lg);
+}
+
+.auth-card__subtitle {
+  color: var(--color-muted-foreground);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-2xl);
+}
+
+.auth-card__footer {
+  margin-top: var(--space-2xl);
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--color-muted-foreground);
+}

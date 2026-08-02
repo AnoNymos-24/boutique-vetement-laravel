@@ -1,0 +1,102 @@
+.topbar {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: 0 var(--space-2xl);
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.topbar__menu-btn {
+  display: none;
+  padding: var(--space-sm);
+  color: var(--color-muted-foreground);
+
+  .icon { width: 20px; height: 20px; }
+}
+
+@media (max-width: 900px) {
+  .topbar__menu-btn { display: inline-flex; }
+}
+
+.topbar__search {
+  flex: 1;
+  max-width: 360px;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-left: auto;
+}
+
+.icon-btn {
+  position: relative;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  color: var(--color-muted-foreground);
+  transition: background var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+
+  &:hover {
+    background: var(--color-muted);
+    color: var(--color-foreground);
+  }
+
+  .icon { width: 19px; height: 19px; }
+}
+
+.icon-btn__dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-destructive);
+  border: 2px solid var(--color-card);
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: background var(--duration-fast) var(--ease-out);
+
+  &:hover {
+    background: var(--color-muted);
+  }
+}
+
+.user-menu-trigger__info {
+  text-align: left;
+  line-height: 1.25;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .user-menu-trigger__info { display: block; }
+}
+
+.user-menu-trigger__name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.user-menu-trigger__role {
+  font-size: 0.7rem;
+  color: var(--color-muted-foreground);
+}
+
+.user-menu-trigger .icon {
+  width: 15px;
+  height: 15px;
+  color: var(--color-muted-foreground);
+  flex-shrink: 0;
+}

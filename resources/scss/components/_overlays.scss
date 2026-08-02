@@ -1,0 +1,129 @@
+// Dropdown
+.dropdown {
+  position: relative;
+}
+
+.dropdown-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 200px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-sm);
+  z-index: 40;
+  transform-origin: top right;
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  text-align: left;
+  color: var(--color-foreground);
+  transition: background var(--duration-fast) var(--ease-out);
+
+  &:hover {
+    background: var(--color-muted);
+  }
+
+  .icon { width: 16px; height: 16px; color: var(--color-muted-foreground); }
+}
+
+// Modal
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  z-index: 100;
+}
+
+.modal-panel {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+// Bandeau de statut (ex: "Lien de vérification envoyé")
+.status-banner {
+  padding: var(--space-lg) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--color-success-bg);
+  color: var(--color-success-fg);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.status-banner--error {
+  background: var(--color-destructive-bg);
+  color: var(--color-destructive-fg);
+}
+
+// Toast
+.toast-stack {
+  position: fixed;
+  bottom: var(--space-2xl);
+  right: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  z-index: 200;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--color-foreground);
+  color: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.875rem;
+  min-width: 260px;
+
+  .icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--color-accent); }
+  &.toast--error .icon { color: #f87171; }
+}
+
+// Skeleton loading
+.skeleton {
+  background: linear-gradient(90deg, var(--color-muted) 25%, rgba(226, 232, 240, 0.6) 37%, var(--color-muted) 63%);
+  background-size: 400% 100%;
+  border-radius: var(--radius-sm);
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  flex-shrink: 0;
+}

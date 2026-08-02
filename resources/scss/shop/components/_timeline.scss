@@ -1,0 +1,101 @@
+.shop-timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.shop-timeline__step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.shop-timeline__dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--shop-color-muted);
+  color: var(--shop-color-muted-foreground);
+  border: 2px solid var(--shop-color-muted);
+  z-index: 1;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  transition: all var(--shop-duration-base) var(--shop-ease-out);
+
+  svg { width: 15px; height: 15px; }
+}
+
+.shop-timeline__step.is-done .shop-timeline__dot {
+  background: var(--shop-color-primary);
+  border-color: var(--shop-color-primary);
+  color: #fff;
+}
+
+.shop-timeline__step.is-current .shop-timeline__dot {
+  background: #fff;
+  border-color: var(--shop-color-primary);
+  color: var(--shop-color-primary);
+}
+
+.shop-timeline__step.is-cancelled .shop-timeline__dot {
+  background: var(--shop-color-destructive);
+  border-color: var(--shop-color-destructive);
+  color: #fff;
+}
+
+.shop-timeline__step::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--shop-color-muted);
+  z-index: 0;
+}
+
+.shop-timeline__step:first-child::before {
+  display: none;
+}
+
+.shop-timeline__step.is-done::before {
+  background: var(--shop-color-primary);
+}
+
+.shop-timeline__label {
+  margin-top: var(--shop-space-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--shop-color-muted-foreground);
+}
+
+.shop-timeline__step.is-done .shop-timeline__label,
+.shop-timeline__step.is-current .shop-timeline__label {
+  color: var(--shop-color-foreground);
+}
+
+.shop-timeline__date {
+  font-size: 0.6875rem;
+  color: var(--shop-color-muted-foreground);
+  margin-top: 2px;
+}
+
+.shop-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--shop-space-sm) 0;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--shop-color-border);
+
+  &:last-child { border-bottom: none; }
+}
+
+.shop-info-row__label {
+  color: var(--shop-color-muted-foreground);
+}
