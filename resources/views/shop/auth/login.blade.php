@@ -1,4 +1,4 @@
-<x-shop.auth-card>
+<x-shop.auth-card quote="Contente de vous revoir.">
     <h1 class="shop-h3" style="margin-bottom: var(--shop-space-xs);">Connexion</h1>
     <p class="shop-text-muted" style="font-size:0.875rem; margin-bottom: var(--shop-space-lg);">Accédez à votre compte client.</p>
 

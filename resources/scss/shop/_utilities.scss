@@ -23,16 +23,16 @@ body.shop [data-reveal] {
 .shop-status-banner {
   padding: var(--shop-space-md) var(--shop-space-lg);
   border-radius: var(--shop-radius-md);
-  background: #ecfdf5;
-  color: #047857;
+  background: var(--shop-color-success-bg);
+  color: var(--shop-color-success-fg);
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: var(--shop-space-lg);
 }
 
 .shop-status-banner--error {
-  background: #fef2f2;
-  color: #b91c1c;
+  background: var(--shop-color-error-bg);
+  color: var(--shop-color-error-fg);
 }
 
 .shop-badge {
@@ -45,6 +45,6 @@ body.shop [data-reveal] {
   font-weight: 600;
 }
 
-.shop-badge--success { background: #ecfdf5; color: #047857; }
-.shop-badge--warning { background: #fffbeb; color: #b45309; }
+.shop-badge--success { background: var(--shop-color-success-bg); color: var(--shop-color-success-fg); }
+.shop-badge--warning { background: var(--shop-color-warning-bg); color: var(--shop-color-warning-fg); }
 .shop-badge--muted { background: var(--shop-color-muted); color: var(--shop-color-muted-foreground); }

@@ -16,6 +16,7 @@
             ['route' => 'clients', 'icon' => 'users', 'label' => 'Clients'],
             ['route' => 'reviews', 'icon' => 'star', 'label' => 'Avis'],
             ['route' => 'marketing', 'icon' => 'megaphone', 'label' => 'Marketing'],
+            ['route' => 'banners.index', 'icon' => 'image', 'label' => 'Bannières'],
         ],
     ];
 

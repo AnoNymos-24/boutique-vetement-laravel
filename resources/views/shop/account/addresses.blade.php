@@ -1,7 +1,12 @@
 <x-shop-layout>
     <div class="shop-container" style="padding: var(--shop-space-lg) var(--shop-space-lg) var(--shop-space-3xl);">
         <x-shop.account-layout active="addresses">
-            <div class="account-card">
+            <div style="margin-bottom: var(--shop-space-lg);" data-reveal>
+                <p class="shop-eyebrow">Livraison</p>
+                <p class="shop-text-muted">Gérez les adresses utilisées à la commande.</p>
+            </div>
+
+            <div class="account-card shop-card" data-reveal>
                 <h3 class="shop-h3" style="margin-bottom: var(--shop-space-md);">Mes adresses</h3>
 
                 @forelse ($addresses as $address)
@@ -35,7 +40,7 @@
                 @endforelse
             </div>
 
-            <div class="account-card">
+            <div class="account-card shop-card" data-reveal>
                 <h3 class="shop-h3" style="margin-bottom: var(--shop-space-md);">Ajouter une adresse</h3>
 
                 <form method="POST" action="{{ route('customer.addresses.store') }}">

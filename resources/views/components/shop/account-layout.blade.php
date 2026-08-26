@@ -16,9 +16,10 @@
 </div>
 
 <div class="account-layout" data-reveal>
-    <nav class="account-nav">
+    <nav class="account-nav shop-card">
         @foreach ($navItems as $key => $item)
             <a href="{{ $item['route'] }}" class="account-nav__item {{ $active === $key ? 'is-active' : '' }}">
+                <span class="account-nav__indicator"></span>
                 <x-icon :name="$item['icon']" /> {{ $item['label'] }}
             </a>
         @endforeach

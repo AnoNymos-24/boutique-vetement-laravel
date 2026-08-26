@@ -1,9 +1,36 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
-import { revealOnLoad } from './modules/motion';
+import { initReveals, revealGrid, initCounters, celebrate } from './modules/motion';
 
 Alpine.data('mobileFilters', () => ({
     open: false,
+}));
+
+Alpine.data('mobileNav', () => ({
+    open: false,
+}));
+
+Alpine.data('bannerCarousel', (count = 1) => ({
+    active: 0,
+    count,
+    timer: null,
+
+    init() {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (this.count > 1 && !reduceMotion) this.start();
+    },
+
+    start() {
+        this.timer = setInterval(() => {
+            this.active = (this.active + 1) % this.count;
+        }, 6000);
+    },
+
+    go(index) {
+        this.active = index;
+        clearInterval(this.timer);
+        this.start();
+    },
 }));
 
 Alpine.data('accordion', () => ({
@@ -96,5 +123,8 @@ window.Alpine = Alpine;
 Alpine.start();
 
 document.addEventListener('DOMContentLoaded', () => {
-    revealOnLoad();
+    initReveals();
+    initCounters();
+    document.querySelectorAll('.product-grid, .wishlist-grid, .shop-category-grid, .shop-review-grid').forEach(revealGrid);
+    celebrate(document.getElementById('order-confirmation-celebrate'));
 });

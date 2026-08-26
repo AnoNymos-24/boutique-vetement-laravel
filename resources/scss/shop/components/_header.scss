@@ -1,17 +1,60 @@
+.shop-announcement {
+  background: var(--shop-color-primary);
+  color: var(--shop-color-on-primary);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.5rem var(--shop-space-md);
+}
+
 .shop-header {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(253, 242, 248, 0.92);
+  background: rgba(13, 13, 13, 0.85);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--shop-color-border);
 }
 
 .shop-header__bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: var(--shop-space-lg);
   height: var(--shop-header-height);
+}
+
+.shop-header__menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: calc(-1 * var(--shop-space-sm));
+  border-radius: 50%;
+  color: var(--shop-color-foreground);
+  transition: background var(--shop-duration-fast) var(--shop-ease-out);
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--shop-color-muted);
+  }
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (max-width: 860px) {
+    display: inline-flex;
+  }
+}
+
+.shop-header__left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 .shop-header__brand {
@@ -31,11 +74,15 @@
   object-fit: contain;
 }
 
-.shop-header__nav {
+// Deuxième ligne du header : navigation centrée sous la barre logo/recherche/icônes.
+.shop-header__nav-row {
   display: flex;
   align-items: center;
-  gap: var(--shop-space-lg);
-  margin-left: var(--shop-space-lg);
+  justify-content: center;
+  gap: var(--shop-space-xl);
+  padding-top: 0.625rem;
+  padding-bottom: var(--shop-space-md);
+  border-top: 1px solid var(--shop-color-border);
 
   a {
     font-size: 0.9375rem;
@@ -54,23 +101,23 @@
 }
 
 .shop-header__search {
-  flex: 1;
-  max-width: 360px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
   position: relative;
-  margin-left: auto;
 
   input {
     width: 100%;
     padding: 0.625rem 0.875rem 0.625rem 2.5rem;
     border-radius: var(--shop-radius-pill);
     border: 1px solid var(--shop-color-border);
-    background: #fff;
+    background: var(--shop-color-card);
     font-size: 0.875rem;
 
     &:focus {
       outline: none;
       border-color: var(--shop-color-primary);
-      box-shadow: 0 0 0 3px rgba(190, 24, 93, 0.1);
+      box-shadow: var(--shop-shadow-ring);
     }
   }
 
@@ -100,8 +147,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   color: var(--shop-color-foreground);
   transition: background var(--shop-duration-fast) var(--shop-ease-out);
@@ -135,8 +182,8 @@
 
 .shop-footer {
   margin-top: var(--shop-space-3xl);
-  background: #fff;
-  border-top: 1px solid var(--shop-color-border);
+  background: var(--shop-color-muted);
+  border-top: 2px solid var(--shop-color-foreground);
   padding: var(--shop-space-2xl) 0;
 }
 
@@ -152,9 +199,10 @@
 
 .shop-footer__brand {
   font-family: var(--shop-font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--shop-color-primary);
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--shop-color-foreground);
   margin-bottom: var(--shop-space-sm);
 }
 
@@ -175,8 +223,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--shop-color-muted);
   color: var(--shop-color-primary);
@@ -215,4 +263,104 @@
   border-top: 1px solid var(--shop-color-border);
   font-size: 0.8125rem;
   color: var(--shop-color-muted-foreground);
+}
+
+// Tiroir de navigation mobile — panneau plein écran ancré à gauche (menu,
+// pas un filtre) : se distingue du bottom-sheet des filtres catalogue.
+.mobile-nav-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--shop-color-scrim);
+}
+
+.mobile-nav-sheet__panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  overflow-y: auto;
+  background: var(--shop-color-card);
+  padding: var(--shop-space-lg);
+  padding-bottom: calc(var(--shop-space-lg) + env(safe-area-inset-bottom));
+  box-shadow: var(--shop-shadow-xl);
+}
+
+// Transition d'ouverture du tiroir : le panneau glisse depuis le haut pendant
+// que le scrim (voir x-transition.opacity sur .mobile-nav-sheet) s'estompe —
+// pour que ça se lise comme une vraie superposition, pas un à-coup brutal.
+.shop-drawer-enter {
+  transition: transform 280ms var(--shop-ease-out);
+}
+
+.shop-drawer-enter-start {
+  transform: translateY(-100%);
+}
+
+.shop-drawer-leave {
+  transition: transform 200ms var(--shop-ease-out);
+}
+
+.shop-drawer-leave-end {
+  transform: translateY(-100%);
+}
+
+.mobile-nav-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--shop-space-lg);
+}
+
+.mobile-nav-sheet__search {
+  position: relative;
+  margin-bottom: var(--shop-space-lg);
+
+  input {
+    width: 100%;
+    padding: 0.75rem 0.875rem 0.75rem 2.5rem;
+    border-radius: var(--shop-radius-pill);
+    border: 1px solid var(--shop-color-border);
+    background: var(--shop-color-background);
+    font-size: 1rem;
+    color: var(--shop-color-foreground);
+
+    &:focus {
+      outline: none;
+      border-color: var(--shop-color-primary);
+      box-shadow: var(--shop-shadow-ring);
+    }
+  }
+
+  svg {
+    position: absolute;
+    left: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--shop-color-muted-foreground);
+  }
+}
+
+.mobile-nav-sheet__links {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    padding: var(--shop-space-md) var(--shop-space-sm);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--shop-color-foreground);
+    border-bottom: 1px solid var(--shop-color-border);
+
+    &:hover {
+      color: var(--shop-color-primary);
+    }
+  }
 }

@@ -1,11 +1,11 @@
 <x-shop-layout>
     <div class="shop-container" style="padding: var(--shop-space-2xl) var(--shop-space-lg) var(--shop-space-3xl); max-width: 720px;">
-        <div style="text-align:center; margin-bottom: var(--shop-space-2xl);" data-reveal>
-            <div style="width:72px; height:72px; border-radius:50%; background: var(--shop-color-muted); display:flex; align-items:center; justify-content:center; margin: 0 auto var(--shop-space-lg);">
-                <x-icon name="check" style="width:32px;height:32px; color:var(--shop-color-primary);" />
+        <div id="order-confirmation-celebrate" style="text-align:center; margin-bottom: var(--shop-space-2xl);">
+            <div data-celebrate-badge style="width:72px; height:72px; border-radius:50%; background: var(--shop-color-primary); display:flex; align-items:center; justify-content:center; margin: 0 auto var(--shop-space-lg); opacity:0;">
+                <x-icon name="check" style="width:32px;height:32px; color:#fff;" />
             </div>
-            <h1 class="shop-h1" style="font-size:2rem;">Merci pour votre commande !</h1>
-            <p class="shop-text-muted" style="margin-top: var(--shop-space-sm);">
+            <h1 class="shop-h1" style="font-size:2rem; opacity:0;" data-celebrate-item>Merci pour votre commande !</h1>
+            <p class="shop-text-muted" style="margin-top: var(--shop-space-sm); opacity:0;" data-celebrate-item>
                 Commande <strong>{{ $order->order_number }}</strong> enregistrée. Nous vérifions votre paiement et vous tiendrons informée par téléphone.
             </p>
         </div>
@@ -15,7 +15,7 @@
             @foreach ($order->items as $item)
                 <div class="shop-info-row">
                     <span class="shop-info-row__label">{{ $item->product_name }} @if ($item->variant_label) ({{ $item->variant_label }}) @endif × {{ $item->quantity }}</span>
-                    <span class="cart-summary__value">{{ number_format($item->subtotal / 100, 2, ',', ' ') }} €</span>
+                    <span class="cart-summary__value">{{ number_format($item->subtotal / 100, 3, ',', ' ') }} DT</span>
                 </div>
             @endforeach
             <div class="cart-summary__row cart-summary__row--total">

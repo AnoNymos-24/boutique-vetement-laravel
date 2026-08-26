@@ -1,37 +1,78 @@
 <x-shop-layout>
-    <section class="shop-container" style="padding: var(--shop-space-2xl) var(--shop-space-lg) var(--shop-space-3xl);">
-        <div style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--shop-space-2xl); align-items:center;" data-reveal>
-            <div>
-                <p class="shop-eyebrow">Nouvelle collection</p>
-                <h1 class="shop-h1" style="margin-top: var(--shop-space-sm);">Des pièces choisies pour vous accompagner, saison après saison.</h1>
-                <p class="shop-text-muted" style="font-size:1.0625rem; margin-top: var(--shop-space-md); max-width: 42ch;">
-                    Vêtements et accessoires sélectionnés avec soin, en tailles et couleurs variées, livrés où que vous soyez via Orange Money ou Wave.
-                </p>
-                <a href="{{ route('shop.catalog') }}" class="shop-btn shop-btn--primary" style="margin-top: var(--shop-space-xl);">
-                    Découvrir la boutique <x-icon name="arrow-right" />
-                </a>
+    @if ($banners->isNotEmpty())
+        <section class="shop-banner-hero" x-data="bannerCarousel({{ $banners->count() }})" data-reveal>
+            <div class="shop-banner-hero__viewport">
+                @foreach ($banners as $index => $banner)
+                    <div class="shop-banner-hero__slide" x-show="active === {{ $index }}" x-cloak
+                         x-transition.opacity.duration.500ms
+                         style="background-image: url('{{ $banner->imageUrl() }}');">
+                        <div class="shop-banner-hero__overlay"></div>
+                        <div class="shop-container">
+                            <div class="shop-banner-hero__content">
+                                @if ($banner->promo_text)
+                                    <span class="shop-banner-hero__promo">{{ $banner->promo_text }}</span>
+                                @endif
+                                <h1 class="shop-banner-hero__title">{{ $banner->title }}</h1>
+                                @if ($banner->subtitle)
+                                    <p class="shop-banner-hero__subtitle">{{ $banner->subtitle }}</p>
+                                @endif
+                                @if ($banner->button_text)
+                                    <a href="{{ $banner->button_link ?: route('shop.catalog') }}" class="shop-btn shop-btn--primary shop-banner-hero__cta">
+                                        {{ $banner->button_text }} <x-icon name="arrow-right" />
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
 
-            @if ($newArrivals->first()?->images->first())
-                <div style="aspect-ratio: 4/5; border-radius: var(--shop-radius-lg); overflow:hidden; box-shadow: var(--shop-shadow-xl);">
-                    <img src="{{ $newArrivals->first()->images->first()->url() }}" alt="" style="width:100%; height:100%; object-fit:cover;">
+            @if ($banners->count() > 1)
+                <div class="shop-banner-hero__dots">
+                    @foreach ($banners as $index => $banner)
+                        <button type="button" class="shop-banner-hero__dot" :class="{ 'is-active': active === {{ $index }} }"
+                                @click="go({{ $index }})" aria-label="Bannière {{ $index + 1 }} sur {{ $banners->count() }}"></button>
+                    @endforeach
                 </div>
             @endif
-        </div>
-    </section>
+        </section>
+    @else
+        <section class="shop-container shop-hero">
+            <div class="shop-hero__grid" data-reveal>
+                <div>
+                    <p class="shop-eyebrow">Nouvelle collection</p>
+                    <h1 class="shop-hero__title">Des pièces choisies pour vous accompagner, saison après saison.</h1>
+                    <p class="shop-text-muted shop-hero__lede">
+                        Vêtements et accessoires sélectionnés avec soin, en tailles et couleurs variées, livrés où que vous soyez via Orange Money ou Wave.
+                    </p>
+                    <a href="{{ route('shop.catalog') }}" class="shop-btn shop-btn--primary shop-hero__cta">
+                        Découvrir la boutique <x-icon name="arrow-right" />
+                    </a>
+                </div>
+
+                @if ($newArrivals->first()?->images->first())
+                    <div class="shop-hero__media">
+                        <div class="shop-hero__media-frame">
+                            <img src="{{ $newArrivals->first()->images->first()->url() }}" alt="">
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </section>
+    @endif
 
     @if ($categories->isNotEmpty())
-        <section class="shop-container" style="padding-bottom: var(--shop-space-3xl);">
+        <section class="shop-container shop-section">
             <h2 class="shop-h2" data-reveal style="margin-bottom: var(--shop-space-lg);">Catégories</h2>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--shop-space-md);">
+            <div class="shop-category-grid">
                 @foreach ($categories as $category)
-                    <a href="{{ route('shop.catalog.category', $category) }}" data-reveal
-                       style="position:relative; aspect-ratio: 1; border-radius: var(--shop-radius-lg); overflow:hidden; display:flex; align-items:flex-end; background: var(--shop-color-muted);">
+                    <a href="{{ route('shop.catalog.category', $category) }}" class="shop-category-tile">
                         @if ($category->cover)
-                            <img src="{{ $category->cover }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+                            <img src="{{ $category->cover }}" alt="" class="shop-category-tile__image">
                         @endif
-                        <span style="position:relative; z-index:1; width:100%; padding: var(--shop-space-md); background: linear-gradient(to top, rgba(15,23,42,.55), transparent); color:#fff; font-weight:600;">
-                            {{ $category->name }}
+                        <span class="shop-category-tile__label">
+                            <span class="shop-category-tile__name">{{ $category->name }}</span>
+                            <span class="shop-category-tile__cta">Découvrir <x-icon name="arrow-right" /></span>
                         </span>
                     </a>
                 @endforeach
@@ -40,7 +81,7 @@
     @endif
 
     @if ($newArrivals->isNotEmpty())
-        <section class="shop-container" style="padding-bottom: var(--shop-space-3xl);">
+        <section class="shop-container shop-section">
             <div class="shop-flex shop-justify-between shop-items-center" style="margin-bottom: var(--shop-space-lg);" data-reveal>
                 <h2 class="shop-h2">Nouveautés</h2>
                 <a href="{{ route('shop.catalog') }}" class="shop-btn shop-btn--secondary shop-btn--sm">Tout voir</a>
@@ -54,11 +95,11 @@
     @endif
 
     @if ($reviews->isNotEmpty())
-        <section class="shop-container" style="padding-bottom: var(--shop-space-3xl);">
+        <section class="shop-container shop-section">
             <h2 class="shop-h2" data-reveal style="margin-bottom: var(--shop-space-lg);">Elles nous font confiance</h2>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--shop-space-lg);">
+            <div class="shop-review-grid">
                 @foreach ($reviews as $review)
-                    <div class="shop-review-card" data-reveal>
+                    <div class="shop-review-card shop-card">
                         <div class="shop-review-card__header">
                             <span class="shop-review-card__author">{{ $review->author_name }}</span>
                             <x-star-rating :rating="$review->rating" />
@@ -71,10 +112,10 @@
         </section>
     @endif
 
-    <section style="background: var(--shop-color-primary); color:#fff; padding: var(--shop-space-2xl) 0; margin-top: var(--shop-space-xl);">
-        <div class="shop-container" style="text-align:center;" data-reveal>
+    <section class="shop-cta-banner" style="--shop-cta-word: '{{ Str::upper($storeName ?? 'INA') }}';">
+        <div class="shop-container shop-cta-banner__content" data-reveal>
             <h2 class="shop-h2" style="color:#fff;">Prête à renouveler votre garde-robe ?</h2>
-            <p style="opacity:.85; margin-top: var(--shop-space-sm);">Livraison partout, paiement Orange Money ou Wave.</p>
+            <p class="shop-cta-banner__lede">Livraison partout, paiement Orange Money ou Wave.</p>
             <a href="{{ route('shop.catalog') }}" class="shop-btn shop-btn--accent" style="margin-top: var(--shop-space-lg);">
                 Voir tout le catalogue
             </a>

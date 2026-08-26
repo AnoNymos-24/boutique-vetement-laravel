@@ -15,10 +15,10 @@
 .shop-textarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: #fff;
+  background: var(--shop-color-card);
   border: 1px solid var(--shop-color-border);
   border-radius: var(--shop-radius-md);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: var(--shop-color-foreground);
   transition: border-color var(--shop-duration-fast) var(--shop-ease-out),
               box-shadow var(--shop-duration-fast) var(--shop-ease-out);
@@ -30,7 +30,7 @@
   &:focus {
     outline: none;
     border-color: var(--shop-color-primary);
-    box-shadow: 0 0 0 3px rgba(190, 24, 93, 0.1);
+    box-shadow: var(--shop-shadow-ring);
   }
 
   &.has-error {
@@ -74,11 +74,13 @@
 .variant-pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--shop-space-xs);
+  min-height: 44px;
   padding: 0.625rem 1.125rem;
   border-radius: var(--shop-radius-pill);
   border: 1.5px solid var(--shop-color-border);
-  background: #fff;
+  background: var(--shop-color-card);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -101,21 +103,49 @@
   }
 }
 
-// Étapes du tunnel de commande
+// Étapes du tunnel de commande — piste + remplissage animé (même logique que
+// .shop-timeline) au lieu de simples points texte sans notion de progression.
 .checkout-steps {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--shop-space-sm);
+  justify-content: space-between;
   margin-bottom: var(--shop-space-xl);
+
+  @media (max-width: 480px) {
+    .checkout-step__label {
+      display: none;
+    }
+  }
+}
+
+.checkout-steps__track {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  right: 13px;
+  height: 2px;
+  background: var(--shop-color-border);
+  z-index: 0;
+}
+
+.checkout-steps__track-fill {
+  height: 100%;
+  background: var(--shop-color-primary);
+  transition: width var(--shop-duration-slow) var(--shop-ease-out);
 }
 
 .checkout-step {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: var(--shop-space-sm);
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--shop-color-muted-foreground);
+  background: var(--shop-color-background);
+  padding-right: var(--shop-space-sm);
 }
 
 .checkout-step__index {
@@ -125,9 +155,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--shop-color-muted);
+  background: var(--shop-color-card);
+  border: 2px solid var(--shop-color-border);
   color: var(--shop-color-muted-foreground);
   font-size: 0.75rem;
+  transition: all var(--shop-duration-base) var(--shop-ease-out);
 }
 
 .checkout-step.is-active {
@@ -135,19 +167,16 @@
 
   .checkout-step__index {
     background: var(--shop-color-primary);
+    border-color: var(--shop-color-primary);
     color: #fff;
+    box-shadow: var(--shop-shadow-ring);
   }
 }
 
 .checkout-step.is-done .checkout-step__index {
-  background: var(--shop-color-accent);
+  background: var(--shop-color-primary);
+  border-color: var(--shop-color-primary);
   color: #fff;
-}
-
-.checkout-step__sep {
-  width: 24px;
-  height: 1.5px;
-  background: var(--shop-color-border);
 }
 
 .payment-method-card {
@@ -167,3 +196,18 @@
     background: var(--shop-color-muted);
   }
 }
+
+.payment-method-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  svg { width: 16px; height: 16px; color: #fff; }
+}
+
+.payment-method-card__icon--orange-money { background: #ff6600; }
+.payment-method-card__icon--wave { background: #1dc8f2; }

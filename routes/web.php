@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinanceController;
@@ -54,6 +55,9 @@ Route::prefix('admin')->group(function () {
         Route::post('/marketing', [MarketingController::class, 'store'])->name('marketing.store');
         Route::patch('/marketing/{promoCode}/activer', [MarketingController::class, 'toggleActive'])->name('marketing.toggle');
         Route::delete('/marketing/{promoCode}', [MarketingController::class, 'destroy'])->name('marketing.destroy');
+
+        Route::resource('bannieres', BannerController::class)->except(['show'])->parameters(['bannieres' => 'banner'])->names('banners');
+        Route::patch('/bannieres/{banner}/activer', [BannerController::class, 'toggleActive'])->name('banners.toggle');
 
         Route::prefix('parametres')->name('settings.')->group(function () {
             Route::get('/identite', [IdentityController::class, 'edit'])->name('identity.edit');

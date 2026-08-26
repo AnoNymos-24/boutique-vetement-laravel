@@ -1,16 +1,20 @@
 <x-shop-layout>
     <div class="shop-container" style="padding: var(--shop-space-lg) var(--shop-space-lg) var(--shop-space-3xl); max-width: 960px;">
         <div class="checkout-steps" data-reveal>
+            <div class="checkout-steps__track">
+                <div class="checkout-steps__track-fill" style="width: 50%"></div>
+            </div>
             <div class="checkout-step is-done">
-                <span class="checkout-step__index"><x-icon name="check" style="width:14px;height:14px;" /></span> Panier
+                <span class="checkout-step__index"><x-icon name="check" style="width:14px;height:14px;" /></span>
+                <span class="checkout-step__label">Panier</span>
             </div>
-            <span class="checkout-step__sep"></span>
             <div class="checkout-step is-active">
-                <span class="checkout-step__index">2</span> Livraison &amp; paiement
+                <span class="checkout-step__index">2</span>
+                <span class="checkout-step__label">Livraison &amp; paiement</span>
             </div>
-            <span class="checkout-step__sep"></span>
             <div class="checkout-step">
-                <span class="checkout-step__index">3</span> Confirmation
+                <span class="checkout-step__index">3</span>
+                <span class="checkout-step__label">Confirmation</span>
             </div>
         </div>
 
@@ -37,7 +41,7 @@
 
                 <div class="shop-field">
                     <label class="shop-label" for="customer_phone">Téléphone</label>
-                    <input type="text" id="customer_phone" name="customer_phone" class="shop-input" required placeholder="07…"
+                    <input type="tel" id="customer_phone" name="customer_phone" class="shop-input" required placeholder="07…" inputmode="tel"
                            value="{{ old('customer_phone', $customer?->phone) }}">
                     <x-input-error :messages="$errors->get('customer_phone')" />
                 </div>
@@ -65,11 +69,11 @@
                 <div class="shop-field">
                     <label class="payment-method-card" style="margin-bottom: var(--shop-space-sm);">
                         <input type="radio" name="payment_method" value="orange_money" {{ old('payment_method', 'orange_money') === 'orange_money' ? 'checked' : '' }}>
-                        <x-icon name="cash" /> Orange Money
+                        <span class="payment-method-card__icon payment-method-card__icon--orange-money"><x-icon name="cash" /></span> Orange Money
                     </label>
                     <label class="payment-method-card">
                         <input type="radio" name="payment_method" value="wave" {{ old('payment_method') === 'wave' ? 'checked' : '' }}>
-                        <x-icon name="cash" /> Wave
+                        <span class="payment-method-card__icon payment-method-card__icon--wave"><x-icon name="cash" /></span> Wave
                     </label>
                     <x-input-error :messages="$errors->get('payment_method')" />
                 </div>
@@ -92,13 +96,13 @@
                 @foreach ($items as $item)
                     <div class="shop-info-row">
                         <span class="shop-info-row__label">{{ $item['product']->name }} ({{ $item['variant']->label() }}) × {{ $item['quantity'] }}</span>
-                        <span class="cart-summary__value">{{ number_format($item['subtotal'] / 100, 2, ',', ' ') }} €</span>
+                        <span class="cart-summary__value">{{ number_format($item['subtotal'] / 100, 3, ',', ' ') }} DT</span>
                     </div>
                 @endforeach
 
                 <div class="cart-summary__row cart-summary__row--total">
                     <span>Total</span>
-                    <span class="cart-summary__value">{{ number_format($subtotal / 100, 2, ',', ' ') }} €</span>
+                    <span class="cart-summary__value">{{ number_format($subtotal / 100, 3, ',', ' ') }} DT</span>
                 </div>
             </div>
         </div>

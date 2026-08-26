@@ -1,5 +1,17 @@
 @php
     $filtersActive = request()->anyFilled(['size', 'color', 'price_max', 'in_stock', 'search']);
+    $catalogBaseRoute = $activeCategory ? route('shop.catalog.category', $activeCategory) : route('shop.catalog');
+    $activeFilterChips = collect([
+        'search' => 'Recherche',
+        'size' => 'Taille',
+        'color' => 'Couleur',
+        'price_max' => 'Prix max',
+        'in_stock' => 'En stock',
+    ])->filter(fn ($label, $key) => request()->filled($key))
+      ->map(fn ($label, $key) => [
+          'label' => $key === 'in_stock' ? $label : "{$label} : ".request($key),
+          'href' => $catalogBaseRoute.'?'.http_build_query(request()->except($key, 'page')),
+      ]);
 @endphp
 
 <x-shop-layout>
@@ -31,6 +43,16 @@
                 </div>
 
                 <div>
+                    @if ($activeFilterChips->isNotEmpty())
+                        <div class="active-filter-row">
+                            @foreach ($activeFilterChips as $chip)
+                                <a href="{{ $chip['href'] }}" class="active-filter-chip">
+                                    {{ $chip['label'] }} <x-icon name="x" />
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
+
                     <div class="catalog-toolbar">
                         @if ($filtersActive)
                             <a href="{{ $activeCategory ? route('shop.catalog.category', $activeCategory) : route('shop.catalog') }}" class="shop-btn shop-btn--ghost shop-btn--sm">

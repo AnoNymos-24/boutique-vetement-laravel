@@ -4,13 +4,16 @@
     $inStock = $product->relationLoaded('variants') ? $product->variants->sum('stock_quantity') > 0 : true;
 @endphp
 
-<div class="product-card-wrap" data-reveal>
+<div class="product-card-wrap">
     <x-shop.favorite-button :product="$product" :active="$favorited" />
 
     <a href="{{ route('shop.product', $product) }}" class="product-card">
         <div class="product-card__image-wrap">
             @if ($product->images->first())
-                <img src="{{ $product->images->first()->url() }}" alt="{{ $product->name }}" class="product-card__image">
+                <img src="{{ $product->images->first()->url() }}" alt="{{ $product->name }}" class="product-card__image product-card__image--primary">
+                @if ($product->images->get(1))
+                    <img src="{{ $product->images->get(1)->url() }}" alt="" class="product-card__image product-card__image--secondary">
+                @endif
             @else
                 <div class="product-card__image product-card__image--empty">
                     <x-icon name="shirt" />
@@ -32,7 +35,7 @@
         <div class="product-card__prices">
             <span class="product-card__price">{{ $product->priceFormatted() }}</span>
             @if ($product->compare_at_price)
-                <span class="product-card__price--compare">{{ number_format($product->compare_at_price / 100, 2, ',', ' ') }} €</span>
+                <span class="product-card__price--compare">{{ number_format($product->compare_at_price / 100, 3, ',', ' ') }} DT</span>
             @endif
         </div>
     </a>

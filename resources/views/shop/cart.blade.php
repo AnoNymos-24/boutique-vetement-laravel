@@ -11,7 +11,7 @@
             </div>
         @else
             <div class="cart-layout" data-reveal>
-                <div>
+                <div class="shop-card" style="padding: 0 var(--shop-space-lg);">
                     @foreach ($items as $item)
                         <div class="cart-line">
                             <div class="cart-line__image">
@@ -23,7 +23,7 @@
                             <div>
                                 <a href="{{ route('shop.product', $item['product']) }}" class="cart-line__name">{{ $item['product']->name }}</a>
                                 <div class="cart-line__variant">{{ $item['variant']->label() }}</div>
-                                <div class="cart-line__price">{{ number_format($item['unit_price'] / 100, 2, ',', ' ') }} €</div>
+                                <div class="cart-line__price">{{ number_format($item['unit_price'] / 100, 3, ',', ' ') }} DT</div>
                             </div>
 
                             <div class="cart-line__actions">
@@ -51,11 +51,11 @@
                     <h3 class="shop-h3" style="margin-bottom: var(--shop-space-md);">Récapitulatif</h3>
                     <div class="cart-summary__row">
                         <span>Sous-total</span>
-                        <span class="cart-summary__value">{{ number_format($subtotal / 100, 2, ',', ' ') }} €</span>
+                        <span class="cart-summary__value">{{ number_format($subtotal / 100, 3, ',', ' ') }} DT</span>
                     </div>
                     <div class="cart-summary__row cart-summary__row--total">
                         <span>Total</span>
-                        <span class="cart-summary__value">{{ number_format($subtotal / 100, 2, ',', ' ') }} €</span>
+                        <span class="cart-summary__value">{{ number_format($subtotal / 100, 3, ',', ' ') }} DT</span>
                     </div>
 
                     @auth('customer')

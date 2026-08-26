@@ -1,27 +1,44 @@
 // Design tokens boutique — synchronisés avec design-system/boutique-front-office/MASTER.md
-// Palette distincte du back-office (voir _tokens.scss) : chaleureuse, éditoriale, orientée mode.
+// Palette distincte du back-office (voir _tokens.scss) : éditoriale mode sombre, rouge vif sur noir
+// (inspirée de la mise en page ha.com.tn, recolorée à la demande de l'utilisateur).
 
 :root {
   // Couleurs
-  --shop-color-primary: #be185d;
-  --shop-color-primary-hover: #9d174d;
+  --shop-color-primary: #ff1a2c;
+  --shop-color-primary-hover: #ff3b4c;
   --shop-color-on-primary: #ffffff;
-  --shop-color-secondary: #ec4899;
-  --shop-color-accent: #d97706;
-  --shop-color-accent-hover: #b45309;
+  --shop-color-secondary: #b3121f;
+  --shop-color-accent: #ff4d5e;
+  --shop-color-accent-hover: #ff6b79;
   --shop-color-on-accent: #ffffff;
-  --shop-color-background: #fdf2f8;
-  --shop-color-foreground: #0f172a;
-  --shop-color-muted: #fbf1f5;
-  --shop-color-muted-foreground: #64748b;
-  --shop-color-border: #f7e3eb;
-  --shop-color-card: #ffffff;
-  --shop-color-destructive: #dc2626;
-  --shop-color-ring: #be185d;
+  --shop-color-background: #0d0d0d;
+  --shop-color-foreground: #f5f5f0;
+  --shop-color-muted: #1a1a1a;
+  --shop-color-muted-foreground: #a3a39c;
+  --shop-color-border: rgba(255, 255, 255, 0.12);
+  --shop-color-card: #1a1a1a;
+  --shop-color-destructive: #f04438;
+  --shop-color-ring: #ff1a2c;
+
+  // Scrim & focus-ring — dérivés des couleurs ci-dessus, pour ne plus retomber
+  // sur des rgba() ardoise/bleu hérités d'un autre thème (overlays, sheets mobiles).
+  --shop-color-scrim: rgba(0, 0, 0, 0.65);
+  --shop-shadow-ring: 0 0 0 3px rgba(255, 26, 44, 0.35);
+  --shop-shadow-glow: 0 8px 24px rgba(255, 26, 44, 0.35);
+
+  // Statuts — sémantiques (vert/rouge/ambre), version sombre : fond teinté transparent
+  // + texte vif, les pastels clairs d'origine seraient aveuglants sur fond noir.
+  // L'erreur reprend la famille rouge de la marque (--shop-color-destructive).
+  --shop-color-success-bg: rgba(34, 197, 94, 0.15);
+  --shop-color-success-fg: #4ade80;
+  --shop-color-warning-bg: rgba(245, 158, 11, 0.15);
+  --shop-color-warning-fg: #fbbf24;
+  --shop-color-error-bg: rgba(240, 68, 56, 0.15);
+  --shop-color-error-fg: var(--shop-color-destructive);
 
   // Typographie
-  --shop-font-display: 'Playfair Display', Georgia, serif;
-  --shop-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --shop-font-display: 'Syne', 'Arial Black', sans-serif;
+  --shop-font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
   --shop-font-mono: 'Fira Code', 'Courier New', monospace;
 
   // Espacement (densité 3/10 — spacieux)
@@ -33,17 +50,18 @@
   --shop-space-2xl: 4rem;
   --shop-space-3xl: 6rem;
 
-  // Rayons — plus doux qu'en admin, cohérent avec l'ambiance boutique
-  --shop-radius-sm: 8px;
-  --shop-radius-md: 12px;
-  --shop-radius-lg: 20px;
+  // Rayons — plus francs, esprit éditorial mode (moins "soft UI" que l'admin)
+  --shop-radius-sm: 6px;
+  --shop-radius-md: 10px;
+  --shop-radius-lg: 14px;
   --shop-radius-pill: 999px;
 
-  // Ombres
-  --shop-shadow-sm: 0 1px 2px rgba(190, 24, 93, 0.06);
-  --shop-shadow-md: 0 4px 16px rgba(190, 24, 93, 0.08);
-  --shop-shadow-lg: 0 12px 32px rgba(190, 24, 93, 0.14);
-  --shop-shadow-xl: 0 24px 48px rgba(190, 24, 93, 0.18);
+  // Ombres — sur fond sombre l'élévation vient surtout du contraste de ton entre
+  // --shop-color-card et --shop-color-background ; l'ombre noire reste un renfort léger.
+  --shop-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shop-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shop-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+  --shop-shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.7);
 
   // Mouvement
   --shop-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -53,5 +71,8 @@
 
   // Layout
   --shop-header-height: 72px;
+  // Ligne de navigation ajoutée sous la barre logo/recherche/icônes (desktop uniquement,
+  // masquée <860px) — additionnée à --shop-header-height pour les offsets `position: sticky`.
+  --shop-header-nav-height: 48px;
   --shop-content-max: 1280px;
 }

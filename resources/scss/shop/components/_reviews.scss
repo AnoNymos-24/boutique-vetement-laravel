@@ -14,11 +14,9 @@
   }
 }
 
+// .shop-review-card utilise la primitive .shop-card (fond/radius/ombre) ajoutée au markup.
 .shop-review-card {
   padding: var(--shop-space-lg);
-  background: #fff;
-  border-radius: var(--shop-radius-lg);
-  box-shadow: var(--shop-shadow-sm);
 }
 
 .shop-review-card__header {

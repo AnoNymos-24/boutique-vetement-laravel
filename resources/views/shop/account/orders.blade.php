@@ -1,7 +1,7 @@
 <x-shop-layout>
     <div class="shop-container" style="padding: var(--shop-space-lg) var(--shop-space-lg) var(--shop-space-3xl);">
         <x-shop.account-layout active="orders">
-            <div class="account-card">
+            <div class="account-card shop-card" data-reveal>
                 <h3 class="shop-h3" style="margin-bottom: var(--shop-space-md);">Mes commandes</h3>
 
                 @forelse ($orders as $order)

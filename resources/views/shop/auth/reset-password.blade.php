@@ -1,4 +1,4 @@
-<x-shop.auth-card>
+<x-shop.auth-card quote="Presque fini. Choisissez un nouveau mot de passe.">
     <h1 class="shop-h3" style="margin-bottom: var(--shop-space-lg);">Réinitialiser le mot de passe</h1>
 
     <form method="POST" action="{{ route('customer.password.store') }}">

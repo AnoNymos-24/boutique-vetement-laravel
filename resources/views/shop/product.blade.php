@@ -19,20 +19,19 @@
             <span>{{ $product->name }}</span>
         </div>
 
-        <div class="pdp-layout" x-data="variantSelector(@js($variantsForJs))" data-reveal>
-            <div class="pdp-gallery">
+        <div class="pdp-layout" x-data="variantSelector(@js($variantsForJs))">
+            <div class="pdp-gallery" x-data="{ mainImage: '{{ $product->images->first()?->url() }}' }" data-reveal>
                 <div class="pdp-gallery__main">
                     @if ($product->images->first())
-                        <img src="{{ $product->images->first()->url() }}" alt="{{ $product->name }}" id="pdp-main-image">
+                        <img :src="mainImage" alt="{{ $product->name }}">
                     @endif
                 </div>
                 @if ($product->images->count() > 1)
                     <div class="pdp-gallery__thumbs">
                         @foreach ($product->images as $index => $image)
-                            <button type="button" class="pdp-gallery__thumb {{ $index === 0 ? 'is-active' : '' }}"
-                                    onclick="document.getElementById('pdp-main-image').src = this.querySelector('img').src;
-                                             document.querySelectorAll('.pdp-gallery__thumb').forEach(t => t.classList.remove('is-active'));
-                                             this.classList.add('is-active');">
+                            <button type="button" class="pdp-gallery__thumb"
+                                    :class="{ 'is-active': mainImage === '{{ $image->url() }}' }"
+                                    @click="mainImage = '{{ $image->url() }}'">
                                 <img src="{{ $image->url() }}" alt="">
                             </button>
                         @endforeach
@@ -40,7 +39,7 @@
                 @endif
             </div>
 
-            <div class="pdp-buybox">
+            <div class="pdp-buybox" data-reveal>
                 <div class="shop-flex shop-justify-between shop-items-center">
                     <div class="pdp-buybox__category">{{ $product->category->name }}</div>
                     <x-shop.favorite-button :product="$product" :inline="true" />
@@ -57,7 +56,7 @@
                 <div class="pdp-buybox__prices">
                     <span class="pdp-buybox__price">{{ $product->priceFormatted() }}</span>
                     @if ($product->compare_at_price)
-                        <span class="pdp-buybox__price--compare">{{ number_format($product->compare_at_price / 100, 2, ',', ' ') }} €</span>
+                        <span class="pdp-buybox__price--compare">{{ number_format($product->compare_at_price / 100, 3, ',', ' ') }} DT</span>
                     @endif
                 </div>
 
@@ -119,7 +118,7 @@
                         <button type="button" class="pdp-accordion__trigger" :class="{ 'is-open': open }" @click="open = !open">
                             Description <x-icon name="chevron-down" />
                         </button>
-                        <div class="pdp-accordion__panel" x-show="open" x-cloak>{{ $product->description }}</div>
+                        <div class="pdp-accordion__panel" x-show="open" x-transition.opacity.duration.200ms x-cloak>{{ $product->description }}</div>
                     </div>
 
                     @if ($product->variants->whereNotNull('size')->isNotEmpty())
@@ -127,16 +126,18 @@
                             <button type="button" class="pdp-accordion__trigger" :class="{ 'is-open': open }" @click="open = !open">
                                 Guide des tailles <x-icon name="chevron-down" />
                             </button>
-                            <div class="pdp-accordion__panel" x-show="open" x-cloak>
-                                <table class="size-guide-table">
-                                    <thead>
-                                        <tr><th>Taille</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th></tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>Tour de poitrine (cm)</td><td>78</td><td>84</td><td>90</td><td>96</td><td>104</td></tr>
-                                        <tr><td>Tour de taille (cm)</td><td>60</td><td>66</td><td>72</td><td>78</td><td>86</td></tr>
-                                    </tbody>
-                                </table>
+                            <div class="pdp-accordion__panel" x-show="open" x-transition.opacity.duration.200ms x-cloak>
+                                <div style="overflow-x: auto;">
+                                    <table class="size-guide-table">
+                                        <thead>
+                                            <tr><th>Taille</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>Tour de poitrine (cm)</td><td>78</td><td>84</td><td>90</td><td>96</td><td>104</td></tr>
+                                            <tr><td>Tour de taille (cm)</td><td>60</td><td>66</td><td>72</td><td>78</td><td>86</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -145,7 +146,7 @@
                         <button type="button" class="pdp-accordion__trigger" :class="{ 'is-open': open }" @click="open = !open">
                             Avis clients ({{ $reviews->count() }}) <x-icon name="chevron-down" />
                         </button>
-                        <div class="pdp-accordion__panel" x-show="open" x-cloak>
+                        <div class="pdp-accordion__panel" x-show="open" x-transition.opacity.duration.200ms x-cloak>
                             @forelse ($reviews as $review)
                                 <div style="padding: var(--shop-space-md) 0; border-bottom: 1px solid var(--shop-color-border);">
                                     <div class="shop-flex shop-justify-between shop-items-center">

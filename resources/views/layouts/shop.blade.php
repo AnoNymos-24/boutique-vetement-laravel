@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr" data-theme="dark">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,27 +9,28 @@
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@500;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=Fira+Code:wght@500;600&display=swap" rel="stylesheet">
 
         @vite(['resources/scss/shop.scss', 'resources/js/shop.js'])
     </head>
     <body class="shop">
-        <header class="shop-header">
-            <div class="shop-container shop-header__bar">
-                <a href="{{ route('shop.home') }}" class="shop-header__brand">
-                    @if ($storeSetting?->logoUrl())
-                        <img src="{{ $storeSetting->logoUrl() }}" alt="{{ $storeName }}" class="shop-header__logo">
-                    @else
-                        {{ $storeName }}
-                    @endif
-                </a>
+        <div class="shop-announcement">Livraison partout — paiement via Orange Money ou Wave</div>
 
-                <nav class="shop-header__nav">
-                    <a href="{{ route('shop.catalog') }}">Boutique</a>
-                    @foreach ($shopNavCategories ?? [] as $navCategory)
-                        <a href="{{ route('shop.catalog.category', $navCategory) }}">{{ $navCategory->name }}</a>
-                    @endforeach
-                </nav>
+        <header class="shop-header" x-data="mobileNav()">
+            <div class="shop-container shop-header__bar">
+                <div class="shop-header__left">
+                    <button type="button" class="shop-header__menu-btn" title="Menu" aria-label="Ouvrir le menu" @click="open = true">
+                        <x-icon name="menu" />
+                    </button>
+
+                    <a href="{{ route('shop.home') }}" class="shop-header__brand">
+                        @if ($storeSetting?->logoUrl())
+                            <img src="{{ $storeSetting->logoUrl() }}" alt="{{ $storeName }}" class="shop-header__logo">
+                        @else
+                            {{ $storeName }}
+                        @endif
+                    </a>
+                </div>
 
                 <form method="GET" action="{{ route('shop.catalog') }}" class="shop-header__search">
                     <x-icon name="search" />
@@ -54,6 +55,38 @@
                             <span class="shop-header__badge">{{ $shopCartCount }}</span>
                         @endif
                     </a>
+                </div>
+            </div>
+
+            <nav class="shop-container shop-header__nav-row">
+                <a href="{{ route('shop.catalog') }}">Boutique</a>
+                @foreach ($shopNavCategories ?? [] as $navCategory)
+                    <a href="{{ route('shop.catalog.category', $navCategory) }}">{{ $navCategory->name }}</a>
+                @endforeach
+            </nav>
+
+            <div x-show="open" x-cloak class="mobile-nav-sheet" @click.self="open = false" x-transition.opacity.duration.250ms>
+                <div class="mobile-nav-sheet__panel"
+                     x-transition:enter="shop-drawer-enter" x-transition:enter-start="shop-drawer-enter-start" x-transition:enter-end=""
+                     x-transition:leave="shop-drawer-leave" x-transition:leave-start="" x-transition:leave-end="shop-drawer-leave-end">
+                    <div class="mobile-nav-sheet__header">
+                        <span class="shop-header__brand">{{ $storeName }}</span>
+                        <button type="button" @click="open = false" class="shop-btn shop-btn--icon shop-btn--ghost" aria-label="Fermer le menu">
+                            <x-icon name="x" />
+                        </button>
+                    </div>
+
+                    <form method="GET" action="{{ route('shop.catalog') }}" class="mobile-nav-sheet__search">
+                        <x-icon name="search" />
+                        <input type="search" name="search" placeholder="Rechercher un article…" value="{{ request('search') }}">
+                    </form>
+
+                    <nav class="mobile-nav-sheet__links">
+                        <a href="{{ route('shop.catalog') }}" @click="open = false">Boutique</a>
+                        @foreach ($shopNavCategories ?? [] as $navCategory)
+                            <a href="{{ route('shop.catalog.category', $navCategory) }}" @click="open = false">{{ $navCategory->name }}</a>
+                        @endforeach
+                    </nav>
                 </div>
             </div>
         </header>

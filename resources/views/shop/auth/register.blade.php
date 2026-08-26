@@ -1,4 +1,4 @@
-<x-shop.auth-card>
+<x-shop.auth-card quote="Rejoignez la garde-robe. Suivez vos commandes, retrouvez vos favoris.">
     <h1 class="shop-h3" style="margin-bottom: var(--shop-space-xs);">Créer un compte</h1>
     <p class="shop-text-muted" style="font-size:0.875rem; margin-bottom: var(--shop-space-lg);">Suivez vos commandes et retrouvez vos favoris.</p>
 
@@ -19,7 +19,7 @@
 
         <div class="shop-field">
             <label class="shop-label" for="phone">Téléphone</label>
-            <input type="text" id="phone" name="phone" class="shop-input" value="{{ old('phone') }}" required autocomplete="tel" placeholder="07…">
+            <input type="tel" id="phone" name="phone" class="shop-input" value="{{ old('phone') }}" required autocomplete="tel" inputmode="tel" placeholder="07…">
             <x-input-error :messages="$errors->get('phone')" />
         </div>
 

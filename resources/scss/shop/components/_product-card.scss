@@ -33,11 +33,28 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--shop-duration-slow) var(--shop-ease-out);
+  transition: transform var(--shop-duration-slow) var(--shop-ease-out),
+              opacity var(--shop-duration-base) var(--shop-ease-out);
 }
 
 .product-card:hover .product-card__image {
   transform: scale(1.05);
+}
+
+// Deuxième photo (si le produit en a une) : crossfade au survol au lieu
+// d'un simple zoom statique — pattern courant en mode/fashion e-commerce.
+.product-card__image--secondary {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.product-card:hover .product-card__image--secondary {
+  opacity: 1;
+}
+
+.product-card:hover .product-card__image--primary {
+  opacity: 0;
 }
 
 .product-card__image--empty {
@@ -125,7 +142,7 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--shop-color-foreground);
-  background: #fff;
+  background: var(--shop-color-card);
   transition: all var(--shop-duration-fast) var(--shop-ease-out);
 
   &:hover {

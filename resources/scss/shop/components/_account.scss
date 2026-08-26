@@ -9,18 +9,18 @@
   }
 }
 
+// .account-nav et .account-card utilisent la primitive .shop-card (fond/radius/ombre)
+// ajoutée dans le markup — ici uniquement le padding/espacement spécifique.
 .account-nav {
-  background: #fff;
-  border-radius: var(--shop-radius-lg);
   padding: var(--shop-space-md);
-  box-shadow: var(--shop-shadow-sm);
 }
 
 .account-nav__item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--shop-space-sm);
-  padding: 0.625rem 0.875rem;
+  padding: 0.625rem 0.875rem 0.625rem 1.125rem;
   border-radius: var(--shop-radius-md);
   font-size: 0.9375rem;
   font-weight: 500;
@@ -34,9 +34,26 @@
   }
 
   &.is-active {
-    background: var(--shop-color-primary);
-    color: #fff;
+    background: var(--shop-color-muted);
+    color: var(--shop-color-primary);
+    font-weight: 700;
   }
+}
+
+.account-nav__indicator {
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 20px;
+  border-radius: var(--shop-radius-pill);
+  background: var(--shop-color-primary);
+  transition: transform var(--shop-duration-fast) var(--shop-ease-out);
+}
+
+.is-active .account-nav__indicator {
+  transform: translateY(-50%) scaleY(1);
 }
 
 .account-nav__item--danger {
@@ -44,15 +61,53 @@
   width: 100%;
   text-align: left;
 
-  &:hover { background: #fef2f2; }
+  &:hover { background: var(--shop-color-error-bg); }
 }
 
 .account-card {
-  background: #fff;
-  border-radius: var(--shop-radius-lg);
   padding: var(--shop-space-xl);
-  box-shadow: var(--shop-shadow-sm);
   margin-bottom: var(--shop-space-lg);
+}
+
+.account-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--shop-space-lg);
+  margin-bottom: var(--shop-space-lg);
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.account-stat {
+  padding: var(--shop-space-lg);
+  text-align: center;
+}
+
+.account-stat__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--shop-radius-md);
+  background: var(--shop-color-muted);
+  color: var(--shop-color-primary);
+  margin-bottom: var(--shop-space-sm);
+
+  svg { width: 20px; height: 20px; }
+}
+
+.account-stat__value {
+  font-family: var(--shop-font-mono);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.account-stat__label {
+  color: var(--shop-color-muted-foreground);
+  font-size: 0.8125rem;
 }
 
 .account-order-row {
@@ -113,6 +168,7 @@
   svg { width: 18px; height: 18px; color: var(--shop-color-muted-foreground); }
 
   &:hover { transform: scale(1.1); }
+  &:active { transform: scale(0.85); }
 
   &.is-active svg {
     color: var(--shop-color-primary);

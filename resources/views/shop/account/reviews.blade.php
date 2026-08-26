@@ -8,8 +8,13 @@
                 <div class="shop-status-banner shop-status-banner--error">{{ session('error') }}</div>
             @endif
 
+            <div style="margin-bottom: var(--shop-space-lg);" data-reveal>
+                <p class="shop-eyebrow">Retours</p>
+                <p class="shop-text-muted">Partagez votre expérience sur les articles achetés.</p>
+            </div>
+
             @if ($eligibleItems->isNotEmpty())
-                <div class="account-card">
+                <div class="account-card shop-card" data-reveal>
                     <h3 class="shop-h3" style="margin-bottom: var(--shop-space-md);">Produits à évaluer</h3>
 
                     @foreach ($eligibleItems as $item)
@@ -47,7 +52,7 @@
                 </div>
             @endif
 
-            <div class="account-card">
+            <div class="account-card shop-card" data-reveal>
                 <h3 class="shop-h3" style="margin-bottom: var(--shop-space-md);">Mes avis publiés</h3>
 
                 @forelse ($myReviews as $review)

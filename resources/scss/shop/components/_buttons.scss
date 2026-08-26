@@ -33,7 +33,7 @@
   &:hover:not(:disabled) {
     background: var(--shop-color-primary-hover);
     transform: translateY(-1px);
-    box-shadow: var(--shop-shadow-lg);
+    box-shadow: var(--shop-shadow-lg), var(--shop-shadow-glow);
   }
 }
 
@@ -45,6 +45,7 @@
   &:hover:not(:disabled) {
     background: var(--shop-color-accent-hover);
     transform: translateY(-1px);
+    box-shadow: var(--shop-shadow-lg), var(--shop-shadow-glow);
   }
 }
 
@@ -78,5 +79,7 @@
 
 .shop-btn--icon {
   padding: 0.625rem;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
 }

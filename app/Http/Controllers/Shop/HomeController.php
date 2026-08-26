@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Review;
@@ -12,6 +13,8 @@ class HomeController extends Controller
 {
     public function index(): View
     {
+        $banners = Banner::active()->orderBy('sort_order')->get();
+
         $newArrivals = Product::with(['category', 'images', 'variants'])
             ->where('status', 'active')
             ->whereHas('variants', fn ($q) => $q->where('stock_quantity', '>', 0))
@@ -39,6 +42,7 @@ class HomeController extends Controller
             ->get();
 
         return view('shop.home', [
+            'banners' => $banners,
             'newArrivals' => $newArrivals,
             'categories' => $categories,
             'reviews' => $reviews,

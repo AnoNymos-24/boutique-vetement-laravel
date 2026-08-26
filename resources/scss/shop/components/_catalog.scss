@@ -11,7 +11,7 @@
 
 .filter-sidebar {
   position: sticky;
-  top: calc(var(--shop-header-height) + var(--shop-space-lg));
+  top: calc(var(--shop-header-height) + var(--shop-header-nav-height) + var(--shop-space-lg));
 
   @media (max-width: 860px) {
     display: none;
@@ -53,16 +53,42 @@
 
 .filter-swatch {
   padding: 0.375rem 0.875rem;
-  border-radius: var(--shop-radius-pill);
+  border-radius: var(--shop-radius-sm);
   border: 1px solid var(--shop-color-border);
   font-size: 0.8125rem;
-  background: #fff;
+  background: var(--shop-color-card);
+  transition: border-color var(--shop-duration-fast) var(--shop-ease-out);
+
+  &:hover { border-color: var(--shop-color-primary); }
 
   &.is-active {
     background: var(--shop-color-primary);
     border-color: var(--shop-color-primary);
     color: #fff;
   }
+}
+
+.active-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--shop-space-sm);
+  margin-bottom: var(--shop-space-md);
+}
+
+.active-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3125rem 0.625rem 0.3125rem 0.875rem;
+  border-radius: var(--shop-radius-pill);
+  background: var(--shop-color-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--shop-color-foreground);
+
+  svg { width: 13px; height: 13px; color: var(--shop-color-muted-foreground); }
+
+  &:hover svg { color: var(--shop-color-destructive); }
 }
 
 .catalog-toolbar {
@@ -86,7 +112,7 @@
   position: fixed;
   inset: 0;
   z-index: 60;
-  background: rgba(15, 23, 42, 0.4);
+  background: var(--shop-color-scrim);
 }
 
 .mobile-filter-sheet__panel {
@@ -96,7 +122,8 @@
   right: 0;
   max-height: 85vh;
   overflow-y: auto;
-  background: #fff;
+  background: var(--shop-color-card);
   border-radius: var(--shop-radius-lg) var(--shop-radius-lg) 0 0;
   padding: var(--shop-space-lg);
+  padding-bottom: calc(var(--shop-space-lg) + env(safe-area-inset-bottom));
 }

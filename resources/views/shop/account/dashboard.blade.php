@@ -1,22 +1,25 @@
 <x-shop-layout>
     <div class="shop-container" style="padding: var(--shop-space-lg) var(--shop-space-lg) var(--shop-space-3xl);">
         <x-shop.account-layout active="dashboard">
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--shop-space-lg); margin-bottom: var(--shop-space-lg);">
-                <div class="account-card" style="margin-bottom:0; text-align:center;">
-                    <div class="pdp-buybox__price" style="font-size:1.75rem;">{{ $ordersCount }}</div>
-                    <div class="shop-text-muted" style="font-size:0.8125rem;">Commande(s)</div>
+            <div class="account-stat-grid">
+                <div class="account-stat shop-card">
+                    <span class="account-stat__icon"><x-icon name="cart" /></span>
+                    <div class="account-stat__value" data-count-to="{{ $ordersCount }}">0</div>
+                    <div class="account-stat__label">Commande(s)</div>
                 </div>
-                <div class="account-card" style="margin-bottom:0; text-align:center;">
-                    <div class="pdp-buybox__price" style="font-size:1.75rem;">{{ $wishlistCount }}</div>
-                    <div class="shop-text-muted" style="font-size:0.8125rem;">Favori(s)</div>
+                <div class="account-stat shop-card">
+                    <span class="account-stat__icon"><x-icon name="heart" /></span>
+                    <div class="account-stat__value" data-count-to="{{ $wishlistCount }}">0</div>
+                    <div class="account-stat__label">Favori(s)</div>
                 </div>
-                <div class="account-card" style="margin-bottom:0; text-align:center;">
-                    <div class="pdp-buybox__price" style="font-size:1.75rem;">{{ $customer->addresses()->count() }}</div>
-                    <div class="shop-text-muted" style="font-size:0.8125rem;">Adresse(s)</div>
+                <div class="account-stat shop-card">
+                    <span class="account-stat__icon"><x-icon name="map-pin" /></span>
+                    <div class="account-stat__value" data-count-to="{{ $customer->addresses()->count() }}">0</div>
+                    <div class="account-stat__label">Adresse(s)</div>
                 </div>
             </div>
 
-            <div class="account-card">
+            <div class="account-card shop-card" data-reveal>
                 <div class="shop-flex shop-justify-between shop-items-center" style="margin-bottom: var(--shop-space-md);">
                     <h3 class="shop-h3">Commandes récentes</h3>
                     <a href="{{ route('customer.account.orders') }}" class="shop-btn shop-btn--secondary shop-btn--sm">Tout voir</a>
@@ -38,7 +41,7 @@
                 @endforelse
             </div>
 
-            <div class="account-card">
+            <div class="account-card shop-card" data-reveal>
                 <h3 class="shop-h3" style="margin-bottom: var(--shop-space-md);">Mes informations</h3>
 
                 @if (session('status'))
@@ -63,7 +66,7 @@
 
                     <div class="shop-field">
                         <label class="shop-label" for="phone">Téléphone</label>
-                        <input type="text" id="phone" name="phone" class="shop-input" value="{{ old('phone', $customer->phone) }}" required>
+                        <input type="tel" id="phone" name="phone" class="shop-input" value="{{ old('phone', $customer->phone) }}" required inputmode="tel">
                         <x-input-error :messages="$errors->get('phone')" />
                     </div>
 
