@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +27,9 @@ class BannerController extends Controller
 
         $data['image_path'] = $request->file('image')->store('banners', 'public');
 
-        Banner::create($data);
+        $banner = Banner::create($data);
+
+        ActivityLog::record('banner.created', "Bannière « {$banner->title} » créée.", $banner);
 
         return redirect()->route('banners.index')->with('status', 'Bannière créée.');
     }
@@ -47,6 +50,8 @@ class BannerController extends Controller
 
         $banner->update($data);
 
+        ActivityLog::record('banner.updated', "Bannière « {$banner->title} » modifiée.", $banner);
+
         return redirect()->route('banners.index')->with('status', 'Bannière mise à jour.');
     }
 
@@ -54,13 +59,22 @@ class BannerController extends Controller
     {
         $banner->update(['is_active' => ! $banner->is_active]);
 
+        ActivityLog::record(
+            $banner->is_active ? 'banner.activated' : 'banner.deactivated',
+            ($banner->is_active ? 'Bannière activée : ' : 'Bannière désactivée : ') . $banner->title,
+            $banner
+        );
+
         return back()->with('status', $banner->is_active ? 'Bannière activée.' : 'Bannière désactivée.');
     }
 
     public function destroy(Banner $banner)
     {
+        $title = $banner->title;
         Storage::disk('public')->delete($banner->image_path);
         $banner->delete();
+
+        ActivityLog::record('banner.deleted', "Bannière « {$title} » supprimée.");
 
         return back()->with('status', 'Bannière supprimée.');
     }

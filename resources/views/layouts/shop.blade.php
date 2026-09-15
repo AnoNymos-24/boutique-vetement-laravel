@@ -9,7 +9,7 @@
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=Fira+Code:wght@500;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         @vite(['resources/scss/shop.scss', 'resources/js/shop.js'])
     </head>
@@ -19,7 +19,8 @@
         <header class="shop-header" x-data="mobileNav()">
             <div class="shop-container shop-header__bar">
                 <div class="shop-header__left">
-                    <button type="button" class="shop-header__menu-btn" title="Menu" aria-label="Ouvrir le menu" @click="open = true">
+                    <button type="button" class="shop-header__menu-btn" title="Menu" aria-label="Ouvrir le menu"
+                            :aria-expanded="open" aria-controls="mobile-nav-menu" @click="open = true">
                         <x-icon name="menu" />
                     </button>
 
@@ -59,14 +60,16 @@
             </div>
 
             <nav class="shop-container shop-header__nav-row">
-                <a href="{{ route('shop.catalog') }}">Boutique</a>
+                <a href="{{ route('shop.catalog') }}" class="{{ request()->routeIs('shop.catalog') ? 'is-active' : '' }}">Boutique</a>
                 @foreach ($shopNavCategories ?? [] as $navCategory)
-                    <a href="{{ route('shop.catalog.category', $navCategory) }}">{{ $navCategory->name }}</a>
+                    <a href="{{ route('shop.catalog.category', $navCategory) }}" class="{{ request()->routeIs('shop.catalog.category') && request()->route('category')?->is($navCategory) ? 'is-active' : '' }}">{{ $navCategory->name }}</a>
                 @endforeach
             </nav>
 
-            <div x-show="open" x-cloak class="mobile-nav-sheet" @click.self="open = false" x-transition.opacity.duration.250ms>
-                <div class="mobile-nav-sheet__panel"
+            <div x-show="open" x-cloak class="mobile-nav-sheet" @click.self="open = false" @keydown.escape.window="open = false"
+                 x-transition.opacity.duration.250ms>
+                <div id="mobile-nav-menu" class="mobile-nav-sheet__panel" x-trap.inert.noscroll="open"
+                     role="dialog" aria-modal="true" aria-label="Menu"
                      x-transition:enter="shop-drawer-enter" x-transition:enter-start="shop-drawer-enter-start" x-transition:enter-end=""
                      x-transition:leave="shop-drawer-leave" x-transition:leave-start="" x-transition:leave-end="shop-drawer-leave-end">
                     <div class="mobile-nav-sheet__header">
@@ -82,9 +85,9 @@
                     </form>
 
                     <nav class="mobile-nav-sheet__links">
-                        <a href="{{ route('shop.catalog') }}" @click="open = false">Boutique</a>
+                        <a href="{{ route('shop.catalog') }}" @click="open = false" class="{{ request()->routeIs('shop.catalog') ? 'is-active' : '' }}">Boutique</a>
                         @foreach ($shopNavCategories ?? [] as $navCategory)
-                            <a href="{{ route('shop.catalog.category', $navCategory) }}" @click="open = false">{{ $navCategory->name }}</a>
+                            <a href="{{ route('shop.catalog.category', $navCategory) }}" @click="open = false" class="{{ request()->routeIs('shop.catalog.category') && request()->route('category')?->is($navCategory) ? 'is-active' : '' }}">{{ $navCategory->name }}</a>
                         @endforeach
                     </nav>
                 </div>
@@ -142,6 +145,7 @@
                         <h4>Aide</h4>
                         <ul>
                             <li><a href="{{ route('shop.cart') }}">Mon panier</a></li>
+                            <li><a href="{{ route('shop.contact') }}">Nous contacter</a></li>
                             <li>
                                 @auth('customer')
                                     <a href="{{ route('customer.account') }}">Mon compte</a>

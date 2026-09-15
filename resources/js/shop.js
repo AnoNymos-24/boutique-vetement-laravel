@@ -1,6 +1,9 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
+import focus from '@alpinejs/focus';
 import { initReveals, revealGrid, initCounters, celebrate } from './modules/motion';
+
+Alpine.plugin(focus);
 
 Alpine.data('mobileFilters', () => ({
     open: false,

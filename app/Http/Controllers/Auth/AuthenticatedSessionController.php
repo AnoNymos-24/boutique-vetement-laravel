@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\ActivityLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        ActivityLog::record('auth.login', Auth::user()->name . ' s\'est connecté(e).');
+
         // `url.intended` is a single session key shared with the customer guard — an
         // unauthenticated visit to the storefront earlier in the same browser session
         // can leave a non-admin URL there. Only honor it if it's actually an admin URL.
@@ -45,6 +48,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        ActivityLog::record('auth.logout', Auth::user()->name . ' s\'est déconnecté(e).');
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

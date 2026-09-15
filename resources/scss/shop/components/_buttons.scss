@@ -4,7 +4,9 @@
   justify-content: center;
   gap: var(--shop-space-sm);
   padding: 0.875rem 1.75rem;
-  border-radius: var(--shop-radius-pill);
+  // Angles légèrement arrondis, jamais en pilule complète — la charte proscrit
+  // explicitement le rendu "bouton gaming" trop rond.
+  border-radius: var(--shop-radius-md);
   font-weight: 600;
   font-size: 0.9375rem;
   cursor: pointer;
@@ -25,13 +27,18 @@
   }
 }
 
+// Bouton principal : fond vert profond, bordure dorée, texte blanc — au survol,
+// bascule complète vers un fond doré et un texte vert profond (charte §8).
 .shop-btn--primary {
   background: var(--shop-color-primary);
   color: var(--shop-color-on-primary);
+  border: 1.5px solid var(--shop-color-accent);
   box-shadow: var(--shop-shadow-md);
 
   &:hover:not(:disabled) {
-    background: var(--shop-color-primary-hover);
+    background: var(--shop-color-accent);
+    color: var(--shop-color-on-accent);
+    border-color: var(--shop-color-accent);
     transform: translateY(-1px);
     box-shadow: var(--shop-shadow-lg), var(--shop-shadow-glow);
   }

@@ -52,7 +52,9 @@ class ReviewController extends Controller
             ->where('product_id', $data['product_id'])
             ->first();
 
-        abort_unless($orderItem, 403, "Vous ne pouvez laisser un avis que sur un achat vérifié.");
+        if (! $orderItem) {
+            return back()->with('error', "Vous ne pouvez commenter que les articles que vous avez déjà achetés.");
+        }
 
         if (Review::where('customer_id', $customer->id)->where('product_id', $data['product_id'])->exists()) {
             return back()->with('error', 'Vous avez déjà laissé un avis pour ce produit.');

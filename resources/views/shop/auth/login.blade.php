@@ -8,6 +8,9 @@
 
     <form method="POST" action="{{ route('customer.login') }}">
         @csrf
+        @if ($redirectTo ?? null)
+            <input type="hidden" name="redirect_to" value="{{ $redirectTo }}">
+        @endif
 
         <div class="shop-field">
             <label class="shop-label" for="email">Email</label>

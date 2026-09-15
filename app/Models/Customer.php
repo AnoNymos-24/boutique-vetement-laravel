@@ -39,6 +39,16 @@ class Customer extends Authenticatable
         return $this->hasMany(Wishlist::class);
     }
 
+    public function complaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class);
+    }
+
+    public function contactMessages(): HasMany
+    {
+        return $this->hasMany(ContactMessage::class);
+    }
+
     public function ordersCount(): int
     {
         return $this->orders_count ?? $this->orders()->count();

@@ -1,45 +1,49 @@
 // Design tokens boutique — synchronisés avec design-system/boutique-front-office/MASTER.md
-// Palette distincte du back-office (voir _tokens.scss) : éditoriale mode sombre, rouge vif sur noir
-// (inspirée de la mise en page ha.com.tn, recolorée à la demande de l'utilisateur).
+// Charte graphique INA : luxe accessible — vert profond + doré + blanc cassé, thème clair
+// (remplace l'ancien thème éditorial sombre rouge/noir à la demande de l'utilisateur).
 
 :root {
-  // Couleurs
-  --shop-color-primary: #ff1a2c;
-  --shop-color-primary-hover: #ff3b4c;
+  // Couleurs de marque
+  --shop-color-primary: #003c35; // vert profond — fonds structurants, boutons importants
+  --shop-color-primary-hover: #0a4f46; // vert légèrement éclairci, hover discret sur surfaces vertes
   --shop-color-on-primary: #ffffff;
-  --shop-color-secondary: #b3121f;
-  --shop-color-accent: #ff4d5e;
-  --shop-color-accent-hover: #ff6b79;
-  --shop-color-on-accent: #ffffff;
-  --shop-color-background: #0d0d0d;
-  --shop-color-foreground: #f5f5f0;
-  --shop-color-muted: #1a1a1a;
-  --shop-color-muted-foreground: #a3a39c;
-  --shop-color-border: rgba(255, 255, 255, 0.12);
-  --shop-color-card: #1a1a1a;
-  --shop-color-destructive: #f04438;
-  --shop-color-ring: #ff1a2c;
+  --shop-color-secondary: #002923; // vert très foncé — footer
+  --shop-color-accent: #c9a24a; // doré — accent premium, à utiliser avec modération
+  --shop-color-accent-hover: #e2c77a; // doré clair — survols, dégradés subtils
+  --shop-color-on-accent: #003c35; // texte vert profond sur fond doré
 
-  // Scrim & focus-ring — dérivés des couleurs ci-dessus, pour ne plus retomber
-  // sur des rgba() ardoise/bleu hérités d'un autre thème (overlays, sheets mobiles).
-  --shop-color-scrim: rgba(0, 0, 0, 0.65);
-  --shop-shadow-ring: 0 0 0 3px rgba(255, 26, 44, 0.35);
-  --shop-shadow-glow: 0 8px 24px rgba(255, 26, 44, 0.35);
+  // Contenu posé sur les surfaces vertes (header, footer, bannière CTA, overlay hero) —
+  // distinct de --shop-color-foreground qui sert au texte sur fond clair.
+  --shop-color-on-dark: #f8f6f0;
+  --shop-color-on-dark-muted: rgba(248, 246, 240, 0.72);
+  --shop-color-on-dark-border: rgba(248, 246, 240, 0.18);
 
-  // Statuts — sémantiques (vert/rouge/ambre), version sombre : fond teinté transparent
-  // + texte vif, les pastels clairs d'origine seraient aveuglants sur fond noir.
-  // L'erreur reprend la famille rouge de la marque (--shop-color-destructive).
-  --shop-color-success-bg: rgba(34, 197, 94, 0.15);
-  --shop-color-success-fg: #4ade80;
-  --shop-color-warning-bg: rgba(245, 158, 11, 0.15);
-  --shop-color-warning-fg: #fbbf24;
-  --shop-color-error-bg: rgba(240, 68, 56, 0.15);
+  // Thème clair — blanc cassé / noir profond
+  --shop-color-background: #f8f6f0;
+  --shop-color-foreground: #111111;
+  --shop-color-muted: #f1ede3;
+  --shop-color-muted-foreground: #777777;
+  --shop-color-border: rgba(17, 17, 17, 0.12);
+  --shop-color-card: #ffffff;
+  --shop-color-destructive: #b3261e;
+  --shop-color-ring: #c9a24a;
+
+  --shop-color-scrim: rgba(0, 20, 17, 0.55);
+  --shop-shadow-ring: 0 0 0 3px rgba(201, 162, 74, 0.35);
+  --shop-shadow-glow: 0 8px 24px rgba(201, 162, 74, 0.35);
+
+  // Statuts — sémantiques (vert/rouge/ambre), version claire : fond pastel + texte soutenu.
+  --shop-color-success-bg: rgba(34, 139, 94, 0.12);
+  --shop-color-success-fg: #1e7d4e;
+  --shop-color-warning-bg: rgba(201, 162, 74, 0.16);
+  --shop-color-warning-fg: #8a6a1f;
+  --shop-color-error-bg: rgba(179, 38, 30, 0.1);
   --shop-color-error-fg: var(--shop-color-destructive);
 
-  // Typographie
-  --shop-font-display: 'Syne', 'Arial Black', sans-serif;
-  --shop-font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-  --shop-font-mono: 'Fira Code', 'Courier New', monospace;
+  // Typographie — titres serif élégante, texte courant sans-serif moderne (charte §5).
+  --shop-font-display: 'Playfair Display', 'Georgia', serif;
+  --shop-font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  --shop-font-mono: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
 
   // Espacement (densité 3/10 — spacieux)
   --shop-space-xs: 0.25rem;
@@ -50,24 +54,24 @@
   --shop-space-2xl: 4rem;
   --shop-space-3xl: 6rem;
 
-  // Rayons — plus francs, esprit éditorial mode (moins "soft UI" que l'admin)
+  // Rayons — sobres, jamais "gaming" (charte §8) : les boutons utilisent --shop-radius-md,
+  // pas --shop-radius-pill. Le pill reste dispo pour badges/chips/inputs.
   --shop-radius-sm: 6px;
   --shop-radius-md: 10px;
   --shop-radius-lg: 14px;
   --shop-radius-pill: 999px;
 
-  // Ombres — sur fond sombre l'élévation vient surtout du contraste de ton entre
-  // --shop-color-card et --shop-color-background ; l'ombre noire reste un renfort léger.
-  --shop-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shop-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-  --shop-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
-  --shop-shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.7);
+  // Ombres — thème clair : élévation réelle (contraste blanc/blanc-cassé insuffisant seul).
+  --shop-shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.06);
+  --shop-shadow-md: 0 4px 16px rgba(17, 17, 17, 0.08);
+  --shop-shadow-lg: 0 12px 32px rgba(17, 17, 17, 0.1);
+  --shop-shadow-xl: 0 24px 48px rgba(17, 17, 17, 0.14);
 
-  // Mouvement
+  // Mouvement — lent et discret (charte §13) : durées allongées par rapport au thème précédent.
   --shop-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --shop-duration-fast: 180ms;
-  --shop-duration-base: 260ms;
-  --shop-duration-slow: 420ms;
+  --shop-duration-fast: 220ms;
+  --shop-duration-base: 340ms;
+  --shop-duration-slow: 520ms;
 
   // Layout
   --shop-header-height: 72px;

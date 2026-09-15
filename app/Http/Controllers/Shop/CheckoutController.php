@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\ProductVariant;
+use App\Notifications\AdminAlertNotification;
 use App\Services\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -90,6 +91,13 @@ class CheckoutController extends Controller
         });
 
         $cart->clear();
+
+        AdminAlertNotification::broadcastToTeam(
+            'Nouvelle commande',
+            $order->order_number,
+            "{$order->customer_name} vient de passer commande ({$order->order_number}).",
+            route('orders.show', $order)
+        );
 
         return redirect()->route('shop.orders.confirmation', $order->order_number);
     }

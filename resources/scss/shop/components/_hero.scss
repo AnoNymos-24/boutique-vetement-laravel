@@ -36,7 +36,7 @@
 .shop-banner-hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(13, 13, 13, 0.75) 0%, rgba(13, 13, 13, 0.35) 55%, rgba(13, 13, 13, 0.1) 100%);
+  background: linear-gradient(90deg, rgba(0, 41, 35, 0.78) 0%, rgba(0, 41, 35, 0.38) 55%, rgba(0, 41, 35, 0.1) 100%);
 }
 
 .shop-banner-hero__content {
@@ -61,9 +61,9 @@
 .shop-banner-hero__title {
   font-family: var(--shop-font-display);
   font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
   color: #fff;
 }
 
@@ -101,14 +101,14 @@
   }
 
   &.is-active {
-    background: var(--shop-color-primary);
+    background: var(--shop-color-accent);
     transform: scale(1.2);
   }
 }
 
 @media (max-width: 640px) {
   .shop-banner-hero__overlay {
-    background: linear-gradient(180deg, rgba(13, 13, 13, 0.35) 0%, rgba(13, 13, 13, 0.8) 100%);
+    background: linear-gradient(180deg, rgba(0, 41, 35, 0.35) 0%, rgba(0, 41, 35, 0.82) 100%);
   }
 
   .shop-banner-hero__content {
@@ -133,11 +133,11 @@
 }
 
 .shop-hero__title {
-  font-family: var(--shop-font-body);
+  font-family: var(--shop-font-display);
   font-size: clamp(1.5rem, 3vw, 2.5rem);
   font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
+  letter-spacing: 0;
   margin-top: var(--shop-space-sm);
 }
 
@@ -249,7 +249,7 @@
   flex-direction: column;
   gap: 2px;
   max-width: calc(100% - var(--shop-space-md) * 2);
-  background: rgba(13, 13, 13, 0.7);
+  background: rgba(0, 41, 35, 0.78);
   backdrop-filter: blur(6px);
   border-radius: var(--shop-radius-md);
   padding: 0.625rem var(--shop-space-md);
@@ -277,7 +277,7 @@
 }
 
 .shop-category-tile:hover .shop-category-tile__cta {
-  color: var(--shop-color-primary);
+  color: var(--shop-color-accent);
 }
 
 .shop-review-grid {
@@ -305,10 +305,10 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--shop-font-display);
-  font-weight: 800;
+  font-weight: 700;
   font-size: clamp(6rem, 22vw, 16rem);
   line-height: 1;
-  color: rgba(255, 255, 255, 0.08);
+  color: rgba(201, 162, 74, 0.12);
   white-space: nowrap;
   pointer-events: none;
 }

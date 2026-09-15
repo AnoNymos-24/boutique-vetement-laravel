@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\MarketingController;
@@ -14,6 +17,7 @@ use App\Http\Controllers\Settings\CategoryController;
 use App\Http\Controllers\Settings\IdentityController;
 use App\Http\Controllers\Settings\TaxonomyController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -58,6 +62,21 @@ Route::prefix('admin')->group(function () {
 
         Route::resource('bannieres', BannerController::class)->except(['show'])->parameters(['bannieres' => 'banner'])->names('banners');
         Route::patch('/bannieres/{banner}/activer', [BannerController::class, 'toggleActive'])->name('banners.toggle');
+
+        Route::get('/reclamations', [ComplaintController::class, 'index'])->name('complaints');
+        Route::patch('/reclamations/{complaint}/statut', [ComplaintController::class, 'updateStatus'])->name('complaints.status');
+        Route::post('/reclamations/{complaint}/reponse', [ComplaintController::class, 'reply'])->name('complaints.reply');
+
+        Route::get('/messages', [ContactMessageController::class, 'index'])->name('contact-messages');
+        Route::patch('/messages/{contactMessage}/statut', [ContactMessageController::class, 'updateStatus'])->name('contact-messages.status');
+        Route::post('/messages/{contactMessage}/reponse', [ContactMessageController::class, 'reply'])->name('contact-messages.reply');
+
+        Route::middleware('admin')->group(function () {
+            Route::resource('utilisateurs', UserController::class)->except(['show'])->parameters(['utilisateurs' => 'user'])->names('users');
+            Route::patch('/utilisateurs/{user}/activer', [UserController::class, 'toggleActive'])->name('users.toggle');
+
+            Route::get('/journal', [ActivityLogController::class, 'index'])->name('activity-log.index');
+        });
 
         Route::prefix('parametres')->name('settings.')->group(function () {
             Route::get('/identite', [IdentityController::class, 'edit'])->name('identity.edit');

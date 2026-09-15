@@ -10,44 +10,54 @@
 **Generated:** 2026-08-01 23:16:36
 **Revised:** 2026-08-08 — palette repensée à la demande de l'utilisateur ("j'aime la logique mais pas le design/couleur, je veux du vif type rouge sang")
 **Revised again:** 2026-08-10 — thème basculé en sombre + rouge vif (inspiration structurelle `ha.com.tn`, grille catégories bento)
-**Category:** Wardrobe & Outfit Planner (fashion e-commerce)
-**Design Dials:** Variance 7/10 (Bold / editorial) | Motion 6/10 (Standard) | Density 3/10 (Spacious)
+**Revised again (2026-08-26)** — remplacé par la charte graphique officielle de la marque **INA** : luxe accessible, vert profond + doré + blanc cassé, thème clair (header/footer restent en vert profond). Structure des pages inchangée, seuls les tokens visuels (couleurs, typographie, boutons) ont été appliqués.
+**Category:** Luxury / premium fashion e-commerce
+**Design Dials:** Variance 4/10 (sobre, moins d'éléments mais de meilleure qualité) | Motion 3/10 (lent, discret) | Density 3/10 (Spacious)
 
 ---
 
 ## Global Rules
 
-### Color Palette (thème sombre)
+### Positionnement de marque
+
+INA — « Vous offre le luxe à votre portée ». Luxe, élégance, sophistication, qualité, exclusivité, accessibilité du luxe. Impression recherchée : haut de gamme et intemporelle, sans être chargée. Règle d'or : **moins d'éléments, mais de meilleure qualité** — l'espace vide renforce la sensation de luxe.
+
+### Color Palette (thème clair)
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary (rouge vif) | `#FF1A2C` | `--shop-color-primary` |
-| Primary Hover (glow) | `#FF3B4C` | `--shop-color-primary-hover` |
+| Primary (vert profond) | `#003C35` | `--shop-color-primary` |
+| Primary Hover | `#0A4F46` | `--shop-color-primary-hover` |
 | On Primary | `#FFFFFF` | `--shop-color-on-primary` |
-| Secondary (rouge profond) | `#B3121F` | `--shop-color-secondary` |
-| Accent (rouge vif secondaire — badges/notes) | `#FF4D5E` | `--shop-color-accent` |
-| Accent Hover | `#FF6B79` | `--shop-color-accent-hover` |
-| Background | `#0D0D0D` | `--shop-color-background` |
-| Foreground | `#F5F5F0` | `--shop-color-foreground` |
-| Muted / Card (surfaces élevées) | `#1A1A1A` | `--shop-color-muted` / `--shop-color-card` |
-| Muted Foreground | `#A3A39C` | `--shop-color-muted-foreground` |
-| Border | `rgba(255,255,255,.12)` | `--shop-color-border` |
-| Destructive | `#F04438` | `--shop-color-destructive` |
-| Ring | `#FF1A2C` | `--shop-color-ring` |
+| Secondary (vert footer, très foncé) | `#002923` | `--shop-color-secondary` |
+| Accent (doré — à utiliser avec modération) | `#C9A24A` | `--shop-color-accent` |
+| Accent Hover (doré clair) | `#E2C77A` | `--shop-color-accent-hover` |
+| On Accent (texte vert profond sur fond doré) | `#003C35` | `--shop-color-on-accent` |
+| On Dark (texte/icônes sur header, footer, overlay hero) | `#F8F6F0` | `--shop-color-on-dark` |
+| On Dark Muted | `rgba(248,246,240,.72)` | `--shop-color-on-dark-muted` |
+| On Dark Border | `rgba(248,246,240,.18)` | `--shop-color-on-dark-border` |
+| Background (blanc cassé) | `#F8F6F0` | `--shop-color-background` |
+| Foreground (noir profond) | `#111111` | `--shop-color-foreground` |
+| Muted | `#F1EDE3` | `--shop-color-muted` |
+| Muted Foreground (gris élégant) | `#777777` | `--shop-color-muted-foreground` |
+| Card | `#FFFFFF` | `--shop-color-card` |
+| Border | `rgba(17,17,17,.12)` | `--shop-color-border` |
+| Destructive | `#B3261E` | `--shop-color-destructive` |
+| Ring (focus, doré) | `#C9A24A` | `--shop-color-ring` |
 
-**Color Notes:** Fond noir/anthracite partout, rouge vif en accent unique (CTA, prix, badges, liens, glow au survol des boutons primaires). L'élévation des surfaces vient du contraste de ton `--shop-color-card` (#1A1A1A) vs `--shop-color-background` (#0D0D0D) plutôt que du flou d'ombre (peu visible sur fond sombre) — les ombres noires restent un renfort léger. `color-scheme: dark` posé sur `body.shop` pour les contrôles natifs. Tokens de statut (succès/erreur/avertissement) en fond teinté transparent + texte vif, pas de pastels clairs (illisibles sur noir).
+**Color Notes:** Vert profond = fonds structurants (header, footer, boutons importants, bannière CTA). Doré = accent premium avec modération (bordures de bouton, badges, icônes de note, hover de navigation, liseré de survol des cartes produit) — **jamais** en couleur de fond dominante. Le header et le footer sortent du thème clair général de la page : ils utilisent les tokens `--shop-color-on-dark*` pour leur texte/icônes, pas `--shop-color-foreground` (qui suppose un fond clair). Les overlays sur les images hero utilisent un dégradé vert profond très transparent, jamais noir pur.
 
 ### Typography
 
-- **Heading Font:** Syne (display, bold, géométrique, mode/edgy)
-- **Body Font:** Manrope
-- **Price/Label Mono:** Fira Code — conservé pour la cohérence cross-app avec le back-office
-- **Mood:** fashion, avant-garde, bold, artistic, edgy — remplace l'ancien pairing Playfair Display/Inter (trop "luxe doux") par "Fashion Forward", plus proche du rendu vif demandé
-- **Google Fonts:** [Syne + Manrope + Fira Code](https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=Fira+Code:wght@500;600&display=swap)
+- **Heading Font:** Playfair Display (serif élégante) — italique disponible pour citations/accents
+- **Body Font:** Montserrat (sans-serif moderne, lisible)
+- **Price/Label:** Montserrat également (le mono "Fira Code" d'origine a été abandonné — trop "code", pas assez luxe)
+- **Poids titres:** volontairement modérés (600–700, jamais 800) et tracking neutre/nul — un serif n'a pas besoin de graisse extrême pour paraître premium
+- **Google Fonts:** [Playfair Display + Montserrat](https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700;800&display=swap)
 
 **CSS Import:**
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=Fira+Code:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700;800&display=swap');
 ```
 
 ### Spacing Variables
@@ -68,21 +78,19 @@
 
 | Level | Value | Usage |
 |-------|-------|-------|
-| `--shop-shadow-sm` | `0 1px 2px rgba(18,18,18,0.06)` | Subtle lift |
-| `--shop-shadow-md` | `0 4px 16px rgba(18,18,18,0.08)` | Cards, buttons |
-| `--shop-shadow-lg` | `0 12px 32px rgba(18,18,18,0.12)` | Hover cards, dropdowns |
-| `--shop-shadow-xl` | `0 24px 48px rgba(18,18,18,0.16)` | Modals, featured cards |
+| `--shop-shadow-sm` | `0 1px 2px rgba(17,17,17,0.06)` | Subtle lift |
+| `--shop-shadow-md` | `0 4px 16px rgba(17,17,17,0.08)` | Cards, buttons |
+| `--shop-shadow-lg` | `0 12px 32px rgba(17,17,17,0.1)` | Hover cards, dropdowns |
+| `--shop-shadow-xl` | `0 24px 48px rgba(17,17,17,0.14)` | Modals, featured cards |
 
 ### Radius
 
-*Plus franc qu'avant (moins "soft UI"), esprit éditorial mode.*
-
-| Token | Value |
-|-------|-------|
-| `--shop-radius-sm` | `6px` |
-| `--shop-radius-md` | `10px` |
-| `--shop-radius-lg` | `14px` |
-| `--shop-radius-pill` | `999px` (boutons, badges, pills catégorie) |
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--shop-radius-sm` | `6px` | |
+| `--shop-radius-md` | `10px` | **Boutons** (voir Anti-Patterns — jamais pill) |
+| `--shop-radius-lg` | `14px` | Cartes, modals |
+| `--shop-radius-pill` | `999px` | Badges, chips, champs de recherche, icônes rondes — pas les boutons CTA |
 
 ---
 
@@ -91,31 +99,37 @@
 ### Buttons
 
 ```css
-/* Primary Button — rouge sang */
+/* Bouton principal — vert profond, bordure dorée, bascule au survol */
 .shop-btn--primary {
-  background: #A4123F;
+  background: #003C35;
   color: #FFFFFF;
-  border-radius: 999px;
+  border: 1.5px solid #C9A24A;
+  border-radius: 10px; /* jamais 999px */
   padding: 0.875rem 1.75rem;
   font-weight: 600;
   box-shadow: var(--shop-shadow-md);
-  transition: all 200ms ease;
+  transition: all 220ms ease;
 }
-.shop-btn--primary:hover { background: #7A0930; transform: translateY(-1px); }
+.shop-btn--primary:hover {
+  background: #C9A24A;
+  color: #003C35;
+  border-color: #C9A24A;
+  transform: translateY(-1px);
+}
 
-/* Secondary Button — outline noir/rouge */
+/* Bouton doré (CTA secondaire ponctuel) */
+.shop-btn--accent {
+  background: #C9A24A;
+  color: #003C35;
+}
+.shop-btn--accent:hover { background: #E2C77A; }
+
+/* Bouton secondaire — outline vert */
 .shop-btn--secondary {
   background: transparent;
-  color: #A4123F;
-  border: 1.5px solid #A4123F;
+  color: #003C35;
+  border: 1.5px solid #003C35;
 }
-
-/* Accent Button — rouge vif (CTA secondaire ponctuel) */
-.shop-btn--accent {
-  background: #E11D2E;
-  color: #FFFFFF;
-}
-.shop-btn--accent:hover { background: #B3121F; }
 ```
 
 ### Cards
@@ -123,57 +137,70 @@
 ```css
 .product-card {
   background: #FFFFFF;
+  border: 1px solid transparent;
   border-radius: 14px;
-  box-shadow: var(--shop-shadow-md);
-  transition: all 200ms ease;
+  box-shadow: none; /* élévation seulement au survol */
+  transition: all 260ms ease;
 }
 .product-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shop-shadow-lg);
+  border-color: #C9A24A; /* fin liseré doré au survol, charte §9 */
 }
 ```
 
-### Badges (promo/nouveau/rating)
+### Badges
 
-Utilisent `--shop-color-accent` (#E11D2E) — cohérent avec la famille rouge sang, sans réintroduire une couleur tierce (or/rose).
+`--shop-color-accent` (doré) avec texte `--shop-color-on-accent` (vert profond, **jamais blanc** — contraste insuffisant sur doré).
 
 ### Inputs
 
 ```css
-.input {
-  border: 1px solid #E5E2E0;
+.shop-input {
+  border: 1px solid rgba(17,17,17,.12);
   border-radius: 10px;
+  background: #FFFFFF;
 }
-.input:focus {
-  border-color: #A4123F;
-  box-shadow: 0 0 0 3px rgba(164,18,63,0.12);
+.shop-input:focus {
+  border-color: #003C35;
+  box-shadow: 0 0 0 3px rgba(201,162,74,.35); /* ring doré */
 }
 ```
+
+### Header (2 lignes)
+
+Ligne 1 : logo (doré, majuscules) + recherche centrée + icônes (blanc cassé). Ligne 2 : navigation centrée, liens en majuscules/petites capitales blanc cassé, **hover → doré + soulignement animé depuis le centre**. Fond vert profond sur les deux lignes.
+
+### Footer
+
+Fond vert très foncé (`--shop-color-secondary`), texte en blanc cassé, liens/icônes → doré au survol. Séparateur du haut en doré fin (1px).
 
 ---
 
 ## Style Guidelines
 
-**Style:** Éditorial fashion (blanc/noir + accent rouge sang unique) — inspiré de "Exaggerated Minimalism" / "Fashion Forward"
+**Style:** Luxe accessible, minimaliste et raffiné — inspiré des maisons de mode haut de gamme
 
-**Keywords:** Bold, vivid, high contrast, editorial, single vivid accent, fashion, streetwear-premium
+**Keywords:** Élégance, luxe, qualité, raffinement, accessibilité, sobriété
 
-**Best For:** Boutique mode haut de gamme, streetwear premium, marques fortes à identité unique
+**Best For:** Boutique mode premium, accessoires haut de gamme
 
-**Key Effects:** Un seul accent vif (rouge) porté sur CTA/prix/badges, reste du fond en noir/blanc/gris neutre, ombres neutres (jamais colorées), typographie display bold (Syne)
+**Key Effects:** Doré réservé aux accents (bordures de bouton, hover, badges, notes, liseré carte produit) ; vert profond porte la structure (header/footer/CTA) ; beaucoup d'espace blanc ; boutons à angles adoucis mais jamais en pilule complète ; animations lentes et discrètes (220–520ms)
 
-### Page Pattern (inchangé)
+### Page Pattern (inchangé — seuls les tokens visuels ont changé)
 
-- **Accueil:** Hero (nouveauté phare) > Catégories en grille bento asymétrique (1 grande tuile + tuiles empilées, libellé en chip sombre haut-gauche — inspiré de ha.com.tn) > Grille nouveautés > Avis clients > CTA newsletter/boutique
+- **Accueil:** Hero/bannière (carrousel administrable ou fallback statique) > Catégories en grille bento asymétrique > Grille nouveautés > Avis clients (étoiles dorées) > CTA newsletter/boutique (fond vert, mot géant en filigrane doré)
 - **Catalogue** (`/boutique`, `/boutique/{categorie}`) — sticky filter sidebar (desktop) / bottom-sheet filters (mobile) + grille produits
-- **Fiche produit** (`/produit/{slug}`) — deux colonnes : galerie sticky (gauche) + buy box (droite)
+- **Fiche produit** (`/produit/{slug}`) — deux colonnes : galerie sticky (gauche) + buy box (droite), étoiles de notation dorées
 - **Panier** — colonne unique, résumé sticky
 - **Tunnel de commande** — stepper linéaire, une colonne
-- **Confirmation / suivi** — carte centrée, timeline de statut (réutilise le pattern back-office restylé aux couleurs boutique)
+- **Confirmation / suivi** — carte centrée, timeline de statut
 
 ---
 
-## Motion (inchangé)
+## Motion
+
+Lente et discrète (charte §13) — pas d'animation agressive.
 
 **Stagger List** (Standard) — Trigger: load or scroll | Duration: 300-450ms | Easing: `back.out(1.4)`
 
@@ -185,13 +212,16 @@ gsap.from('.grid-item', { opacity: 0, scale: 0.92, y: 16, duration: 0.4, stagger
 
 ## Anti-Patterns (Do NOT Use)
 
-- ❌ Réintroduire une couleur tierce (rose/or) — un seul accent vif : le rouge sang
-- ❌ Ombres colorées (rester sur des ombres neutres noir)
-- ❌ Emojis comme icônes — utiliser des SVG (Heroicons/Lucide)
+- ❌ Doré en couleur de fond dominante — c'est un accent, jamais une surface pleine page
+- ❌ Texte blanc sur fond doré (contraste insuffisant) — utiliser `--shop-color-on-accent` (vert)
+- ❌ Boutons en pilule complète (`border-radius: 999px`) — angles adoucis seulement (`--shop-radius-md`)
+- ❌ Réutiliser `--shop-color-foreground`/`--shop-color-border` (tokens "fond clair") sur le header/footer vert — utiliser les tokens `--shop-color-on-dark*`
+- ❌ Ombres colorées
+- ❌ Emojis comme icônes — utiliser des SVG (set outline maison)
 - ❌ `cursor:pointer` manquant sur les éléments cliquables
 - ❌ Hover qui déplace le layout (privilégier `transform`)
 - ❌ Contraste texte < 4.5:1
-- ❌ Changements d'état instantanés (toujours 150-300ms)
+- ❌ Changements d'état instantanés (toujours 150-300ms, idéalement plus lent ici)
 - ❌ États focus invisibles
 
 ---
@@ -199,11 +229,11 @@ gsap.from('.grid-item', { opacity: 0, scale: 0.92, y: 16, duration: 0.4, stagger
 ## Pre-Delivery Checklist
 
 - [ ] Pas d'emoji utilisé comme icône (SVG uniquement)
-- [ ] Icônes cohérentes (Heroicons/Lucide)
+- [ ] Icônes cohérentes, fines/outline
 - [ ] `cursor-pointer` sur tous les éléments cliquables
-- [ ] Hover states avec transitions douces (150-300ms)
-- [ ] Contraste texte 4.5:1 minimum
-- [ ] Focus visible au clavier
+- [ ] Hover states avec transitions douces et lentes
+- [ ] Contraste texte 4.5:1 minimum (attention particulière doré/blanc)
+- [ ] Focus visible au clavier (ring doré)
 - [ ] `prefers-reduced-motion` respecté
 - [ ] Responsive: 375px, 768px, 1024px, 1440px
 - [ ] Pas de contenu caché derrière le header sticky

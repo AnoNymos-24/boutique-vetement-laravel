@@ -15,10 +15,14 @@
         'Relation client' => [
             ['route' => 'clients', 'icon' => 'users', 'label' => 'Clients'],
             ['route' => 'reviews', 'icon' => 'star', 'label' => 'Avis'],
+            ['route' => 'complaints', 'icon' => 'flag', 'label' => 'Réclamations', 'badge' => $newComplaintsCount ?? null],
+            ['route' => 'contact-messages', 'icon' => 'mail', 'label' => 'Messages', 'badge' => $newMessagesCount ?? null],
             ['route' => 'marketing', 'icon' => 'megaphone', 'label' => 'Marketing'],
             ['route' => 'banners.index', 'icon' => 'image', 'label' => 'Bannières'],
         ],
     ];
+
+    $isAdmin = auth()->user()?->isAdmin();
 
     $settingsChildren = [
         ['route' => 'settings.identity.edit', 'label' => 'Identité de la boutique'],
@@ -44,6 +48,19 @@
 @endforeach
 
 <div class="sidebar-nav__section">Administration</div>
+
+@if ($isAdmin)
+    <a href="{{ route('users.index') }}" class="sidebar-link {{ request()->routeIs('users.*') ? 'is-active' : '' }}">
+        <x-icon name="users" />
+        <span>Équipe</span>
+    </a>
+
+    <a href="{{ route('activity-log.index') }}" class="sidebar-link {{ request()->routeIs('activity-log.*') ? 'is-active' : '' }}">
+        <x-icon name="clock" />
+        <span>Journal d'activité</span>
+    </a>
+@endif
+
 <div class="sidebar-group" x-data="{ open: @js($settingsActive) }">
     <button type="button" class="sidebar-link sidebar-group__trigger {{ $settingsActive ? 'is-active' : '' }}" @click="open = !open">
         <x-icon name="settings" />

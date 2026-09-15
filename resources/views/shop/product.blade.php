@@ -161,6 +161,50 @@
                             @empty
                                 <p>Aucun avis pour le moment.</p>
                             @endforelse
+
+                            <div style="margin-top: var(--shop-space-lg); padding-top: var(--shop-space-lg); border-top: 1px solid var(--shop-color-border);">
+                                @if (! $customer)
+                                    <p class="shop-text-muted" style="font-size:0.875rem; margin-bottom: var(--shop-space-sm);">
+                                        Connectez-vous pour laisser un avis sur cet article.
+                                    </p>
+                                    <a href="{{ route('customer.login', ['redirect_to' => url()->current()]) }}" class="shop-btn shop-btn--secondary shop-btn--sm">
+                                        Se connecter pour laisser un avis
+                                    </a>
+                                @elseif ($alreadyReviewed)
+                                    <p class="shop-text-muted" style="font-size:0.875rem;">
+                                        <x-icon name="check" style="width:16px;height:16px;" /> Vous avez déjà laissé un avis sur cet article.
+                                    </p>
+                                @elseif (! $canReview)
+                                    <p class="shop-text-muted" style="font-size:0.875rem;">
+                                        Vous ne pouvez commenter que les articles que vous avez déjà achetés.
+                                    </p>
+                                @else
+                                    <p class="shop-label" style="margin-bottom: var(--shop-space-md);">Laisser un avis sur cet article</p>
+                                    <form method="POST" action="{{ route('customer.reviews.store') }}">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                                        <div class="shop-field" x-data="{ rating: 5 }">
+                                            <label class="shop-label">Note</label>
+                                            <input type="hidden" name="rating" x-model="rating">
+                                            <div class="shop-flex shop-gap-sm">
+                                                <template x-for="n in 5" :key="n">
+                                                    <button type="button" @click="rating = n" style="cursor:pointer;">
+                                                        <x-icon name="star" x-bind:style="'width:22px;height:22px;' + (n <= rating ? 'color:var(--shop-color-accent);fill:var(--shop-color-accent);' : 'color:var(--shop-color-border);')" />
+                                                    </button>
+                                                </template>
+                                            </div>
+                                        </div>
+
+                                        <div class="shop-field">
+                                            <label class="shop-label" for="pdp-comment">Votre avis</label>
+                                            <textarea id="pdp-comment" name="comment" class="shop-textarea" rows="3" required></textarea>
+                                        </div>
+
+                                        <button type="submit" class="shop-btn shop-btn--primary shop-btn--sm">Envoyer l'avis</button>
+                                    </form>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

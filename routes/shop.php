@@ -3,12 +3,16 @@
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\CheckoutController;
+use App\Http\Controllers\Shop\ContactController;
 use App\Http\Controllers\Shop\HomeController;
 use App\Http\Controllers\Shop\OrderTrackingController;
 use App\Http\Controllers\Shop\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('shop.home');
+
+Route::get('/contact', [ContactController::class, 'index'])->name('shop.contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('shop.contact.store');
 
 Route::get('/boutique', [CatalogController::class, 'index'])->name('shop.catalog');
 Route::get('/boutique/{category}', [CatalogController::class, 'index'])->name('shop.catalog.category');

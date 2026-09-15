@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Product;
@@ -101,11 +102,15 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        $name = $product->name;
+
         foreach ($product->images as $image) {
             Storage::disk('public')->delete($image->path);
         }
 
         $product->delete();
+
+        ActivityLog::record('product.deleted', "Produit « {$name} » supprimé.");
 
         return back()->with('status', 'Produit supprimé.');
     }

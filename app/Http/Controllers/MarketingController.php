@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Order;
 use App\Models\PromoCode;
 use Illuminate\Http\Request;
@@ -46,6 +47,8 @@ class MarketingController extends Controller
 
         PromoCode::create($data);
 
+        ActivityLog::record('promo.created', "Code promo « {$data['code']} » créé.");
+
         return back()->with('status', "Code « {$data['code']} » créé.");
     }
 
@@ -53,12 +56,21 @@ class MarketingController extends Controller
     {
         $promoCode->update(['is_active' => ! $promoCode->is_active]);
 
+        ActivityLog::record(
+            $promoCode->is_active ? 'promo.activated' : 'promo.deactivated',
+            ($promoCode->is_active ? 'Code promo activé : ' : 'Code promo désactivé : ') . $promoCode->code,
+            $promoCode
+        );
+
         return back()->with('status', $promoCode->is_active ? 'Code activé.' : 'Code désactivé.');
     }
 
     public function destroy(PromoCode $promoCode)
     {
+        $code = $promoCode->code;
         $promoCode->delete();
+
+        ActivityLog::record('promo.deleted', "Code promo « {$code} » supprimé.");
 
         return back()->with('status', 'Code promo supprimé.');
     }

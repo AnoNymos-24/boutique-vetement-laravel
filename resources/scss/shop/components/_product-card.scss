@@ -12,13 +12,18 @@
   display: block;
   background: var(--shop-color-card);
   border-radius: var(--shop-radius-lg);
+  border: 1px solid transparent;
   overflow: hidden;
   transition: transform var(--shop-duration-base) var(--shop-ease-out),
-              box-shadow var(--shop-duration-base) var(--shop-ease-out);
+              box-shadow var(--shop-duration-base) var(--shop-ease-out),
+              border-color var(--shop-duration-base) var(--shop-ease-out);
 
+  // Légère élévation + fine bordure dorée au survol (charte §9) — pas de
+  // bordure épaisse par défaut, juste un liseré discret à l'interaction.
   &:hover {
     transform: translateY(-4px);
     box-shadow: var(--shop-shadow-lg);
+    border-color: var(--shop-color-accent);
   }
 }
 
@@ -74,7 +79,7 @@
   top: var(--shop-space-sm);
   left: var(--shop-space-sm);
   background: var(--shop-color-accent);
-  color: #fff;
+  color: var(--shop-color-on-accent);
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -85,6 +90,7 @@
 
 .product-card__badge--rupture {
   background: var(--shop-color-muted-foreground);
+  color: #fff;
 }
 
 .product-card__body {

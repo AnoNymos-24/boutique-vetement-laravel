@@ -13,9 +13,11 @@ use Illuminate\View\View;
 
 class AuthenticatedCustomerSessionController extends Controller
 {
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('shop.auth.login');
+        return view('shop.auth.login', [
+            'redirectTo' => $request->query('redirect_to'),
+        ]);
     }
 
     /**

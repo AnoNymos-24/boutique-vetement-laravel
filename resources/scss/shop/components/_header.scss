@@ -8,13 +8,14 @@
   padding: 0.5rem var(--shop-space-md);
 }
 
+// Header vert profond, minimaliste et premium (charte §6) — contenu en blanc
+// cassé/doré (--shop-color-on-dark*), distinct des tokens du reste de la page claire.
 .shop-header {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(13, 13, 13, 0.85);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--shop-color-border);
+  background: var(--shop-color-primary);
+  border-bottom: 1px solid var(--shop-color-on-dark-border);
 }
 
 .shop-header__bar {
@@ -33,12 +34,12 @@
   height: 44px;
   margin-left: calc(-1 * var(--shop-space-sm));
   border-radius: 50%;
-  color: var(--shop-color-foreground);
+  color: var(--shop-color-on-dark);
   transition: background var(--shop-duration-fast) var(--shop-ease-out);
   flex-shrink: 0;
 
   &:hover {
-    background: var(--shop-color-muted);
+    background: rgba(248, 246, 240, 0.12);
   }
 
   svg {
@@ -63,7 +64,9 @@
   font-family: var(--shop-font-display);
   font-size: 1.375rem;
   font-weight: 700;
-  color: var(--shop-color-primary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--shop-color-accent);
   white-space: nowrap;
 }
 
@@ -82,16 +85,39 @@
   gap: var(--shop-space-xl);
   padding-top: 0.625rem;
   padding-bottom: var(--shop-space-md);
-  border-top: 1px solid var(--shop-color-border);
+  border-top: 1px solid var(--shop-color-on-dark-border);
 
   a {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--shop-color-foreground);
+    position: relative;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--shop-color-on-dark);
     transition: color var(--shop-duration-fast) var(--shop-ease-out);
 
-    &:hover {
-      color: var(--shop-color-primary);
+    // Fin soulignement animé au survol (charte §6) plutôt qu'un simple changement
+    // de couleur — se déploie depuis le centre pour rester discret et élégant.
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      right: 50%;
+      bottom: -6px;
+      height: 1px;
+      background: var(--shop-color-accent);
+      transition: left var(--shop-duration-base) var(--shop-ease-out),
+                  right var(--shop-duration-base) var(--shop-ease-out);
+    }
+
+    &:hover,
+    &.is-active {
+      color: var(--shop-color-accent);
+
+      &::after {
+        left: 0;
+        right: 0;
+      }
     }
   }
 
@@ -116,7 +142,7 @@
 
     &:focus {
       outline: none;
-      border-color: var(--shop-color-primary);
+      border-color: var(--shop-color-accent);
       box-shadow: var(--shop-shadow-ring);
     }
   }
@@ -150,11 +176,11 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  color: var(--shop-color-foreground);
+  color: var(--shop-color-on-dark);
   transition: background var(--shop-duration-fast) var(--shop-ease-out);
 
   &:hover {
-    background: var(--shop-color-muted);
+    background: rgba(248, 246, 240, 0.12);
   }
 
   svg {
@@ -172,7 +198,7 @@
   padding: 0 4px;
   border-radius: 999px;
   background: var(--shop-color-accent);
-  color: #fff;
+  color: var(--shop-color-on-accent);
   font-size: 0.6875rem;
   font-weight: 700;
   display: flex;
@@ -180,10 +206,13 @@
   justify-content: center;
 }
 
+// Footer vert très foncé (charte §11) — texte en blanc cassé par défaut, tous les
+// liens/boutons hérités du reset global doivent donc être re-teintés ici (--shop-color-on-dark*).
 .shop-footer {
   margin-top: var(--shop-space-3xl);
-  background: var(--shop-color-muted);
-  border-top: 2px solid var(--shop-color-foreground);
+  background: var(--shop-color-secondary);
+  color: var(--shop-color-on-dark);
+  border-top: 1px solid var(--shop-color-accent);
   padding: var(--shop-space-2xl) 0;
 }
 
@@ -200,9 +229,10 @@
 .shop-footer__brand {
   font-family: var(--shop-font-display);
   font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--shop-color-foreground);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--shop-color-accent);
   margin-bottom: var(--shop-space-sm);
 }
 
@@ -226,16 +256,18 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--shop-color-muted);
-  color: var(--shop-color-primary);
+  border: 1px solid var(--shop-color-on-dark-border);
+  color: var(--shop-color-on-dark);
   transition: background var(--shop-duration-fast) var(--shop-ease-out),
+              border-color var(--shop-duration-fast) var(--shop-ease-out),
               color var(--shop-duration-fast) var(--shop-ease-out);
 
   svg { width: 17px; height: 17px; }
 
   &:hover {
-    background: var(--shop-color-primary);
-    color: #fff;
+    background: var(--shop-color-accent);
+    border-color: var(--shop-color-accent);
+    color: var(--shop-color-on-accent);
   }
 }
 
@@ -245,24 +277,28 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: var(--shop-space-md);
-  color: var(--shop-color-muted-foreground);
+  color: var(--shop-color-on-dark-muted);
 }
 
 .shop-footer ul li {
   margin-bottom: var(--shop-space-sm);
 }
 
+.shop-footer p.shop-text-muted {
+  color: var(--shop-color-on-dark-muted);
+}
+
 .shop-footer a:hover,
 .shop-footer button:hover {
-  color: var(--shop-color-primary);
+  color: var(--shop-color-accent);
 }
 
 .shop-footer__bottom {
   margin-top: var(--shop-space-2xl);
   padding-top: var(--shop-space-lg);
-  border-top: 1px solid var(--shop-color-border);
+  border-top: 1px solid var(--shop-color-on-dark-border);
   font-size: 0.8125rem;
-  color: var(--shop-color-muted-foreground);
+  color: var(--shop-color-on-dark-muted);
 }
 
 // Tiroir de navigation mobile — panneau plein écran ancré à gauche (menu,
@@ -312,6 +348,12 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--shop-space-lg);
+
+  // Le panneau du tiroir est clair (fond blanc) — le doré du header n'y offre pas
+  // assez de contraste pour du texte, on repasse la marque en vert profond ici.
+  .shop-header__brand {
+    color: var(--shop-color-primary);
+  }
 }
 
 .mobile-nav-sheet__search {
@@ -329,7 +371,7 @@
 
     &:focus {
       outline: none;
-      border-color: var(--shop-color-primary);
+      border-color: var(--shop-color-accent);
       box-shadow: var(--shop-shadow-ring);
     }
   }
@@ -359,7 +401,10 @@
     color: var(--shop-color-foreground);
     border-bottom: 1px solid var(--shop-color-border);
 
-    &:hover {
+    &:hover,
+    &.is-active {
+      // Le doré clair manque de contraste sur fond blanc (panneau du tiroir) —
+      // on garde le vert profond ici, le doré reste réservé au header/footer sombres.
       color: var(--shop-color-primary);
     }
   }

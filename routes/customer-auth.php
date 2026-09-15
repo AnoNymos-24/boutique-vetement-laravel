@@ -6,6 +6,7 @@ use App\Http\Controllers\Shop\Auth\AuthenticatedCustomerSessionController;
 use App\Http\Controllers\Shop\Auth\CustomerPasswordResetLinkController;
 use App\Http\Controllers\Shop\Auth\NewCustomerPasswordController;
 use App\Http\Controllers\Shop\Auth\RegisteredCustomerController;
+use App\Http\Controllers\Shop\ComplaintController;
 use App\Http\Controllers\Shop\ReviewController;
 use App\Http\Controllers\Shop\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -43,4 +44,7 @@ Route::middleware('auth:customer')->group(function () {
 
     Route::get('mon-compte/avis', [ReviewController::class, 'index'])->name('customer.reviews');
     Route::post('mon-compte/avis', [ReviewController::class, 'store'])->name('customer.reviews.store');
+
+    Route::get('mon-compte/reclamations', [ComplaintController::class, 'index'])->name('customer.complaints');
+    Route::post('mon-compte/reclamations', [ComplaintController::class, 'store'])->name('customer.complaints.store');
 });

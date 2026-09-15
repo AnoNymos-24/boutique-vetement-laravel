@@ -7,6 +7,7 @@
         'addresses' => ['label' => 'Mes adresses', 'icon' => 'map-pin', 'route' => route('customer.addresses')],
         'wishlist' => ['label' => 'Mes favoris', 'icon' => 'heart', 'route' => route('customer.wishlist')],
         'reviews' => ['label' => 'Mes avis', 'icon' => 'star', 'route' => route('customer.reviews')],
+        'complaints' => ['label' => 'Mes réclamations', 'icon' => 'flag', 'route' => route('customer.complaints')],
     ];
 @endphp
 

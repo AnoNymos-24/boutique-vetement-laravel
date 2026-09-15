@@ -1,4 +1,4 @@
-@props(['quote' => 'Des pièces choisies pour vous accompagner, saison après saison.'])
+@props(['quote' => 'Vous offre le luxe à votre portée.'])
 
 <x-shop-layout>
     <div class="auth-overlay">

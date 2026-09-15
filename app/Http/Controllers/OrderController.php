@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Order;
 use App\Models\ProductVariant;
+use App\Notifications\AdminAlertNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -67,6 +69,8 @@ class OrderController extends Controller
             $timestampField => now(),
         ]);
 
+        ActivityLog::record('order.status_advanced', "Commande {$order->order_number} → {$order->statusLabel()}.", $order);
+
         return back()->with('status', "Commande {$order->order_number} : {$order->statusLabel()}.");
     }
 
@@ -77,6 +81,15 @@ class OrderController extends Controller
         }
 
         $order->update(['status' => 'annulee', 'cancelled_at' => now()]);
+
+        ActivityLog::record('order.cancelled', "Commande {$order->order_number} annulée.", $order);
+
+        AdminAlertNotification::broadcastToTeam(
+            'Action importante',
+            "Commande {$order->order_number} annulée",
+            "La commande {$order->order_number} ({$order->customer_name}) vient d'être annulée.",
+            route('orders.show', $order)
+        );
 
         return back()->with('status', "Commande {$order->order_number} annulée.");
     }
@@ -117,6 +130,17 @@ class OrderController extends Controller
         $message = $data['action'] === 'verifie'
             ? "Paiement de {$order->order_number} confirmé."
             : "Paiement de {$order->order_number} rejeté.";
+
+        ActivityLog::record('order.payment_' . $data['action'], $message, $order);
+
+        if ($data['action'] === 'rejete') {
+            AdminAlertNotification::broadcastToTeam(
+                'Action importante',
+                "Paiement rejeté — {$order->order_number}",
+                "Le paiement de la commande {$order->order_number} ({$order->customer_name}) a été rejeté.",
+                route('orders.show', $order)
+            );
+        }
 
         return back()->with('status', $message);
     }

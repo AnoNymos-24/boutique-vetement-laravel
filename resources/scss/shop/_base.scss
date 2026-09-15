@@ -31,7 +31,7 @@ body.shop {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body.shop h1, body.shop h2, body.shop h3, body.shop h4, body.shop p, body.shop figure {
@@ -79,23 +79,23 @@ body.shop [x-cloak] {
 .shop-h1 {
   font-family: var(--shop-font-display);
   font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
 }
 
 .shop-h2 {
   font-family: var(--shop-font-display);
   font-size: clamp(1.5rem, 2.5vw, 2.25rem);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 .shop-h3 {
   font-family: var(--shop-font-display);
   font-size: 1.375rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .shop-eyebrow {
