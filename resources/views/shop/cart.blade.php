@@ -23,7 +23,7 @@
                             <div>
                                 <a href="{{ route('shop.product', $item['product']) }}" class="cart-line__name">{{ $item['product']->name }}</a>
                                 <div class="cart-line__variant">{{ $item['variant']->label() }}</div>
-                                <div class="cart-line__price">{{ number_format($item['unit_price'] / 100, 3, ',', ' ') }} DT</div>
+                                <div class="cart-line__price">{{ \App\Models\StoreSetting::current()->formatMoney($item['unit_price']) }}</div>
                             </div>
 
                             <div class="cart-line__actions">
@@ -51,21 +51,21 @@
                     <h3 class="shop-h3" style="margin-bottom: var(--shop-space-md);">Récapitulatif</h3>
                     <div class="cart-summary__row">
                         <span>Sous-total</span>
-                        <span class="cart-summary__value">{{ number_format($subtotal / 100, 3, ',', ' ') }} DT</span>
+                        <span class="cart-summary__value">{{ \App\Models\StoreSetting::current()->formatMoney($subtotal) }}</span>
                     </div>
                     <div class="cart-summary__row cart-summary__row--total">
                         <span>Total</span>
-                        <span class="cart-summary__value">{{ number_format($subtotal / 100, 3, ',', ' ') }} DT</span>
+                        <span class="cart-summary__value">{{ \App\Models\StoreSetting::current()->formatMoney($subtotal) }}</span>
                     </div>
 
                     @auth('customer')
                         <a href="{{ route('shop.checkout') }}" class="shop-btn shop-btn--primary shop-btn--full" style="margin-top: var(--shop-space-lg);">
-                            Passer la commande <x-icon name="arrow-right" />
+                            Passer la commande
                         </a>
                     @else
                         <button type="button" class="shop-btn shop-btn--primary shop-btn--full" style="margin-top: var(--shop-space-lg);" x-data
                                 @click="$dispatch('open-modal', 'customer-login')">
-                            Se connecter pour commander <x-icon name="arrow-right" />
+                            Se connecter pour commander
                         </button>
                         <p class="shop-hint" style="text-align:center;">Un compte est nécessaire pour commander et suivre votre livraison.</p>
                     @endauth

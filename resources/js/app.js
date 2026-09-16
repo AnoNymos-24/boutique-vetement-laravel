@@ -103,6 +103,20 @@ Alpine.data('posRegister', (products = [], checkPromoUrlBase = '') => ({
     submitting: false,
     pickingProduct: null,
 
+    // Sur téléphone, catalogue et panier ne peuvent pas rester affichés en
+    // même temps sans devenir illisibles — on passe par 2 étapes explicites
+    // au lieu d'un empilement scrollable. Sans effet sur desktop/tablette
+    // (les deux panneaux y restent côte à côte, voir le media query ≤900px).
+    mobileStep: 'catalog',
+
+    goToCart() {
+        this.mobileStep = 'cart';
+    },
+
+    backToCatalog() {
+        this.mobileStep = 'catalog';
+    },
+
     promoInput: '',
     promoChecking: false,
     promoError: '',

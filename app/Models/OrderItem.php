@@ -38,12 +38,12 @@ class OrderItem extends Model
 
     public function unitPriceFormatted(): string
     {
-        return number_format($this->unit_price / 100, 2, ',', ' ') . ' €';
+        return StoreSetting::current()->formatMoney($this->unit_price);
     }
 
     public function subtotalFormatted(): string
     {
-        return number_format($this->subtotal / 100, 2, ',', ' ') . ' €';
+        return StoreSetting::current()->formatMoney($this->subtotal);
     }
 
     public function margin(): int

@@ -24,7 +24,7 @@
 
         <div class="kpi-card" style="--kpi-accent: #eab308">
             <div class="kpi-card__label"><x-icon name="chart" /> CA du mois (payé)</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['ca_mois'] / 100 }}" data-count-decimals="0" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['ca_mois'] / 100 }}" data-count-decimals="0" data-count-suffix=" {{ $currency['symbol'] }}">0 {{ $currency['symbol'] }}</div>
         </div>
     </div>
 

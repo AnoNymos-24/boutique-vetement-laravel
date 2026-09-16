@@ -12,7 +12,7 @@
     <div class="kpi-grid">
         <div class="kpi-card" style="--kpi-accent: var(--color-accent)">
             <div class="kpi-card__label"><x-icon name="cash" /> Chiffre d'affaires du jour</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['ca_jour'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0,00 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['ca_jour'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
             @if ($kpis['ca_variation'] === null)
                 <div class="kpi-card__trend is-flat">pas de vente hier</div>
             @elseif ($kpis['ca_variation'] >= 0)

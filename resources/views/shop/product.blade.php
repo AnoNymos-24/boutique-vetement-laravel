@@ -56,7 +56,7 @@
                 <div class="pdp-buybox__prices">
                     <span class="pdp-buybox__price">{{ $product->priceFormatted() }}</span>
                     @if ($product->compare_at_price)
-                        <span class="pdp-buybox__price--compare">{{ number_format($product->compare_at_price / 100, 3, ',', ' ') }} DT</span>
+                        <span class="pdp-buybox__price--compare">{{ \App\Models\StoreSetting::current()->formatMoney($product->compare_at_price) }}</span>
                     @endif
                 </div>
 
@@ -101,7 +101,7 @@
                             <button type="button" @click="incrementQty()">+</button>
                         </div>
 
-                        <button type="submit" class="shop-btn shop-btn--primary" style="flex:1;" :disabled="!canAddToCart">
+                        <button type="submit" class="shop-btn shop-btn--primary shop-btn--sm" style="flex:1;" :disabled="!canAddToCart">
                             <x-icon name="cart" /> Ajouter au panier
                         </button>
                     </div>
@@ -142,63 +142,94 @@
                         </div>
                     @endif
 
-                    <div class="pdp-accordion__item" x-data="accordion()">
+                    @php
+                        $reviewNeedsAttention = session('review_feedback') || $errors->has('rating') || $errors->has('comment');
+                    @endphp
+                    <div class="pdp-accordion__item" id="avis-clients" x-data="accordion()" x-init="open = @js((bool) $reviewNeedsAttention) || window.location.hash === '#laisser-un-avis'; if (open) { $nextTick(() => $el.scrollIntoView({ behavior: 'smooth', block: 'start' })); }">
                         <button type="button" class="pdp-accordion__trigger" :class="{ 'is-open': open }" @click="open = !open">
                             Avis clients ({{ $reviews->count() }}) <x-icon name="chevron-down" />
                         </button>
                         <div class="pdp-accordion__panel" x-show="open" x-transition.opacity.duration.200ms x-cloak>
                             @forelse ($reviews as $review)
-                                <div style="padding: var(--shop-space-md) 0; border-bottom: 1px solid var(--shop-color-border);">
-                                    <div class="shop-flex shop-justify-between shop-items-center">
-                                        <strong>{{ $review->author_name }}</strong>
+                                <div class="shop-review-card">
+                                    <div class="shop-review-card__header">
+                                        <span class="shop-review-card__author">{{ $review->author_name }}</span>
                                         <x-star-rating :rating="$review->rating" />
                                     </div>
                                     @if ($review->isVerifiedPurchase())
                                         <span class="shop-review-card__badge"><x-icon name="check" /> Achat vérifié</span>
                                     @endif
-                                    <p style="margin-top: var(--shop-space-sm);">{{ $review->comment }}</p>
+                                    <p class="shop-review-card__comment">{{ $review->comment }}</p>
+                                    <p class="shop-review-card__date">{{ $review->created_at->translatedFormat('d F Y') }}</p>
+
+                                    @if ($review->hasReply())
+                                        <div class="shop-review-card__reply">
+                                            <p class="shop-review-card__reply-label">Réponse de {{ \App\Models\StoreSetting::current()->name }}</p>
+                                            <p>{{ $review->admin_reply }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                             @empty
-                                <p>Aucun avis pour le moment.</p>
+                                <p class="shop-text-muted" style="font-size:0.9375rem;">Aucun avis pour le moment — soyez la première à en laisser un.</p>
                             @endforelse
 
-                            <div style="margin-top: var(--shop-space-lg); padding-top: var(--shop-space-lg); border-top: 1px solid var(--shop-color-border);">
+                            <div class="pdp-review-form" id="laisser-un-avis">
+                                <p class="shop-label" style="margin-bottom: var(--shop-space-md);">Laisser un avis sur cet article</p>
+
+                                @if (session('review_feedback') && session('status'))
+                                    <div class="shop-status-banner">{{ session('status') }}</div>
+                                @elseif (session('review_feedback') && session('error'))
+                                    <div class="shop-status-banner shop-status-banner--error">{{ session('error') }}</div>
+                                @endif
+
                                 @if (! $customer)
-                                    <p class="shop-text-muted" style="font-size:0.875rem; margin-bottom: var(--shop-space-sm);">
-                                        Connectez-vous pour laisser un avis sur cet article.
-                                    </p>
-                                    <a href="{{ route('customer.login', ['redirect_to' => url()->current()]) }}" class="shop-btn shop-btn--secondary shop-btn--sm">
-                                        Se connecter pour laisser un avis
-                                    </a>
+                                    <div class="pdp-review-notice">
+                                        <x-icon name="lock" />
+                                        <div>
+                                            <p>Connectez-vous pour laisser un avis sur cet article.</p>
+                                            <a href="{{ route('customer.login', ['redirect_to' => url()->current().'#laisser-un-avis']) }}" class="shop-btn shop-btn--secondary shop-btn--sm" style="margin-top: var(--shop-space-sm);">
+                                                Se connecter pour laisser un avis
+                                            </a>
+                                        </div>
+                                    </div>
                                 @elseif ($alreadyReviewed)
-                                    <p class="shop-text-muted" style="font-size:0.875rem;">
-                                        <x-icon name="check" style="width:16px;height:16px;" /> Vous avez déjà laissé un avis sur cet article.
-                                    </p>
+                                    <div class="pdp-review-notice">
+                                        <x-icon name="check" />
+                                        <p>Vous avez déjà laissé un avis sur cet article. Merci pour votre retour !</p>
+                                    </div>
                                 @elseif (! $canReview)
-                                    <p class="shop-text-muted" style="font-size:0.875rem;">
-                                        Vous ne pouvez commenter que les articles que vous avez déjà achetés.
-                                    </p>
+                                    <div class="pdp-review-notice">
+                                        <x-icon name="warning" />
+                                        <p>Vous ne pouvez commenter que les articles que vous avez déjà achetés et reçus.</p>
+                                    </div>
                                 @else
-                                    <p class="shop-label" style="margin-bottom: var(--shop-space-md);">Laisser un avis sur cet article</p>
-                                    <form method="POST" action="{{ route('customer.reviews.store') }}">
+                                    <form method="POST" action="{{ route('customer.reviews.store') }}" x-data="{ rating: {{ old('rating', 5) }}, hoverRating: 0, comment: @js(old('comment', '')) }">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                                        <div class="shop-field" x-data="{ rating: 5 }">
-                                            <label class="shop-label">Note</label>
+                                        <div class="shop-field">
+                                            <label class="shop-label">Votre note</label>
                                             <input type="hidden" name="rating" x-model="rating">
-                                            <div class="shop-flex shop-gap-sm">
+                                            <div class="star-picker" @mouseleave="hoverRating = 0">
                                                 <template x-for="n in 5" :key="n">
-                                                    <button type="button" @click="rating = n" style="cursor:pointer;">
-                                                        <x-icon name="star" x-bind:style="'width:22px;height:22px;' + (n <= rating ? 'color:var(--shop-color-accent);fill:var(--shop-color-accent);' : 'color:var(--shop-color-border);')" />
+                                                    <button type="button"
+                                                            class="star-picker__star"
+                                                            @click="rating = n"
+                                                            @mouseenter="hoverRating = n"
+                                                            :aria-label="`Noter ${n} sur 5`">
+                                                        <x-icon name="star" x-bind:style="(n <= (hoverRating || rating) ? 'color:var(--shop-color-accent);fill:var(--shop-color-accent);' : 'color:var(--shop-color-border);')" />
                                                     </button>
                                                 </template>
+                                                <span class="star-picker__value" x-text="(hoverRating || rating) + ' / 5'"></span>
                                             </div>
+                                            <x-input-error :messages="$errors->get('rating')" />
                                         </div>
 
                                         <div class="shop-field">
                                             <label class="shop-label" for="pdp-comment">Votre avis</label>
-                                            <textarea id="pdp-comment" name="comment" class="shop-textarea" rows="3" required></textarea>
+                                            <textarea id="pdp-comment" name="comment" class="shop-textarea" rows="3" maxlength="2000" required x-model="comment"></textarea>
+                                            <p class="shop-hint" style="text-align:right;"><span x-text="comment.length"></span>/2000</p>
+                                            <x-input-error :messages="$errors->get('comment')" />
                                         </div>
 
                                         <button type="submit" class="shop-btn shop-btn--primary shop-btn--sm">Envoyer l'avis</button>

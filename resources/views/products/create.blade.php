@@ -43,20 +43,20 @@
 
             <div class="flex gap-lg">
                 <div class="form-group" style="flex:1;">
-                    <x-input-label for="price">Prix de vente (€) <span class="required-mark">*</span></x-input-label>
+                    <x-input-label for="price">Prix de vente ({{ $currency['symbol'] }}) <span class="required-mark">*</span></x-input-label>
                     <x-text-input id="price" type="number" step="0.01" min="0" name="price" :value="old('price')" required />
                     <x-input-error :messages="$errors->get('price')" />
                 </div>
 
                 <div class="form-group" style="flex:1;">
-                    <x-input-label for="compare_at_price" value="Prix barré / promo (€)" />
+                    <x-input-label for="compare_at_price" value="Prix barré / promo ({{ $currency['symbol'] }})" />
                     <x-text-input id="compare_at_price" type="number" step="0.01" min="0" name="compare_at_price" :value="old('compare_at_price')" placeholder="Optionnel" />
                     <p class="form-hint">Laisser vide si pas de promotion.</p>
                 </div>
             </div>
 
             <div class="form-group" style="max-width:calc(50% - var(--space-lg) / 2);">
-                <x-input-label for="cost_price" value="Coût d'achat (€)" />
+                <x-input-label for="cost_price" value="Coût d'achat ({{ $currency['symbol'] }})" />
                 <x-text-input id="cost_price" type="number" step="0.01" min="0" name="cost_price" :value="old('cost_price')" placeholder="Optionnel" />
                 <p class="form-hint">Sert au calcul de la marge dans Finance. Laisser vide si inconnu pour l'instant.</p>
             </div>

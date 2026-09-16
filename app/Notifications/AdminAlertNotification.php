@@ -5,7 +5,7 @@ namespace App\Notifications;
 use App\Models\User;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Notification as NotificationFacade;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Alerte générique envoyée à toute l'équipe (admin + vendeurs) pour tout sujet
@@ -41,14 +41,28 @@ class AdminAlertNotification extends Notification
     }
 
     /**
-     * Envoie l'alerte à tous les membres actifs de l'équipe (admin + vendeurs).
+     * Envoie l'alerte à tous les membres actifs de l'équipe (admin + vendeurs) —
+     * l'admin est toujours inclus puisqu'il fait partie de l'équipe active, donc
+     * reçoit systématiquement tout, en plus des vendeurs concernés.
+     *
+     * Envoyée une personne à la fois (pas Notification::send() sur toute la
+     * collection) et chaque envoi est protégé individuellement : un échec SMTP
+     * sur un destinataire (réseau, quota Gmail...) ne doit jamais empêcher les
+     * autres de recevoir l'alerte, ni faire planter l'action métier qui l'a
+     * déclenchée (commande, avis, réclamation...).
      */
     public static function broadcastToTeam(string $category, string $subjectLine, string $summary, string $url): void
     {
-        $team = User::where('is_active', true)->get();
+        $notification = new self($category, $subjectLine, $summary, $url);
 
-        if ($team->isNotEmpty()) {
-            NotificationFacade::send($team, new self($category, $subjectLine, $summary, $url));
+        foreach (User::where('is_active', true)->get() as $member) {
+            try {
+                $member->notify($notification);
+            } catch (\Throwable $e) {
+                // Voir note ci-dessus — on continue avec le membre suivant, mais on
+                // garde une trace : un échec silencieux et invisible serait pire.
+                Log::warning("Échec d'envoi d'alerte à {$member->email} : {$e->getMessage()}");
+            }
         }
     }
 }

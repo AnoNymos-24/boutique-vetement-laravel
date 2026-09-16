@@ -61,7 +61,7 @@ class Customer extends Authenticatable
 
     public function totalSpentFormatted(): string
     {
-        return number_format($this->totalSpent() / 100, 2, ',', ' ') . ' €';
+        return StoreSetting::current()->formatMoney($this->totalSpent());
     }
 
     public function segment(): string

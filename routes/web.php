@@ -15,12 +15,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Settings\CategoryController;
 use App\Http\Controllers\Settings\IdentityController;
+use App\Http\Controllers\Settings\MailController;
+use App\Http\Controllers\Settings\PaymentController;
+use App\Http\Controllers\Settings\TermsController;
 use App\Http\Controllers\Settings\TaxonomyController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('no-cache')->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -42,6 +45,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/vente-manuelle/code-promo', [PosController::class, 'checkPromoCode'])->name('pos.check-promo');
         Route::get('/finance', [FinanceController::class, 'index'])->name('finance');
         Route::get('/finance/export', [FinanceController::class, 'export'])->name('finance.export');
+        Route::get('/finance/rapport', [FinanceController::class, 'report'])->name('finance.report');
         Route::post('/finance/depenses', [FinanceController::class, 'storeExpense'])->name('finance.expenses.store');
         Route::delete('/finance/depenses/{expense}', [FinanceController::class, 'destroyExpense'])->name('finance.expenses.destroy');
 
@@ -66,6 +70,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/reclamations', [ComplaintController::class, 'index'])->name('complaints');
         Route::patch('/reclamations/{complaint}/statut', [ComplaintController::class, 'updateStatus'])->name('complaints.status');
         Route::post('/reclamations/{complaint}/reponse', [ComplaintController::class, 'reply'])->name('complaints.reply');
+        Route::post('/reclamations/{complaint}/remboursement', [ComplaintController::class, 'refund'])->name('complaints.refund');
 
         Route::get('/messages', [ContactMessageController::class, 'index'])->name('contact-messages');
         Route::patch('/messages/{contactMessage}/statut', [ContactMessageController::class, 'updateStatus'])->name('contact-messages.status');
@@ -89,6 +94,25 @@ Route::prefix('admin')->group(function () {
             Route::get('/etiquettes', [TaxonomyController::class, 'index'])->name('taxonomies.index');
             Route::post('/etiquettes/{type}', [TaxonomyController::class, 'store'])->name('taxonomies.store');
             Route::delete('/etiquettes/{type}/{id}', [TaxonomyController::class, 'destroy'])->name('taxonomies.destroy');
+
+            // Identifiants Gmail sensibles — réservé à l'administrateur, contrairement au
+            // reste de Paramètres (identité/catégories/étiquettes) ouvert aux vendeurs.
+            Route::middleware('admin')->group(function () {
+                Route::get('/email', [MailController::class, 'edit'])->name('mail.edit');
+                Route::put('/email', [MailController::class, 'update'])->name('mail.update');
+                Route::post('/email/test', [MailController::class, 'sendTest'])->name('mail.test');
+
+                // Numéros Wave/Orange Money vers lesquels les clientes envoient de
+                // l'argent — un vendeur malveillant qui les changerait détournerait
+                // directement les paiements, donc réservé à l'admin comme l'e-mail.
+                Route::get('/paiement', [PaymentController::class, 'edit'])->name('payment.edit');
+                Route::put('/paiement', [PaymentController::class, 'update'])->name('payment.update');
+
+                // Conditions générales : document juridique engageant la boutique —
+                // seul l'admin doit pouvoir le modifier, pas n'importe quel vendeur.
+                Route::get('/conditions', [TermsController::class, 'edit'])->name('terms.edit');
+                Route::put('/conditions', [TermsController::class, 'update'])->name('terms.update');
+            });
         });
     });
 

@@ -101,7 +101,7 @@
                                 {{ $product->priceFormatted() }}
                                 @if ($product->compare_at_price)
                                     <div class="text-xs text-muted" style="text-decoration:line-through;">
-                                        {{ number_format($product->compare_at_price / 100, 2, ',', ' ') }} €
+                                        {{ \App\Models\StoreSetting::current()->formatMoney($product->compare_at_price) }}
                                     </div>
                                 @endif
                             </td>

@@ -14,7 +14,7 @@
         @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     </head>
     <body>
-        <div class="pos-shell" x-data="posRegister(@js($products->map(fn ($p) => [
+        <div class="pos-shell" :class="{ 'pos-step-cart': mobileStep === 'cart' }" x-data="posRegister(@js($products->map(fn ($p) => [
             'id' => $p->id,
             'name' => $p->name,
             'price' => $p->price,
@@ -28,11 +28,20 @@
         ])), @js(route('pos.check-promo')))">
             <header class="pos-topbar">
                 <a href="{{ route('dashboard') }}" class="pos-topbar__back">
-                    <x-icon name="chevron-left" /> Retour à l'admin
+                    <x-icon name="chevron-left" /> <span class="pos-topbar__back-label">Retour à l'admin</span>
                 </a>
                 <div class="pos-topbar__title"><x-icon name="cash" /> Vente manuelle</div>
-                <div style="margin-left:auto; font-size:.8125rem; color:#94a3b8;">{{ auth()->user()->name }}</div>
+                <div class="pos-topbar__user">{{ auth()->user()->name }}</div>
             </header>
+
+            <div class="pos-mobile-steps">
+                <span class="pos-mobile-step" :class="{ 'is-active': mobileStep === 'catalog', 'is-done': mobileStep === 'cart' }">
+                    <span class="pos-mobile-step__index">1</span> Choix des produits
+                </span>
+                <span class="pos-mobile-step" :class="{ 'is-active': mobileStep === 'cart' }">
+                    <span class="pos-mobile-step__index">2</span> Enregistrement de la vente
+                </span>
+            </div>
 
             @if (session('status'))
                 <div class="status-banner" style="margin: var(--space-lg) var(--space-2xl) 0;" data-reveal>{{ session('status') }}</div>
@@ -78,6 +87,11 @@
                     </div>
                 </div>
 
+                <button type="button" class="pos-mobile-cart-bar" x-show="mobileStep === 'catalog' && cart.length > 0" x-cloak @click="goToCart()">
+                    <span class="pos-mobile-cart-bar__count" x-text="cart.length + ' article(s)'"></span>
+                    <span class="pos-mobile-cart-bar__cta">Voir le panier <span x-text="totalFormatted"></span> <x-icon name="chevron-right" /></span>
+                </button>
+
                 <x-modal name="variant-pick">
                     <div style="padding: var(--space-2xl);" x-show="pickingProduct">
                         <h2 class="h3" style="margin-bottom: var(--space-lg);" x-text="pickingProduct?.name"></h2>
@@ -96,7 +110,10 @@
                     @csrf
 
                     <div class="pos-cart__header">
-                        <span>Panier</span>
+                        <button type="button" class="pos-mobile-back" @click="backToCatalog()">
+                            <x-icon name="chevron-left" /> Retour au catalogue
+                        </button>
+                        <span class="pos-cart__header-title">Panier</span>
                         <span x-text="cart.length + ' article(s)'"></span>
                     </div>
 

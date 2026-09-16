@@ -36,6 +36,6 @@ class Expense extends Model
 
     public function amountFormatted(): string
     {
-        return number_format($this->amount / 100, 2, ',', ' ') . ' €';
+        return StoreSetting::current()->formatMoney($this->amount);
     }
 }

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
 use App\Models\ContactMessage;
+use App\Notifications\ContactMessageReplyNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class ContactMessageController extends Controller
 {
@@ -50,6 +53,22 @@ class ContactMessageController extends Controller
 
         ActivityLog::record('message.replied', "Réponse envoyée au message #{$contactMessage->id}.", $contactMessage);
 
-        return back()->with('status', 'Réponse enregistrée.');
+        // Un visiteur du formulaire de contact n'a pas de compte donc pas d'espace où
+        // consulter la réponse : l'e-mail est le seul canal de retour possible pour lui.
+        $mailFailed = false;
+        try {
+            Notification::route('mail', $contactMessage->email)
+                ->notify(new ContactMessageReplyNotification($contactMessage));
+        } catch (\Throwable $e) {
+            $mailFailed = true;
+            Log::warning("Échec d'envoi de la réponse au message #{$contactMessage->id} : {$e->getMessage()}");
+        }
+
+        return back()->with(
+            $mailFailed ? 'error' : 'status',
+            $mailFailed
+                ? "Réponse enregistrée, mais l'e-mail n'a pas pu être envoyé au client (vérifiez la configuration dans Paramètres → E-mail)."
+                : 'Réponse enregistrée et envoyée par e-mail au client.'
+        );
     }
 }

@@ -82,6 +82,24 @@
   font-size: 0.8125rem;
 }
 
+// Sur téléphone, un doigt vise moins précisément qu'une souris — on remonte
+// tous les boutons au minimum tactile de 44px sans toucher à la densité
+// desktop (choix délibéré du design system "Data-Dense Dashboard").
+@media (max-width: 900px) {
+  .btn {
+    min-height: 44px;
+  }
+
+  .btn-icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .btn-sm {
+    min-height: 40px;
+  }
+}
+
 // État de chargement : évite les doubles soumissions (cf. MASTER.md > Motion)
 .btn.is-loading {
   color: transparent !important;

@@ -65,6 +65,13 @@
                         </div>
                         <x-star-rating :rating="$review->rating" />
                         <p style="margin-top: var(--shop-space-sm);">{{ $review->comment }}</p>
+
+                        @if ($review->hasReply())
+                            <div class="shop-review-card__reply">
+                                <p class="shop-review-card__reply-label">Réponse de {{ \App\Models\StoreSetting::current()->name }}</p>
+                                <p>{{ $review->admin_reply }}</p>
+                            </div>
+                        @endif
                     </div>
                 @empty
                     <p class="shop-text-muted">Vous n'avez pas encore laissé d'avis.</p>

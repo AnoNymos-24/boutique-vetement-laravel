@@ -8,6 +8,18 @@
 
         <div class="cart-summary" style="margin-bottom: var(--shop-space-xl);" data-reveal>
             <x-shop.order-timeline :order="$order" />
+
+            @if (! in_array($order->status, ['expediee', 'livree', 'annulee'], true))
+                <form method="POST" action="{{ route('customer.account.orders.cancel', $order) }}"
+                      style="margin-top: var(--shop-space-lg); text-align:center;"
+                      onsubmit="return confirm('Annuler la commande {{ $order->order_number }} ?');">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="shop-btn shop-btn--secondary shop-btn--sm">
+                        <x-icon name="x" /> Annuler ma commande
+                    </button>
+                </form>
+            @endif
         </div>
 
         <div class="cart-summary" data-reveal>
@@ -30,7 +42,7 @@
             @foreach ($order->items as $item)
                 <div class="shop-info-row">
                     <span class="shop-info-row__label">{{ $item->product_name }} @if ($item->variant_label) ({{ $item->variant_label }}) @endif × {{ $item->quantity }}</span>
-                    <span class="cart-summary__value">{{ number_format($item->subtotal / 100, 3, ',', ' ') }} DT</span>
+                    <span class="cart-summary__value">{{ $item->subtotalFormatted() }}</span>
                 </div>
             @endforeach
 
@@ -42,15 +54,11 @@
 
         @if ($order->payment_status === 'verifie')
             <div class="cart-summary" style="margin-top: var(--shop-space-xl);" data-reveal>
-                <div class="shop-flex shop-justify-between shop-items-center">
-                    <div>
-                        <h3 class="shop-h3">Satisfaite de vos articles ?</h3>
-                        <p class="shop-text-muted" style="font-size:0.875rem;">Partagez votre avis, il sera visible après modération.</p>
-                    </div>
-                    <a href="{{ route('customer.reviews') }}" class="shop-btn shop-btn--secondary">
-                        <x-icon name="star" /> Laisser un avis
-                    </a>
-                </div>
+                <h3 class="shop-h3">Satisfaite de vos articles ?</h3>
+                <p class="shop-text-muted" style="font-size:0.875rem; margin: var(--shop-space-xs) 0 var(--shop-space-md);">Partagez votre avis, il sera visible immédiatement.</p>
+                <a href="{{ route('customer.reviews') }}" class="shop-btn shop-btn--secondary shop-btn--sm">
+                    <x-icon name="star" /> Laisser un avis
+                </a>
             </div>
         @endif
     </div>

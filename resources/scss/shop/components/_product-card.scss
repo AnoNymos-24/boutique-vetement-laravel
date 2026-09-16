@@ -58,7 +58,12 @@
   opacity: 1;
 }
 
-.product-card:hover .product-card__image--primary {
+// Bug corrigé : cette règle s'appliquait à TOUT survol, même sans image
+// secondaire (produit avec une seule photo) — l'unique image passait alors à
+// opacity:0 avec rien derrière pour prendre le relais, donc elle disparaissait
+// purement et simplement au survol. `:has()` restreint l'effet aux cartes qui
+// ont réellement une seconde image à faire apparaître en échange.
+.product-card:has(.product-card__image--secondary):hover .product-card__image--primary {
   opacity: 0;
 }
 
@@ -115,12 +120,14 @@
   align-items: baseline;
   gap: var(--shop-space-sm);
   padding-bottom: var(--shop-space-md);
+  //padding: 14px; // pour éviter que le prix ne touche le bord de la carte sur mobile
 }
 
 .product-card__price {
   font-family: var(--shop-font-mono);
   font-weight: 700;
   color: var(--shop-color-primary);
+  //margin-left: 14px; // alignement visuel avec le prix barré (même si ce dernier n'est pas affiché)
 }
 
 .product-card__price--compare {
@@ -160,4 +167,17 @@
   background: var(--shop-color-primary);
   border-color: var(--shop-color-primary);
   color: #fff;
+}
+
+// Sur téléphone, la grille catalogue tient rarement plus d'une colonne
+// (.product-grid : minmax(240px, 1fr) ne laisse pas de place pour 2 cartes
+// sous ~480px) — la carte occupe alors presque toute la largeur de l'écran,
+// et les 8px de marge latérale (--shop-space-sm, pensés pour un contexte
+// desktop à plusieurs colonnes serrées) laissaient le prix quasi collé au
+// bord de la carte. Doublée à --shop-space-md ici uniquement.
+@media (max-width: 480px) {
+  .product-card__body {
+    padding-left: var(--shop-space-md);
+    padding-right: var(--shop-space-md);
+  }
 }

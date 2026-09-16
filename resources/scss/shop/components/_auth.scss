@@ -57,3 +57,50 @@
   max-width: 420px;
   padding: var(--shop-space-2xl);
 }
+
+// Sous 860px le panneau visuel disparaît déjà (voir .auth-overlay__visual) mais
+// le padding du panneau desktop (2xl = 64px, cumulé des deux côtés) restait
+// appliqué tel quel : sur un écran de ~375px ça ne laissait qu'une bande de
+// texte utilisable d'à peine 200px, d'où le débordement signalé. On réduit
+// l'échelle de padding par palier au lieu de la retirer d'un coup.
+@media (max-width: 860px) {
+  .auth-overlay__form-side {
+    padding: var(--shop-space-xl) var(--shop-space-md);
+  }
+
+  .auth-overlay__card {
+    max-width: 480px;
+    padding: var(--shop-space-xl) var(--shop-space-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-overlay__form-side {
+    padding: var(--shop-space-lg) var(--shop-space-sm);
+  }
+
+  .auth-overlay__card {
+    padding: var(--shop-space-lg) var(--shop-space-md);
+  }
+}
+
+// Champ avec icône (email/mot de passe) — même logique que la recherche du
+// header : icône positionnée dans le padding gauche du champ, jamais cliquable.
+.auth-input-icon {
+  position: relative;
+
+  svg {
+    position: absolute;
+    left: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--shop-color-muted-foreground);
+    pointer-events: none;
+  }
+
+  .shop-input {
+    padding-left: 2.5rem;
+  }
+}

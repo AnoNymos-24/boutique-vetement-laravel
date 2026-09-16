@@ -154,11 +154,6 @@
   }
 }
 
-.app-shell.is-collapsed .sidebar-submenu-wrapper,
-.app-shell.is-collapsed .sidebar-group__chevron {
-  display: none;
-}
-
 .sidebar-toggle {
   margin: var(--space-md);
   align-self: flex-start;
@@ -174,21 +169,49 @@
   .icon { width: 18px; height: 18px; }
 }
 
-// Repli sidebar (icônes seules)
-.app-shell.is-collapsed {
-  .sidebar-brand__name,
-  .sidebar-nav__section,
-  .sidebar-link span:not(.icon),
-  .sidebar-link__badge {
+// Repli sidebar (icônes seules) — scopé ≥901px comme le grid-template-columns
+// correspondant dans _app-shell.scss : `collapsed` reste mémorisé en
+// localStorage entre sessions, donc sans ce scope le tiroir mobile pouvait
+// s'ouvrir en mode icônes-seules-sans-libellés si l'admin avait replié la
+// sidebar depuis un précédent passage sur desktop (bug réellement rencontré :
+// "la sidebar ne se déplie pas").
+@media (min-width: 901px) {
+  .app-shell.is-collapsed .sidebar-submenu-wrapper,
+  .app-shell.is-collapsed .sidebar-group__chevron {
     display: none;
   }
 
+  .app-shell.is-collapsed {
+    .sidebar-brand__name,
+    .sidebar-nav__section,
+    .sidebar-link span:not(.icon),
+    .sidebar-link__badge {
+      display: none;
+    }
+
+    .sidebar-link {
+      justify-content: center;
+    }
+
+    .sidebar-brand {
+      justify-content: center;
+      padding: var(--space-xl) var(--space-md);
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  // Le tiroir mobile est plein écran par-dessus le contenu — les liens
+  // peuvent se permettre d'être plus généreux que sur la sidebar desktop
+  // compacte, pour un vrai confort tactile (44px minimum).
   .sidebar-link {
-    justify-content: center;
+    padding: 0.75rem;
+    min-height: 44px;
   }
 
-  .sidebar-brand {
-    justify-content: center;
-    padding: var(--space-xl) var(--space-md);
+  .sidebar-sublink {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
 }

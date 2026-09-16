@@ -1,6 +1,7 @@
 <x-shop.auth-card quote="Contente de vous revoir.">
-    <h1 class="shop-h3" style="margin-bottom: var(--shop-space-xs);">Connexion</h1>
-    <p class="shop-text-muted" style="font-size:0.875rem; margin-bottom: var(--shop-space-lg);">Accédez à votre compte client.</p>
+    <p class="shop-eyebrow" style="margin-bottom: var(--shop-space-xs);">Bienvenue</p>
+    <h1 class="shop-h2" style="margin-bottom: var(--shop-space-xs);">Connexion</h1>
+    <p class="shop-text-muted" style="font-size:0.9375rem; margin-bottom: var(--shop-space-xl);">Accédez à votre compte, que vous soyez cliente ou membre de l'équipe.</p>
 
     @if (session('status'))
         <div class="shop-status-banner">{{ session('status') }}</div>
@@ -14,13 +15,19 @@
 
         <div class="shop-field">
             <label class="shop-label" for="email">Email</label>
-            <input type="email" id="email" name="email" class="shop-input" value="{{ old('email') }}" required autofocus autocomplete="username">
+            <div class="auth-input-icon">
+                <x-icon name="mail" />
+                <input type="email" id="email" name="email" class="shop-input" value="{{ old('email') }}" required autofocus autocomplete="username">
+            </div>
             <x-input-error :messages="$errors->get('email')" />
         </div>
 
         <div class="shop-field">
             <label class="shop-label" for="password">Mot de passe</label>
-            <input type="password" id="password" name="password" class="shop-input" required autocomplete="current-password">
+            <div class="auth-input-icon">
+                <x-icon name="lock" />
+                <input type="password" id="password" name="password" class="shop-input" required autocomplete="current-password">
+            </div>
             <x-input-error :messages="$errors->get('password')" />
         </div>
 

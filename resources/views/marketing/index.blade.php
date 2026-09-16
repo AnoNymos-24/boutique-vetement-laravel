@@ -19,7 +19,7 @@
 
         <div class="kpi-card" style="--kpi-accent: var(--color-destructive)">
             <div class="kpi-card__label"><x-icon name="cash" /> Réduction accordée</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['reduction_totale'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['reduction_totale'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
         </div>
 
         <div class="kpi-card" style="--kpi-accent: #eab308">
@@ -46,7 +46,7 @@
                     <x-input-label for="type" value="Type de réduction" />
                     <select id="type" name="type" class="form-select" required>
                         <option value="pourcentage">Pourcentage (%)</option>
-                        <option value="montant_fixe">Montant fixe (€)</option>
+                        <option value="montant_fixe">Montant fixe ({{ $currency['symbol'] }})</option>
                     </select>
                 </div>
 
@@ -59,7 +59,7 @@
 
             <div class="flex gap-lg">
                 <div class="form-group" style="flex:1;">
-                    <x-input-label for="min_order_amount" value="Panier minimum (€)" />
+                    <x-input-label for="min_order_amount" value="Panier minimum ({{ $currency['symbol'] }})" />
                     <x-text-input id="min_order_amount" type="number" step="0.01" min="0" name="min_order_amount" placeholder="Optionnel" />
                 </div>
 
@@ -97,7 +97,7 @@
                         <td class="cell-primary font-mono">{{ $promoCode->code }}</td>
                         <td class="cell-numeric">{{ $promoCode->valueLabel() }}</td>
                         <td class="cell-numeric">{{ $promoCode->used_count }}{{ $promoCode->max_uses ? ' / ' . $promoCode->max_uses : '' }}</td>
-                        <td class="cell-numeric text-muted">{{ $promoCode->min_order_amount ? number_format($promoCode->min_order_amount / 100, 2, ',', ' ') . ' €' : '—' }}</td>
+                        <td class="cell-numeric text-muted">{{ $promoCode->min_order_amount ? \App\Models\StoreSetting::current()->formatMoney($promoCode->min_order_amount) : '—' }}</td>
                         <td class="cell-muted text-sm">{{ $promoCode->expires_at?->format('d/m/Y') ?? '—' }}</td>
                         <td>
                             @switch($promoCode->statusLabel())

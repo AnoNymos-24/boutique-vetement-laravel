@@ -89,6 +89,6 @@ class PromoCode extends Model
     {
         return $this->type === 'pourcentage'
             ? "{$this->value}%"
-            : number_format($this->value / 100, 2, ',', ' ') . ' €';
+            : StoreSetting::current()->formatMoney($this->value);
     }
 }

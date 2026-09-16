@@ -7,7 +7,7 @@
     $gap = 2;
     $barWidth = max(($viewBoxWidth / $count) - $gap, 2);
 
-    $bars = $chartDays->values()->map(function ($day, $i) use ($barWidth, $gap, $maxValue, $baseline) {
+    $bars = $chartDays->values()->map(function ($day, $i) use ($barWidth, $gap, $maxValue, $baseline, $currency) {
         $x = $i * ($barWidth + $gap);
         $height = $day['total'] > 0 ? max(($day['total'] / $maxValue) * 170, 3) : 0;
 
@@ -16,7 +16,7 @@
             'y' => round($baseline - $height, 2),
             'height' => round($height, 2),
             'label' => $day['date']->translatedFormat('d M'),
-            'value' => number_format($day['total'] / 100, 2, ',', ' ') . ' €',
+            'value' => number_format($day['total'] / 100, $currency['decimals'], ',', ' ') . ' ' . $currency['symbol'],
         ];
     });
 @endphp
@@ -27,9 +27,14 @@
             <h1 class="h1">Finance</h1>
             <p class="text-muted text-sm">{{ $start->translatedFormat('d M Y') }} — {{ $end->translatedFormat('d M Y') }}</p>
         </div>
-        <a href="{{ route('finance.export', ['period' => $period]) }}" class="btn btn-secondary">
-            <x-icon name="chart" /> Exporter en CSV
-        </a>
+        <div class="flex gap-md page-header__actions">
+            <a href="{{ route('finance.report', ['period' => $period]) }}" target="_blank" class="btn btn-secondary">
+                <x-icon name="edit" /> Rapport imprimable
+            </a>
+            <a href="{{ route('finance.export', ['period' => $period]) }}" class="btn btn-secondary">
+                <x-icon name="chart" /> Exporter en CSV
+            </a>
+        </div>
     </div>
 
     <div class="settings-tabs" data-reveal>
@@ -41,32 +46,41 @@
     <div class="kpi-grid">
         <div class="kpi-card" style="--kpi-accent: var(--color-accent)">
             <div class="kpi-card__label"><x-icon name="cash" /> Chiffre d'affaires encaissé</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['revenue'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['revenue'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
+        </div>
+
+        <div class="kpi-card" style="--kpi-accent: var(--color-destructive)">
+            <div class="kpi-card__label"><x-icon name="warning" /> Remboursements</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['refunds'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
+            <div class="kpi-card__trend is-flat">
+                <a href="{{ route('complaints') }}" class="link">{{ $kpis['refunds_count'] }} remboursement(s) — voir les réclamations</a>
+            </div>
         </div>
 
         <div class="kpi-card" style="--kpi-accent: var(--color-primary)">
             <div class="kpi-card__label"><x-icon name="box" /> Coût des marchandises vendues</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['cogs'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['cogs'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
         </div>
 
         <div class="kpi-card" style="--kpi-accent: #eab308">
             <div class="kpi-card__label"><x-icon name="trend-up" /> Marge brute</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['gross_margin'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['gross_margin'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
+            <div class="kpi-card__trend is-flat">CA net des remboursements moins COGS</div>
         </div>
 
         <div class="kpi-card" style="--kpi-accent: var(--color-destructive)">
             <div class="kpi-card__label"><x-icon name="cart" /> Dépenses</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['expenses_total'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['expenses_total'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
         </div>
 
         <div class="kpi-card" style="--kpi-accent: var(--color-accent)">
             <div class="kpi-card__label"><x-icon name="check" /> Bénéfice net</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['net_profit'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['net_profit'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
         </div>
 
         <div class="kpi-card" style="--kpi-accent: var(--color-warning)">
             <div class="kpi-card__label"><x-icon name="warning" /> Paiements en attente</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['pending'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['pending'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
             <div class="kpi-card__trend is-flat">
                 <a href="{{ route('orders', ['payment_status' => 'en_attente_verification']) }}" class="link">à vérifier</a>
             </div>
@@ -110,7 +124,7 @@
         </template>
     </div>
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl);">
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-xl);">
         <div class="card" data-reveal>
             <div class="card-header">
                 <h2 class="card-title">Top produits (par CA)</h2>
@@ -133,7 +147,7 @@
                                 <tr>
                                     <td class="cell-primary">{{ $item->product_name }}</td>
                                     <td class="cell-numeric">{{ $item->qty }}</td>
-                                    <td class="cell-numeric cell-actions font-semibold">{{ number_format($item->revenue / 100, 2, ',', ' ') }} €</td>
+                                    <td class="cell-numeric cell-actions font-semibold">{{ \App\Models\StoreSetting::current()->formatMoney($item->revenue) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -149,17 +163,17 @@
 
             <form method="POST" action="{{ route('finance.expenses.store') }}" style="margin-bottom: var(--space-xl);">
                 @csrf
-                <div class="flex gap-md">
+                <div class="flex gap-md expense-form-row">
                     <div class="form-group" style="flex:1;">
                         <x-input-label for="label" value="Libellé" />
                         <x-text-input id="label" name="label" placeholder="Ex. Livraison Jumia" required />
                     </div>
-                    <div class="form-group" style="width:120px;">
-                        <x-input-label for="amount" value="Montant (€)" />
+                    <div class="form-group expense-form-row__amount">
+                        <x-input-label for="amount" value="Montant ({{ $currency['symbol'] }})" />
                         <x-text-input id="amount" type="number" step="0.01" min="0" name="amount" required />
                     </div>
                 </div>
-                <div class="flex gap-md">
+                <div class="flex gap-md expense-form-row">
                     <div class="form-group" style="flex:1;">
                         <x-input-label for="category" value="Catégorie" />
                         <select id="category" name="category" class="form-select" required>
@@ -171,7 +185,7 @@
                             <option value="autre">Autre</option>
                         </select>
                     </div>
-                    <div class="form-group" style="width:160px;">
+                    <div class="form-group expense-form-row__date">
                         <x-input-label for="expense_date" value="Date" />
                         <x-text-input id="expense_date" type="date" name="expense_date" :value="now()->format('Y-m-d')" required />
                     </div>
@@ -184,13 +198,13 @@
             @else
                 <div style="display:flex; flex-direction:column; gap:2px;">
                     @foreach ($expenses as $expense)
-                        <div class="flex items-center justify-between" style="padding: var(--space-sm) 0; border-bottom: 1px solid var(--color-muted);">
-                            <div>
+                        <div class="flex items-center justify-between expense-row" style="padding: var(--space-sm) 0; border-bottom: 1px solid var(--color-muted);">
+                            <div class="expense-row__info">
                                 <span class="font-semibold text-sm">{{ $expense->label }}</span>
                                 <span class="badge badge--muted" style="margin-left: var(--space-sm);">{{ $expense->categoryLabel() }}</span>
                                 <div class="text-xs text-muted">{{ $expense->expense_date->format('d/m/Y') }}</div>
                             </div>
-                            <div class="flex items-center gap-md">
+                            <div class="flex items-center gap-md" style="flex-shrink:0;">
                                 <span class="font-mono font-semibold">{{ $expense->amountFormatted() }}</span>
                                 <form method="POST" action="{{ route('finance.expenses.destroy', $expense) }}"
                                       onsubmit="return confirm('Supprimer cette dépense ?');">

@@ -90,7 +90,7 @@ class Product extends Model
 
     public function priceFormatted(): string
     {
-        return number_format($this->price / 100, 3, ',', ' ') . ' DT';
+        return StoreSetting::current()->formatMoney($this->price);
     }
 
     public function marginPerUnit(): ?int

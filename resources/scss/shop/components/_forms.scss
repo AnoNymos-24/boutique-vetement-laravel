@@ -211,3 +211,102 @@
 
 .payment-method-card__icon--orange-money { background: #ff6600; }
 .payment-method-card__icon--wave { background: #1dc8f2; }
+.payment-method-card__icon--especes { background: var(--shop-color-primary); }
+
+// Encart d'instructions étape par étape, affiché sous le moyen de paiement
+// sélectionné — évite que la cliente doive deviner comment payer réellement
+// (numéro à créditer, appli à ouvrir) au lieu de simplement cocher une case.
+.payment-instructions {
+  margin-top: var(--shop-space-sm);
+  margin-bottom: var(--shop-space-lg);
+  padding: var(--shop-space-lg);
+  background: var(--shop-color-muted);
+  border-radius: var(--shop-radius-md);
+  border-left: 3px solid var(--shop-color-accent);
+}
+
+.payment-instructions__title {
+  display: flex;
+  align-items: center;
+  gap: var(--shop-space-sm);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin-bottom: var(--shop-space-md);
+
+  svg { width: 18px; height: 18px; color: var(--shop-color-primary); }
+}
+
+.payment-instructions__steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--shop-space-sm);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.payment-instructions__steps li {
+  display: flex;
+  gap: var(--shop-space-sm);
+}
+
+// min-width:0 est nécessaire sur un enfant flex pour qu'il puisse s'enrouler
+// au lieu de forcer le <li> (et donc toute la carte) à déborder horizontalement
+// — sans ça, un <strong> ou un numéro un peu long poussait la largeur de la
+// page sur téléphone au lieu de passer à la ligne (débordement réellement rencontré).
+.payment-instructions__text {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.payment-instructions__index {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--shop-color-primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.payment-instructions__number {
+  font-family: var(--shop-font-mono);
+  font-weight: 700;
+  color: var(--shop-color-primary);
+  letter-spacing: 0.02em;
+}
+
+// Callout dédié pour le numéro à créditer — sorti de la phrase (au lieu
+// d'être embarqué en plein milieu d'une instruction) pour rester lisible et
+// ne jamais forcer la largeur de la page sur téléphone, quelle que soit la
+// longueur du numéro.
+.payment-instructions__callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--shop-space-sm);
+  flex-wrap: wrap;
+  margin: var(--shop-space-sm) 0 var(--shop-space-sm) 30px; // aligné avec le texte, pas le badge
+  padding: var(--shop-space-sm) var(--shop-space-md);
+  background: var(--shop-color-card);
+  border: 1px dashed var(--shop-color-accent);
+  border-radius: var(--shop-radius-md);
+}
+
+.payment-instructions__callout-label {
+  font-size: 0.75rem;
+  color: var(--shop-color-muted-foreground);
+}
+
+.payment-instructions__callout-value {
+  font-family: var(--shop-font-mono);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--shop-color-primary);
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}

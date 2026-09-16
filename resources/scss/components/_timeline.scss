@@ -97,3 +97,16 @@
 .info-row__label {
   color: var(--color-muted-foreground);
 }
+
+// Modificateur opt-in — .info-row est aussi utilisé dans clients/show.blade.php
+// et pos/index.blade.php, où le côte-à-côte reste voulu ; seules les lignes
+// client/paiement de orders/show.blade.php passent en libellé-au-dessus,
+// valeur-en-dessous sur téléphone (plus lisible qu'écrasé sur une carte à
+// moitié de largeur, cf. la grille auto-fit juste au-dessus dans le blade).
+@media (max-width: 600px) {
+  .info-row--stack-mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}

@@ -13,6 +13,8 @@
 
 .topbar__menu-btn {
   display: none;
+  align-items: center;
+  justify-content: center;
   padding: var(--space-sm);
   color: var(--color-muted-foreground);
 
@@ -20,7 +22,32 @@
 }
 
 @media (max-width: 900px) {
-  .topbar__menu-btn { display: inline-flex; }
+  .topbar {
+    padding: 0 var(--space-lg);
+    gap: var(--space-md);
+  }
+
+  .topbar__menu-btn {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+  }
+
+  // Champ non relié à une recherche réelle pour l'instant — sur téléphone il
+  // vole surtout de la place au menu/aux actions, alors qu'il est déjà masqué
+  // par design sur la boutique en dessous de 640px (même logique ici).
+  .topbar__search {
+    display: none;
+  }
+
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
 }
 
 .topbar__search {

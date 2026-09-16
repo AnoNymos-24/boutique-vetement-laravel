@@ -69,9 +69,14 @@
 }
 
 .review-card__reply-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 4px;
+
+  .icon { width: 14px; height: 14px; }
 }
 
 .review-card__actions {
@@ -85,4 +90,16 @@
   margin-top: var(--space-md);
   display: flex;
   gap: var(--space-sm);
+}
+
+.refund-form {
+  margin-top: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+
+  .form-group:last-of-type {
+    margin-bottom: 0;
+  }
 }

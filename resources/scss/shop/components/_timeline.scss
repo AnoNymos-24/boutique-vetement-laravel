@@ -91,11 +91,26 @@
 .shop-info-row {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--shop-space-md);
   padding: var(--shop-space-sm) 0;
   font-size: 0.875rem;
   border-bottom: 1px solid var(--shop-color-border);
 
   &:last-child { border-bottom: none; }
+
+  // Le label (souvent un nom d'article + variante + quantité) peut être long —
+  // sans min-width:0 sur ce flex item, il refuse de s'enrouler et pousse toute
+  // la ligne (donc la page) plus large que l'écran sur téléphone. La valeur en
+  // face (prix) ne doit elle jamais se laisser compresser.
+  > :first-child {
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+
+  > :last-child {
+    flex-shrink: 0;
+  }
 }
 
 .shop-info-row__label {

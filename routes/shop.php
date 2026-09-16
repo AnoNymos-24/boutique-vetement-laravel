@@ -7,12 +7,15 @@ use App\Http\Controllers\Shop\ContactController;
 use App\Http\Controllers\Shop\HomeController;
 use App\Http\Controllers\Shop\OrderTrackingController;
 use App\Http\Controllers\Shop\ProductController;
+use App\Http\Controllers\Shop\TermsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('shop.home');
 
 Route::get('/contact', [ContactController::class, 'index'])->name('shop.contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('shop.contact.store');
+
+Route::get('/conditions-generales', [TermsController::class, 'show'])->name('shop.terms');
 
 Route::get('/boutique', [CatalogController::class, 'index'])->name('shop.catalog');
 Route::get('/boutique/{category}', [CatalogController::class, 'index'])->name('shop.catalog.category');

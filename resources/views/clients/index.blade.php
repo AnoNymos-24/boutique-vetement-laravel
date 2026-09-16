@@ -24,7 +24,7 @@
 
         <div class="kpi-card" style="--kpi-accent: var(--color-warning)">
             <div class="kpi-card__label"><x-icon name="cash" /> Panier moyen</div>
-            <div class="kpi-card__value" data-count-to="{{ $kpis['panier_moyen'] / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ $kpis['panier_moyen'] / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
         </div>
     </div>
 
@@ -85,7 +85,7 @@
                                 @endswitch
                             </td>
                             <td class="cell-numeric">{{ $customer->orders_count }}</td>
-                            <td class="cell-numeric font-semibold">{{ number_format(($customer->total_spent ?? 0) / 100, 2, ',', ' ') }} €</td>
+                            <td class="cell-numeric font-semibold">{{ \App\Models\StoreSetting::current()->formatMoney($customer->total_spent ?? 0) }}</td>
                             <td class="cell-actions">
                                 <a href="{{ route('clients.show', $customer) }}" class="btn btn-secondary btn-sm">Voir</a>
                             </td>

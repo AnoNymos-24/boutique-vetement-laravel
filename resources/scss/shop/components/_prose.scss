@@ -1,0 +1,57 @@
+// Rendu du contenu "riche" édité par l'admin en texte simple (Conditions
+// générales, voir App\Support\SimpleMarkdown) — un seul endroit de la
+// boutique a besoin de ces styles de titres/listes/citation, pas de
+// framework "prose" générique pour autant.
+.shop-prose {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--shop-color-foreground);
+
+  > * + * {
+    margin-top: var(--shop-space-md);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--shop-font-display);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-top: var(--shop-space-xl);
+  }
+
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; color: var(--shop-color-primary); }
+  h3 { font-size: 1.0625rem; }
+
+  h1:first-child, h2:first-child, h3:first-child {
+    margin-top: 0;
+  }
+
+  p {
+    overflow-wrap: break-word;
+  }
+
+  strong { font-weight: 700; }
+
+  ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--shop-space-xs);
+  }
+
+  blockquote {
+    padding: var(--shop-space-md) var(--shop-space-lg);
+    background: var(--shop-color-muted);
+    border-left: 3px solid var(--shop-color-accent);
+    border-radius: var(--shop-radius-md);
+    color: var(--shop-color-muted-foreground);
+    font-size: 0.875rem;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--shop-color-border);
+    margin: var(--shop-space-xl) 0;
+  }
+}

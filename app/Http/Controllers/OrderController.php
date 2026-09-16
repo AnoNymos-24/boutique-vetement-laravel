@@ -6,9 +6,13 @@ use App\Models\ActivityLog;
 use App\Models\Order;
 use App\Models\ProductVariant;
 use App\Notifications\AdminAlertNotification;
+use App\Notifications\OrderCancelledNotification;
+use App\Notifications\OrderPaymentStatusNotification;
+use App\Notifications\OrderStatusNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -29,9 +33,15 @@ class OrderController extends Controller
 
         $kpis = [
             'a_traiter' => Order::where('status', 'en_attente')->count(),
-            'a_verifier' => Order::where('payment_status', 'en_attente_verification')->count(),
+            // Exclut les commandes annulées entre-temps : rien à vérifier pour
+            // un paiement dont la commande n'ira de toute façon plus nulle part.
+            'a_verifier' => Order::where('payment_status', 'en_attente_verification')->where('status', '!=', 'annulee')->count(),
             'expediees' => Order::where('status', 'expediee')->count(),
-            'ca_mois' => Order::where('payment_status', 'verifie')->whereMonth('created_at', now()->month)->sum('total'),
+            // whereBetween(mois civil courant) plutôt que whereMonth(), qui matche
+            // le mois sur TOUTES les années (bug : compterait aussi tous les
+            // Septembre passés) ; verifiedAndActive() exclut aussi les commandes
+            // payées puis annulées, pour rester cohérent avec Finance → CA encaissé.
+            'ca_mois' => Order::verifiedAndActive()->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->sum('total'),
         ];
 
         return view('orders.index', [
@@ -71,6 +81,8 @@ class OrderController extends Controller
 
         ActivityLog::record('order.status_advanced', "Commande {$order->order_number} → {$order->statusLabel()}.", $order);
 
+        $this->notifyCustomer($order, new OrderStatusNotification($order));
+
         return back()->with('status', "Commande {$order->order_number} : {$order->statusLabel()}.");
     }
 
@@ -90,6 +102,8 @@ class OrderController extends Controller
             "La commande {$order->order_number} ({$order->customer_name}) vient d'être annulée.",
             route('orders.show', $order)
         );
+
+        $this->notifyCustomer($order, new OrderCancelledNotification($order));
 
         return back()->with('status', "Commande {$order->order_number} annulée.");
     }
@@ -142,6 +156,29 @@ class OrderController extends Controller
             );
         }
 
+        $this->notifyCustomer($order, new OrderPaymentStatusNotification($order));
+
         return back()->with('status', $message);
+    }
+
+    /**
+     * Notifie la cliente par e-mail à chaque étape de sa commande (statut ou
+     * paiement) — uniquement pour les commandes passées en ligne avec un compte
+     * client réel : une vente manuelle (POS) n'a pas cette notion de suivi à
+     * distance, et un `Customer` créé sans e-mail (saisi au comptoir) ne peut de
+     * toute façon pas être notifié. Un échec d'envoi ne doit jamais faire échouer
+     * l'action admin déjà effectuée (même pattern que CheckoutController::store()).
+     */
+    private function notifyCustomer(Order $order, $notification): void
+    {
+        if ($order->channel !== 'boutique_en_ligne' || ! $order->customer?->email) {
+            return;
+        }
+
+        try {
+            $order->customer->notify($notification);
+        } catch (\Throwable $e) {
+            Log::warning("Échec d'envoi de la notification de commande {$order->order_number} : {$e->getMessage()}");
+        }
     }
 }

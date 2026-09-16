@@ -46,6 +46,11 @@ class Order extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    public function refunds(): HasMany
+    {
+        return $this->hasMany(Refund::class);
+    }
+
     public static function generateOrderNumber(): string
     {
         do {
@@ -57,7 +62,7 @@ class Order extends Model
 
     public function totalFormatted(): string
     {
-        return number_format($this->total / 100, 2, ',', ' ') . ' €';
+        return StoreSetting::current()->formatMoney($this->total);
     }
 
     public function statusLabel(): string
@@ -86,7 +91,7 @@ class Order extends Model
         return match ($this->payment_method) {
             'orange_money' => 'Orange Money',
             'wave' => 'Wave',
-            'especes' => 'Espèces',
+            'especes' => $this->channel === 'vente_manuelle' ? 'Espèces' : 'Paiement à la livraison',
             default => '—',
         };
     }
@@ -94,6 +99,20 @@ class Order extends Model
     public function isManualSale(): bool
     {
         return $this->channel === 'vente_manuelle';
+    }
+
+    /**
+     * Paiement vérifié ET commande pas annulée — `payment_status` (l'historique
+     * du paiement) et `status` (le cycle de vie de la commande) sont deux états
+     * indépendants : annuler une commande ne touche jamais `payment_status`
+     * (voir OrderController::cancel()/Shop\AccountController::cancelOrder()),
+     * donc une commande payée-puis-annulée restait comptée comme du vrai
+     * chiffre d'affaires partout où seul `payment_status = verifie` était
+     * filtré (bug de cohérence trouvé et corrigé dans FinanceController).
+     */
+    public function scopeVerifiedAndActive($query)
+    {
+        return $query->where('payment_status', 'verifie')->where('status', '!=', 'annulee');
     }
 
     public function isTerminal(): bool

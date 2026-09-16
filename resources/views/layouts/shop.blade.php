@@ -14,7 +14,7 @@
         @vite(['resources/scss/shop.scss', 'resources/js/shop.js'])
     </head>
     <body class="shop">
-        <div class="shop-announcement">Livraison partout — paiement via Orange Money ou Wave</div>
+        <div class="shop-announcement">Livraison partout — paiement via {{ \App\Models\StoreSetting::current()->enabledPaymentMethodsLabel() }}</div>
 
         <header class="shop-header" x-data="mobileNav()">
             <div class="shop-container shop-header__bar">
@@ -95,14 +95,16 @@
         </header>
 
         <main>
-            <div class="shop-container" style="padding-top: var(--shop-space-lg);">
-                @if (session('status'))
-                    <div class="shop-status-banner" data-reveal>{{ session('status') }}</div>
-                @endif
-                @if (session('error'))
-                    <div class="shop-status-banner shop-status-banner--error" data-reveal>{{ session('error') }}</div>
-                @endif
-            </div>
+            @if (session('status') || session('error'))
+                <div class="shop-container" style="padding-top: var(--shop-space-lg);">
+                    @if (session('status'))
+                        <div class="shop-status-banner" data-reveal>{{ session('status') }}</div>
+                    @endif
+                    @if (session('error'))
+                        <div class="shop-status-banner shop-status-banner--error" data-reveal>{{ session('error') }}</div>
+                    @endif
+                </div>
+            @endif
 
             {{ $slot }}
         </main>
@@ -123,11 +125,18 @@
                         @if ($storeSetting && $storeSetting->socialLinks() !== [])
                             <div class="shop-footer__socials">
                                 @foreach ($storeSetting->socialLinks() as $network => $url)
-                                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" title="{{ ucfirst($network) }}">
+                                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" title="{{ $storeSetting->socialLinkLabel($network) }}">
                                         <x-icon :name="$network" />
                                     </a>
                                 @endforeach
                             </div>
+                        @endif
+
+                        @if ($storeSetting?->address)
+                            <p class="shop-text-muted" style="font-size:0.8125rem; margin-top: var(--shop-space-md); display:flex; align-items:flex-start; gap:6px;">
+                                <x-icon name="map-pin" style="width:14px;height:14px;flex-shrink:0;margin-top:2px;" />
+                                {{ $storeSetting->address }}
+                            </p>
                         @endif
                     </div>
 
@@ -146,6 +155,7 @@
                         <ul>
                             <li><a href="{{ route('shop.cart') }}">Mon panier</a></li>
                             <li><a href="{{ route('shop.contact') }}">Nous contacter</a></li>
+                            <li><a href="{{ route('shop.terms') }}">Conditions générales</a></li>
                             <li>
                                 @auth('customer')
                                     <a href="{{ route('customer.account') }}">Mon compte</a>
@@ -159,8 +169,11 @@
                     <div>
                         <h4>Paiement</h4>
                         <ul>
-                            <li class="shop-text-muted">Orange Money</li>
-                            <li class="shop-text-muted">Wave</li>
+                            @forelse (\App\Models\StoreSetting::current()->enabledPaymentMethods() as $method)
+                                <li class="shop-text-muted">{{ $method['label'] }}</li>
+                            @empty
+                                <li class="shop-text-muted">Nous contacter</li>
+                            @endforelse
                         </ul>
                     </div>
                 </div>

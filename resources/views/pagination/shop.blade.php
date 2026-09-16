@@ -6,15 +6,15 @@
 
         <div class="shop-flex shop-gap-sm">
             @if ($paginator->onFirstPage())
-                <span class="shop-btn shop-btn--secondary shop-btn--sm" style="opacity:.4; cursor:not-allowed;"><x-icon name="arrow-left" /></span>
+                <span class="shop-btn shop-btn--secondary shop-btn--sm" style="opacity:.4; cursor:not-allowed;">Précédent</span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" class="shop-btn shop-btn--secondary shop-btn--sm"><x-icon name="arrow-left" /></a>
+                <a href="{{ $paginator->previousPageUrl() }}" class="shop-btn shop-btn--secondary shop-btn--sm">Précédent</a>
             @endif
 
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" class="shop-btn shop-btn--secondary shop-btn--sm"><x-icon name="arrow-right" /></a>
+                <a href="{{ $paginator->nextPageUrl() }}" class="shop-btn shop-btn--secondary shop-btn--sm">Suivant</a>
             @else
-                <span class="shop-btn shop-btn--secondary shop-btn--sm" style="opacity:.4; cursor:not-allowed;"><x-icon name="arrow-right" /></span>
+                <span class="shop-btn shop-btn--secondary shop-btn--sm" style="opacity:.4; cursor:not-allowed;">Suivant</span>
             @endif
         </div>
     </div>

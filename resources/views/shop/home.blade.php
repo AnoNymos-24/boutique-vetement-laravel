@@ -18,7 +18,7 @@
                                 @endif
                                 @if ($banner->button_text)
                                     <a href="{{ $banner->button_link ?: route('shop.catalog') }}" class="shop-btn shop-btn--primary shop-banner-hero__cta">
-                                        {{ $banner->button_text }} <x-icon name="arrow-right" />
+                                        {{ $banner->button_text }}
                                     </a>
                                 @endif
                             </div>
@@ -39,14 +39,14 @@
     @else
         <section class="shop-container shop-hero">
             <div class="shop-hero__grid" data-reveal>
-                <div>
+                <div class="shop-hero__content">
                     <p class="shop-eyebrow">Nouvelle collection</p>
                     <h1 class="shop-hero__title">Des pièces choisies pour vous accompagner, saison après saison.</h1>
                     <p class="shop-text-muted shop-hero__lede">
-                        Vêtements et accessoires sélectionnés avec soin, en tailles et couleurs variées, livrés où que vous soyez via Orange Money ou Wave.
+                        Vêtements et accessoires sélectionnés avec soin, en tailles et couleurs variées, livrés où que vous soyez via {{ \App\Models\StoreSetting::current()->enabledPaymentMethodsLabel() }}.
                     </p>
                     <a href="{{ route('shop.catalog') }}" class="shop-btn shop-btn--primary shop-hero__cta">
-                        Découvrir la boutique <x-icon name="arrow-right" />
+                        Découvrir la boutique
                     </a>
                 </div>
 
@@ -72,7 +72,7 @@
                         @endif
                         <span class="shop-category-tile__label">
                             <span class="shop-category-tile__name">{{ $category->name }}</span>
-                            <span class="shop-category-tile__cta">Découvrir <x-icon name="arrow-right" /></span>
+                            <span class="shop-category-tile__cta">Découvrir</span>
                         </span>
                     </a>
                 @endforeach
@@ -115,7 +115,7 @@
     <section class="shop-cta-banner" style="--shop-cta-word: '{{ Str::upper($storeName ?? 'INA') }}';">
         <div class="shop-container shop-cta-banner__content" data-reveal>
             <h2 class="shop-h2" style="color:#fff;">Prête à renouveler votre garde-robe ?</h2>
-            <p class="shop-cta-banner__lede">Livraison partout, paiement Orange Money ou Wave.</p>
+            <p class="shop-cta-banner__lede">Livraison partout, paiement {{ \App\Models\StoreSetting::current()->enabledPaymentMethodsLabel() }}.</p>
             <a href="{{ route('shop.catalog') }}" class="shop-btn shop-btn--accent" style="margin-top: var(--shop-space-lg);">
                 Voir tout le catalogue
             </a>

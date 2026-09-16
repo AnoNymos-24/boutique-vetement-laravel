@@ -1,7 +1,8 @@
 @guest('customer')
     <x-modal name="customer-login" :show="$errors->has('email')" focusable>
         <div style="padding: var(--shop-space-2xl);">
-            <h2 class="shop-h3" style="margin-bottom: var(--shop-space-xs);">Connexion</h2>
+            <p class="shop-eyebrow" style="margin-bottom: var(--shop-space-xs);">Bienvenue</p>
+            <h2 class="shop-h2" style="margin-bottom: var(--shop-space-xs);">Connexion</h2>
             <p class="shop-text-muted" style="font-size:0.875rem; margin-bottom: var(--shop-space-lg);">
                 Accédez à votre compte pour commander et suivre vos achats.
             </p>
@@ -12,13 +13,19 @@
 
                 <div class="shop-field">
                     <label class="shop-label" for="modal-email">Email</label>
-                    <input type="email" id="modal-email" name="email" class="shop-input" required autocomplete="username" value="{{ old('email') }}">
+                    <div class="auth-input-icon">
+                        <x-icon name="mail" />
+                        <input type="email" id="modal-email" name="email" class="shop-input" required autocomplete="username" value="{{ old('email') }}">
+                    </div>
                     <x-input-error :messages="$errors->get('email')" />
                 </div>
 
                 <div class="shop-field">
                     <label class="shop-label" for="modal-password">Mot de passe</label>
-                    <input type="password" id="modal-password" name="password" class="shop-input" required autocomplete="current-password">
+                    <div class="auth-input-icon">
+                        <x-icon name="lock" />
+                        <input type="password" id="modal-password" name="password" class="shop-input" required autocomplete="current-password">
+                    </div>
                 </div>
 
                 <div class="shop-flex shop-justify-between shop-items-center" style="margin-bottom: var(--shop-space-lg);">

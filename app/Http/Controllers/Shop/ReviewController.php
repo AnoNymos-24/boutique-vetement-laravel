@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\OrderItem;
 use App\Models\Review;
+use App\Notifications\AdminAlertNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,23 +54,33 @@ class ReviewController extends Controller
             ->first();
 
         if (! $orderItem) {
-            return back()->with('error', "Vous ne pouvez commenter que les articles que vous avez déjà achetés.");
+            return back()->with('error', "Vous ne pouvez commenter que les articles que vous avez déjà achetés.")->with('review_feedback', true);
         }
 
         if (Review::where('customer_id', $customer->id)->where('product_id', $data['product_id'])->exists()) {
-            return back()->with('error', 'Vous avez déjà laissé un avis pour ce produit.');
+            return back()->with('error', 'Vous avez déjà laissé un avis pour ce produit.')->with('review_feedback', true);
         }
 
-        Review::create([
+        // Publication immédiate, sans modération — l'admin garde la main pour
+        // répondre ou supprimer un avis a posteriori (ReviewController back-office),
+        // mais rien ne bloque plus sa visibilité publique dès l'envoi.
+        $review = Review::create([
             'product_id' => $data['product_id'],
             'customer_id' => $customer->id,
             'order_id' => $orderItem->order_id,
             'author_name' => $customer->name,
             'rating' => $data['rating'],
             'comment' => $data['comment'],
-            'status' => 'en_attente',
+            'status' => 'publie',
         ]);
 
-        return back()->with('status', 'Merci ! Votre avis sera visible après modération.');
+        AdminAlertNotification::broadcastToTeam(
+            'Nouveau commentaire',
+            "{$review->rating}/5 — {$orderItem->product_name}",
+            "{$customer->name} a laissé un avis ({$review->rating}/5) sur « {$orderItem->product_name} », publié automatiquement.",
+            route('reviews')
+        );
+
+        return back()->with('status', 'Merci ! Votre avis est publié.')->with('review_feedback', true);
     }
 }

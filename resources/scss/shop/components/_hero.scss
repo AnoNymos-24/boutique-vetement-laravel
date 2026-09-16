@@ -107,17 +107,30 @@
 }
 
 @media (max-width: 640px) {
+  // Quasiment plein écran sur téléphone, moins la hauteur du header sticky
+  // au-dessus : un 100dvh plein poussait le bas du hero (donc le texte/bouton,
+  // alignés en bas) hors de la zone visible, sous le header. 100dvh = hauteur
+  // de viewport "dynamique" (tient compte de la barre d'adresse mobile), avec
+  // repli sur 100vh pour les navigateurs qui ne le supportent pas encore.
+  .shop-banner-hero__viewport {
+    height: calc(100vh - var(--shop-header-height));
+    height: calc(100dvh - var(--shop-header-height));
+  }
+
   .shop-banner-hero__overlay {
     background: linear-gradient(180deg, rgba(0, 41, 35, 0.35) 0%, rgba(0, 41, 35, 0.82) 100%);
   }
 
   .shop-banner-hero__content {
     max-width: 100%;
-    padding-bottom: var(--shop-space-2xl);
+    padding-left: var(--shop-space-md);
+    padding-right: var(--shop-space-md);
   }
 
+  // Texte + bouton centrés dans la hauteur du hero plutôt que collés en bas
+  // (l'ancien align-items:flex-end laissait un grand vide au-dessus).
   .shop-banner-hero__slide {
-    align-items: flex-end;
+    align-items: center;
   }
 }
 
@@ -149,6 +162,48 @@
 
 .shop-hero__cta {
   margin-top: var(--shop-space-xl);
+}
+
+// Sur téléphone : texte et bouton centrés, bouton plus compact (charte §14 —
+// boutons suffisamment grands mais pas plus imposants que nécessaire).
+@media (max-width: 640px) {
+  // Hero statique (repli sans bannière CMS active) en plein écran comme la
+  // bannière carrousel ci-dessus : .shop-hero cumule .shop-container (largeur
+  // plafonnée + marges latérales) avec .shop-hero — on neutralise ces deux-là
+  // spécifiquement ici plutôt que sur .shop-container en général, pour ne pas
+  // affecter le reste du site. Les marges latérales du texte/de l'image sont
+  // réintroduites individuellement (.shop-hero__content ci-dessous).
+  .shop-container.shop-hero {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+    // Moins la hauteur du header sticky, même raisonnement que la bannière
+    // carrousel ci-dessus — sinon le bas du contenu déborde sous le header.
+    min-height: calc(100vh - var(--shop-header-height));
+    min-height: calc(100dvh - var(--shop-header-height));
+    display: flex;
+    align-items: center;
+  }
+
+  .shop-hero__grid {
+    width: 100%;
+  }
+
+  .shop-hero__content {
+    text-align: center;
+    padding-left: var(--shop-space-md);
+    padding-right: var(--shop-space-md);
+  }
+
+  .shop-hero__lede {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .shop-hero__cta {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
 }
 
 // Cadre décalé façon "collage éditorial" : un aplat rouge derrière l'image,
@@ -188,20 +243,16 @@
   }
 }
 
-// Grille bento asymétrique (inspirée de ha.com.tn) : une grande tuile à gauche
-// (span 2 lignes) + les suivantes empilées à droite. Avec exactement 2
-// catégories (cas réel actuel), la 2ᵉ tuile occupe aussi toute la hauteur —
-// sinon une cellule resterait vide en bas à droite.
+// Grille de tuiles catégorie de taille identique — chaque tuile garde le même
+// ratio quel que soit son nombre, pour que les images (ex. Homme / Femme)
+// s'affichent toujours à l'identique plutôt qu'en bento asymétrique.
 .shop-category-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  grid-auto-rows: 1fr;
-  height: clamp(420px, 52vw, 640px);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--shop-space-md);
 
   @media (max-width: 760px) {
     grid-template-columns: 1fr;
-    height: auto;
   }
 }
 
@@ -210,19 +261,7 @@
   border-radius: var(--shop-radius-lg);
   overflow: hidden;
   background: var(--shop-color-muted);
-
-  @media (max-width: 760px) {
-    aspect-ratio: 4 / 3;
-  }
-}
-
-.shop-category-tile:first-child {
-  grid-row: span 2;
-}
-
-.shop-category-tile:first-child:nth-last-child(2),
-.shop-category-tile:first-child:nth-last-child(2) ~ .shop-category-tile {
-  grid-row: span 2;
+  aspect-ratio: 4 / 5;
 }
 
 .shop-category-tile__image {

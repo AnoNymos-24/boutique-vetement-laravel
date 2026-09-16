@@ -1,0 +1,49 @@
+// Formulaire "Ajouter une dépense" : Libellé/Montant puis Catégorie/Date sont
+// côte à côte sur desktop, mais un champ à largeur fixe (120-160px) à côté
+// d'un champ flexible peut écraser ce dernier sur téléphone — passage en
+// colonne unique en dessous de 640px.
+@media (max-width: 640px) {
+  .expense-form-row {
+    flex-direction: column;
+  }
+
+  .expense-form-row__amount,
+  .expense-form-row__date {
+    width: 100%;
+  }
+}
+
+@media (min-width: 641px) {
+  .expense-form-row__amount { width: 120px; }
+  .expense-form-row__date { width: 160px; }
+}
+
+// Ligne de la liste des dépenses : libellé + badge catégorie + date à gauche,
+// montant + suppression à droite — le libellé doit pouvoir s'enrouler au lieu
+// de forcer la ligne à déborder sur téléphone (même défaut que .shop-info-row
+// avant son propre correctif, voir plus haut dans le projet).
+.expense-row {
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.expense-row__info {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+// Les 2 boutons d'action du header Finance ("Rapport imprimable" + "Exporter
+// en CSV") sont regroupés dans un même conteneur flex — sur téléphone ils
+// passent en colonne, chacun pleine largeur (le sélecteur générique
+// .page-header > a.btn de _app-shell.scss ne cible qu'un lien direct, pas un
+// groupe de boutons comme celui-ci).
+@media (max-width: 900px) {
+  .page-header__actions {
+    flex-direction: column;
+    width: 100%;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

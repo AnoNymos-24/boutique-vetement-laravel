@@ -28,3 +28,19 @@
     border-bottom-color: var(--color-accent);
   }
 }
+
+// Sur téléphone, 3 onglets (Finance) ou jusqu'à 6 (Paramètres) ne tiennent pas
+// sur une largeur d'écran — défilement horizontal plutôt qu'un retour à la
+// ligne qui casserait le soulignement actif de chaque onglet.
+@media (max-width: 640px) {
+  .settings-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .settings-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}

@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\ProductVariant;
+use App\Models\StoreSetting;
 use App\Notifications\AdminAlertNotification;
+use App\Notifications\OrderConfirmationNotification;
 use App\Services\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class CheckoutController extends Controller
@@ -22,12 +26,15 @@ class CheckoutController extends Controller
         }
 
         $customer = Auth::guard('customer')->user();
+        $setting = StoreSetting::current();
 
         return view('shop.checkout', [
             'items' => $cart->items(),
             'subtotal' => $cart->subtotal(),
             'customer' => $customer,
             'addresses' => $customer->addresses()->orderByDesc('is_default')->get(),
+            'paymentMethods' => $setting->enabledPaymentMethods(),
+            'setting' => $setting,
         ]);
     }
 
@@ -37,12 +44,17 @@ class CheckoutController extends Controller
             return redirect()->route('shop.cart')->with('error', 'Votre panier est vide.');
         }
 
+        $enabledMethods = StoreSetting::current()->enabledPaymentMethods();
+
         $data = $request->validate([
             'customer_name' => ['required', 'string', 'max:255'],
             'customer_phone' => ['required', 'string', 'max:30'],
             'customer_address' => ['required', 'string', 'max:255'],
-            'payment_method' => ['required', 'in:orange_money,wave'],
-            'payment_reference' => ['required', 'digits:6'],
+            'payment_method' => ['required', Rule::in(array_keys($enabledMethods))],
+            'payment_reference' => [
+                Rule::requiredIf(fn () => ($enabledMethods[$request->payment_method]['requires_reference'] ?? false)),
+                'nullable', 'digits:6',
+            ],
         ]);
 
         $items = $cart->items();
@@ -70,7 +82,7 @@ class CheckoutController extends Controller
                 'status' => 'en_attente',
                 'payment_status' => 'en_attente_verification',
                 'payment_method' => $data['payment_method'],
-                'payment_reference' => $data['payment_reference'],
+                'payment_reference' => $data['payment_reference'] ?? null,
                 'total' => $subtotal,
             ]);
 
@@ -98,6 +110,13 @@ class CheckoutController extends Controller
             "{$order->customer_name} vient de passer commande ({$order->order_number}).",
             route('orders.show', $order)
         );
+
+        try {
+            $customer->notify(new OrderConfirmationNotification($order));
+        } catch (\Throwable $e) {
+            // La commande est déjà enregistrée — un échec d'envoi ne doit jamais bloquer le client.
+            Log::warning("Échec d'envoi de la confirmation de commande {$order->order_number} : {$e->getMessage()}");
+        }
 
         return redirect()->route('shop.orders.confirmation', $order->order_number);
     }

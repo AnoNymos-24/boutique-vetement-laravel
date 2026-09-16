@@ -40,6 +40,77 @@
   gap: var(--space-sm);
 }
 
+.pos-topbar__user {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+}
+
+// Indicateur d'étape (catalogue → panier) — uniquement pertinent sur
+// téléphone puisque desktop/tablette affichent les deux panneaux en
+// permanence (voir .pos-body ci-dessous) : masqué par défaut.
+.pos-mobile-steps {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .pos-topbar {
+    padding: 0 var(--space-lg);
+    gap: var(--space-md);
+  }
+
+  .pos-topbar__back-label,
+  .pos-topbar__user {
+    display: none;
+  }
+
+  .pos-mobile-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-card);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .pos-mobile-step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-muted-foreground);
+  }
+
+  .pos-mobile-step__index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-muted);
+    color: var(--color-muted-foreground);
+    font-size: 0.6875rem;
+  }
+
+  .pos-mobile-step.is-active {
+    color: var(--color-foreground);
+
+    .pos-mobile-step__index {
+      background: var(--color-accent);
+      color: #fff;
+    }
+  }
+
+  .pos-mobile-step.is-done .pos-mobile-step__index {
+    background: var(--color-success-bg);
+    color: var(--color-success-fg);
+  }
+}
+
 .pos-body {
   flex: 1;
   display: grid;
@@ -47,10 +118,78 @@
   min-height: 0;
 }
 
+// Barre flottante "Voir le panier" (étape 1 → 2) — n'existe qu'en dessous de
+// 900px, cachée par défaut même si le JS l'affiche déjà via x-show (double
+// sécurité si Alpine n'a pas encore chargé).
+.pos-mobile-cart-bar {
+  display: none;
+}
+
+// Bouton "Retour au catalogue" (étape 2 → 1), affiché uniquement dans
+// l'en-tête du panier sur téléphone — inutile sur desktop où les deux
+// panneaux restent visibles côte à côte en permanence.
+.pos-mobile-back {
+  display: none;
+}
+
 @media (max-width: 900px) {
-  .pos-body {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
+  .pos-mobile-cart-bar {
+    position: fixed;
+    left: var(--space-md);
+    right: var(--space-md);
+    bottom: var(--space-md);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    min-height: 56px;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-foreground);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+
+  .pos-mobile-cart-bar__count {
+    color: #cbd5e1;
+    font-weight: 600;
+    font-size: 0.8125rem;
+  }
+
+  .pos-mobile-cart-bar__cta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-accent);
+
+    .icon { width: 16px; height: 16px; }
+  }
+
+  .pos-mobile-back {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 44px;
+    padding: 0 var(--space-sm) 0 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-muted-foreground);
+
+    .icon { width: 16px; height: 16px; }
+
+    &:hover { color: var(--color-foreground); }
+  }
+
+  .pos-cart__header {
+    justify-content: flex-start;
+    gap: var(--space-md);
+  }
+
+  .pos-cart__header-title {
+    margin-left: auto;
   }
 }
 
@@ -136,21 +275,14 @@
   color: var(--color-muted-foreground);
 }
 
-// Panneau panier
+// Panneau panier — sur mobile, remplace entièrement le catalogue plutôt que
+// de s'empiler dessous (voir le media query ≤900px sur .pos-body plus haut).
 .pos-cart {
   display: flex;
   flex-direction: column;
   background: var(--color-card);
   border-left: 1px solid var(--color-border);
   min-height: 0;
-}
-
-@media (max-width: 900px) {
-  .pos-cart {
-    border-left: 0;
-    border-top: 1px solid var(--color-border);
-    max-height: 60vh;
-  }
 }
 
 .pos-cart__header {
@@ -299,4 +431,80 @@
   width: 100%;
   min-height: 56px;
   font-size: 1rem;
+}
+
+@media (max-width: 900px) {
+  .pos-qty-stepper button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+}
+
+// Placé volontairement en toute fin de fichier : .pos-body/.pos-catalog/.pos-cart
+// ont des règles de base non conditionnelles plus haut (display:flex, padding…)
+// avec la même spécificité qu'un sélecteur de classe simple — un media query
+// placé AVANT elles dans le fichier perdait le conflit de cascade (la règle de
+// base, définie après, l'emportait à égalité de spécificité), donc le panier
+// restait visible en étape 1 malgré le `display:none` ci-dessous (bug réellement
+// rencontré : "je vois encore les infos client et le panier sur la 1ère étape").
+// Sur téléphone, catalogue et panier ne peuvent pas tenir côte à côte ni
+// empilés sans défiler sans fin — un seul des deux panneaux s'affiche à la
+// fois, piloté par l'état `mobileStep` (voir posRegister() dans app.js) via
+// la classe .pos-step-cart posée sur .pos-shell. Le bouton "Voir le panier"
+// / "Retour au catalogue" fait la navigation entre les deux étapes.
+@media (max-width: 900px) {
+  .pos-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    overflow: hidden;
+  }
+
+  .pos-catalog {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-lg);
+    padding-bottom: calc(var(--space-lg) + 64px); // laisse la place à la barre "Voir le panier"
+  }
+
+  .pos-product-grid {
+    flex: 1;
+  }
+
+  .pos-cart {
+    display: none;
+  }
+
+  .pos-shell.pos-step-cart .pos-catalog {
+    display: none;
+  }
+
+  .pos-shell.pos-step-cart .pos-cart {
+    display: flex;
+    max-height: none;
+    // Le panneau entier défile comme une page normale, plutôt que de compter
+    // sur le seul défilement interne de .pos-cart__items (voir plus bas) —
+    // sans ça, la zone panier n'a nulle part où déborder : .pos-cart__footer
+    // (infos client + paiement + promo + bouton "Valider") a `flex-shrink: 0`
+    // et refuse de rétrécir, donc c'est .pos-cart__items (seul enfant flexible)
+    // qui se faisait écraser à une hauteur quasi nulle pour lui faire de la
+    // place — et une fois le footer plus haut que l'espace restant, son bas
+    // (dont le bouton de validation) sortait purement et simplement de
+    // l'écran sans aucun moyen d'y défiler (bug réellement rencontré : "je
+    // n'arrive pas à descendre pour valider la vente" + panier invisible).
+    overflow-y: auto;
+  }
+
+  .pos-shell.pos-step-cart .pos-cart__header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--color-card);
+  }
+
+  .pos-shell.pos-step-cart .pos-cart__items {
+    flex: none;
+    overflow-y: visible;
+  }
 }

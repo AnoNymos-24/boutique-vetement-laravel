@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Complaint extends Model
 {
@@ -28,9 +29,19 @@ class Complaint extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function refund(): HasOne
+    {
+        return $this->hasOne(Refund::class);
+    }
+
     public function hasReply(): bool
     {
         return ! is_null($this->admin_reply);
+    }
+
+    public function hasRefund(): bool
+    {
+        return $this->refund()->exists();
     }
 
     public function statusLabel(): string

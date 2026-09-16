@@ -5,8 +5,19 @@
   transition: grid-template-columns var(--duration-base) var(--ease-in-out);
 }
 
-.app-shell.is-collapsed {
-  grid-template-columns: var(--sidebar-width-collapsed) 1fr;
+// Le mode "repli en icônes" n'a de sens que pour la sidebar fixe desktop —
+// scopé ≥901px pour ne jamais entrer en conflit avec le média-query mobile
+// juste en dessous : `collapsed` reste mémorisé dans localStorage entre les
+// sessions, donc un admin qui replie la sidebar sur desktop puis rouvre le
+// site sur son téléphone gardait cette classe active. Sans ce scope, cette
+// règle (2 classes) l'emportait sur le `grid-template-columns: 1fr` du
+// media query mobile (1 classe) — la sidebar sortant du flux en `position:
+// fixed` sur mobile, `.app-main` héritait alors de la 1ʳᵉ colonne (76px),
+// écrasant toute la page admin dans une bande de 76px de large (bug réellement rencontré).
+@media (min-width: 901px) {
+  .app-shell.is-collapsed {
+    grid-template-columns: var(--sidebar-width-collapsed) 1fr;
+  }
 }
 
 // Hors grille dans tous les cas : ce n'est qu'un fond cliquable pour fermer
@@ -66,6 +77,11 @@
   .sidebar {
     position: fixed;
     inset: 0 auto 0 0;
+    // En position fixed, la sidebar sort de la grille qui lui donnait sa largeur
+    // (--sidebar-width) — sans largeur explicite ici, elle retombe à la largeur
+    // de son contenu (variable, jamais testée), d'où un tiroir trop étroit/instable.
+    width: 280px;
+    max-width: 85vw;
     z-index: 60;
     transform: translateX(-100%);
     transition: transform var(--duration-base) var(--ease-in-out);
@@ -78,5 +94,22 @@
 
   .app-shell.sidebar-open .sidebar-backdrop {
     display: block;
+  }
+
+  // Le bouton de repli n'a de sens que pour la sidebar fixe desktop (mode
+  // icônes seules) — dans le tiroir mobile, plein écran par-dessus le
+  // contenu, replier les libellés n'apporte rien et prête à confusion.
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .app-content {
+    padding: var(--space-xl);
+  }
+
+  .page-header > a.btn,
+  .page-header > button.btn {
+    width: 100%;
+    justify-content: center;
   }
 }

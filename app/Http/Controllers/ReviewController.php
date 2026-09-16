@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Review;
+use App\Notifications\ReviewReplyNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReviewController extends Controller
 {
@@ -86,7 +88,13 @@ class ReviewController extends Controller
             'replied_at' => now(),
         ]);
 
-        return back()->with('status', 'Réponse publiée.');
+        try {
+            $review->customer?->notify(new ReviewReplyNotification($review));
+        } catch (\Throwable $e) {
+            Log::warning("Échec d'envoi de la réponse à l'avis #{$review->id} : {$e->getMessage()}");
+        }
+
+        return back()->with('status', 'Réponse publiée et envoyée par e-mail.');
     }
 
     public function destroy(Review $review)

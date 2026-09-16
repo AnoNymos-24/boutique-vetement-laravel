@@ -74,7 +74,7 @@
         </div>
     @endif
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-xl);">
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-xl); margin-bottom: var(--space-xl);">
         <div class="card" data-reveal>
             <div class="card-header">
                 <h2 class="card-title">Client</h2>
@@ -82,16 +82,16 @@
                     <a href="{{ route('clients.show', $order->customer_id) }}" class="link">Voir la fiche client</a>
                 @endif
             </div>
-            <div class="info-row">
+            <div class="info-row info-row--stack-mobile">
                 <span class="info-row__label">Nom</span>
                 <span class="font-semibold">{{ $order->customer_name }}</span>
             </div>
-            <div class="info-row">
+            <div class="info-row info-row--stack-mobile">
                 <span class="info-row__label">Téléphone</span>
                 <span>{{ $order->customer_phone }}</span>
             </div>
             @if ($order->customer_address)
-                <div class="info-row">
+                <div class="info-row info-row--stack-mobile">
                     <span class="info-row__label">Adresse</span>
                     <span>{{ $order->customer_address }}</span>
                 </div>
@@ -102,15 +102,17 @@
             <div class="card-header">
                 <h2 class="card-title">Paiement</h2>
             </div>
-            <div class="info-row">
+            <div class="info-row info-row--stack-mobile">
                 <span class="info-row__label">Moyen</span>
                 <span>{{ $order->paymentMethodLabel() }}</span>
             </div>
-            <div class="info-row">
-                <span class="info-row__label">Référence (6 derniers chiffres)</span>
-                <span class="font-mono">{{ $order->payment_reference ?? '—' }}</span>
-            </div>
-            <div class="info-row">
+            @unless ($order->payment_method === 'especes')
+                <div class="info-row info-row--stack-mobile">
+                    <span class="info-row__label">Référence (6 derniers chiffres)</span>
+                    <span class="font-mono">{{ $order->payment_reference ?? '—' }}</span>
+                </div>
+            @endunless
+            <div class="info-row info-row--stack-mobile">
                 <span class="info-row__label">Statut</span>
                 @switch($order->payment_status)
                     @case('verifie')

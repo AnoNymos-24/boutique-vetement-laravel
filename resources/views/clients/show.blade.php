@@ -19,7 +19,7 @@
 
         <div class="kpi-card" style="--kpi-accent: var(--color-accent)">
             <div class="kpi-card__label"><x-icon name="cash" /> Total dépensé</div>
-            <div class="kpi-card__value" data-count-to="{{ ($customer->total_spent ?? 0) / 100 }}" data-count-decimals="2" data-count-suffix=" €">0 €</div>
+            <div class="kpi-card__value" data-count-to="{{ ($customer->total_spent ?? 0) / 100 }}" data-count-decimals="{{ $currency['decimals'] }}" data-count-suffix=" {{ $currency['symbol'] }}">{{ number_format(0, $currency['decimals']) }} {{ $currency['symbol'] }}</div>
         </div>
 
         <div class="kpi-card" style="--kpi-accent: #eab308">

@@ -56,3 +56,96 @@
   color: var(--shop-color-muted-foreground);
   margin-top: var(--shop-space-sm);
 }
+
+// Réponse de la boutique à un avis — affichée juste à côté (en dessous) du
+// commentaire du client, jamais dans une autre page : la cliente et les
+// autres visiteuses doivent voir la réponse au même endroit que l'avis lui-même.
+.shop-review-card__reply {
+  margin-top: var(--shop-space-md);
+  padding: var(--shop-space-md) var(--shop-space-lg);
+  background: var(--shop-color-muted);
+  border-radius: var(--shop-radius-md);
+  border-left: 3px solid var(--shop-color-accent);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.shop-review-card__reply-label {
+  font-weight: 700;
+  color: var(--shop-color-primary);
+  margin-bottom: 4px;
+}
+
+// Sur la fiche produit, .shop-review-card est utilisée sans .shop-card (liste
+// empilée, pas des tuiles en grille) — un simple séparateur suffit entre avis.
+.pdp-accordion__panel .shop-review-card {
+  padding: var(--shop-space-md) 0;
+  border-bottom: 1px solid var(--shop-color-border);
+}
+
+// Zone "laisser un avis" en bloc distinct des avis existants, pour qu'on
+// comprenne au premier coup d'œil qu'il s'agit d'une action et pas d'un avis de plus.
+.pdp-review-form {
+  margin-top: var(--shop-space-lg);
+  padding-top: var(--shop-space-lg);
+  border-top: 1px solid var(--shop-color-border);
+}
+
+// États "non éligible" (invité / déjà commenté / pas d'achat) — remplace le texte
+// gris isolé par un petit encart avec icône, plus visible et moins ambigu qu'une
+// simple ligne de texte muet qui se confond avec le reste de la page.
+.pdp-review-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--shop-space-sm);
+  padding: var(--shop-space-md);
+  background: var(--shop-color-muted);
+  border-radius: var(--shop-radius-md);
+  font-size: 0.875rem;
+  color: var(--shop-color-foreground);
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--shop-color-muted-foreground);
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+// Sélecteur d'étoiles du formulaire d'avis : gros hitbox tactile (44px, cf. règle
+// touch-target) et valeur numérique affichée en direct au lieu de ne montrer que
+// des étoiles pleines/vides sans confirmation du chiffre sélectionné.
+.star-picker {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-picker__star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 -0.125rem;
+  cursor: pointer;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    transition: color var(--shop-duration-fast) var(--shop-ease-out);
+  }
+}
+
+.star-picker__value {
+  margin-left: var(--shop-space-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--shop-color-muted-foreground);
+}

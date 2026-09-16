@@ -7,20 +7,20 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-
-    Route::post('register', [RegisteredUserController::class, 'store']);
-
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
-
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    // Plus de formulaire de connexion ni d'auto-inscription équipe séparés : le seul
+    // point d'entrée est /connexion (customer.login), qui détecte si l'email appartient
+    // à un compte équipe (admin/vendeur) ou à un client et redirige en conséquence —
+    // voir Shop\Auth\AuthenticatedCustomerSessionController::store(). Cette route ne
+    // sert plus qu'à faire fonctionner les anciens liens/favoris vers /admin/login.
+    // L'auto-inscription équipe (`register`) a été retirée : n'importe qui pouvait
+    // auparavant créer un compte "vendeur" et accéder directement au back-office —
+    // les comptes équipe se créent désormais uniquement depuis /admin/utilisateurs.
+    Route::redirect('login', '/connexion')->name('login');
+    Route::redirect('register', '/connexion');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

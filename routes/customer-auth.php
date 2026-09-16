@@ -33,6 +33,7 @@ Route::middleware('auth:customer')->group(function () {
 
     Route::get('mon-compte/commandes', [AccountController::class, 'orders'])->name('customer.account.orders');
     Route::get('mon-compte/commandes/{order}', [AccountController::class, 'orderShow'])->name('customer.account.orders.show');
+    Route::patch('mon-compte/commandes/{order}/annuler', [AccountController::class, 'cancelOrder'])->name('customer.account.orders.cancel');
 
     Route::get('mon-compte/adresses', [AddressController::class, 'index'])->name('customer.addresses');
     Route::post('mon-compte/adresses', [AddressController::class, 'store'])->name('customer.addresses.store');

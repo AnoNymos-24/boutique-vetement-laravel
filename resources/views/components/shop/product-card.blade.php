@@ -35,7 +35,7 @@
         <div class="product-card__prices">
             <span class="product-card__price">{{ $product->priceFormatted() }}</span>
             @if ($product->compare_at_price)
-                <span class="product-card__price--compare">{{ number_format($product->compare_at_price / 100, 3, ',', ' ') }} DT</span>
+                <span class="product-card__price--compare">{{ \App\Models\StoreSetting::current()->formatMoney($product->compare_at_price) }}</span>
             @endif
         </div>
     </a>
