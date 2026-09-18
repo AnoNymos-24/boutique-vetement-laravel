@@ -120,14 +120,12 @@
   align-items: baseline;
   gap: var(--shop-space-sm);
   padding-bottom: var(--shop-space-md);
-  //padding: 14px; // pour éviter que le prix ne touche le bord de la carte sur mobile
 }
 
 .product-card__price {
   font-family: var(--shop-font-mono);
   font-weight: 700;
   color: var(--shop-color-primary);
-  //margin-left: 14px; // alignement visuel avec le prix barré (même si ce dernier n'est pas affiché)
 }
 
 .product-card__price--compare {

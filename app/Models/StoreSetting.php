@@ -40,7 +40,21 @@ class StoreSetting extends Model
 
     public static function current(): self
     {
-        return static::$cached ??= static::firstOrCreate([], ['name' => config('app.name')]);
+        // Les valeurs par défaut des colonnes (orange_money_enabled, etc.) sont
+        // fixées à true au niveau de la migration, mais firstOrCreate() ne
+        // relit jamais la ligne après l'INSERT : sur une base toute neuve, la
+        // toute première requête de tout le site récupérait un objet en
+        // mémoire avec ces booléens à null tant qu'aucun rechargement complet
+        // n'avait eu lieu — ce qui pouvait afficher "aucun moyen de paiement
+        // disponible" au tout premier chargement après un déploiement. On les
+        // fixe donc explicitement ici pour que l'objet créé soit toujours
+        // fidèle à ce que la base contient réellement.
+        return static::$cached ??= static::firstOrCreate([], [
+            'name' => config('app.name'),
+            'orange_money_enabled' => true,
+            'wave_enabled' => true,
+            'cash_on_delivery_enabled' => true,
+        ]);
     }
 
     public function hasMailConfigured(): bool

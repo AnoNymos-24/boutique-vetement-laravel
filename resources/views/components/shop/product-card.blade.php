@@ -32,11 +32,11 @@
             <div class="product-card__name">{{ $product->name }}</div>
         </div>
 
-        <div class="product-card__prices">
+         <div class="product-card__prices">
             <span class="product-card__price">{{ $product->priceFormatted() }}</span>
             @if ($product->compare_at_price)
                 <span class="product-card__price--compare">{{ \App\Models\StoreSetting::current()->formatMoney($product->compare_at_price) }}</span>
             @endif
-        </div>
+        </div> 
     </a>
 </div>

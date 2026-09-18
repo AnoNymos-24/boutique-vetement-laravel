@@ -125,5 +125,10 @@ Route::prefix('admin')->middleware('no-cache')->group(function () {
     require __DIR__.'/auth.php';
 });
 
-require __DIR__.'/customer-auth.php';
-require __DIR__.'/shop.php';
+// Même raisonnement que le groupe admin plus haut : une page boutique mise en
+// cache par le navigateur (prix, stock, panier, avis...) peut rester figée
+// après un déploiement — la cliente aussi doit toujours voir la version à jour.
+Route::middleware('no-cache')->group(function () {
+    require __DIR__.'/customer-auth.php';
+    require __DIR__.'/shop.php';
+});

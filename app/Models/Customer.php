@@ -12,6 +12,17 @@ class Customer extends Authenticatable
     /** @use HasFactory<\Database\Factories\CustomerFactory> */
     use HasFactory, Notifiable;
 
+    /**
+     * Remplace la notification ResetPassword par défaut de Laravel, qui pointe
+     * toujours vers route('password.reset') — la route de l'équipe (garde web)
+     * — quel que soit le compte concerné. Voir CustomerResetPasswordNotification
+     * pour le détail du bug que ça causait.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new \App\Notifications\CustomerResetPasswordNotification($token));
+    }
+
     protected $fillable = ['name', 'phone', 'email', 'address', 'note', 'password'];
 
     protected $hidden = ['password', 'remember_token'];

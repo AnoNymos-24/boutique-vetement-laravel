@@ -90,10 +90,15 @@ class PosController extends Controller
         $order = DB::transaction(function () use ($data, $variants, $promoCode, $subtotal) {
             $now = now();
 
+            // ?? null avant ?: : ces deux champs sont "nullable" côté validation,
+            // donc absents de $data (pas juste vides) quand la vendeuse ne les
+            // renseigne pas — un accès direct ($data['customer_phone']) plantait
+            // alors avec "Undefined array key" au lieu de retomber sur la valeur
+            // par défaut.
             $customer = null;
-            if (! empty($data['customer_phone'])) {
+            if (! empty($data['customer_phone'] ?? null)) {
                 $customer = Customer::findOrCreateFromOrder(
-                    $data['customer_name'] ?: 'Client comptoir',
+                    ($data['customer_name'] ?? null) ?: 'Client comptoir',
                     $data['customer_phone']
                 );
             }
@@ -104,8 +109,8 @@ class PosController extends Controller
                 'order_number' => Order::generateOrderNumber(),
                 'channel' => 'vente_manuelle',
                 'customer_id' => $customer?->id,
-                'customer_name' => $data['customer_name'] ?: 'Client comptoir',
-                'customer_phone' => $data['customer_phone'] ?: '—',
+                'customer_name' => ($data['customer_name'] ?? null) ?: 'Client comptoir',
+                'customer_phone' => ($data['customer_phone'] ?? null) ?: '—',
                 'status' => 'livree',
                 'payment_status' => 'verifie',
                 'payment_method' => $data['payment_method'],

@@ -51,6 +51,50 @@ php artisan serve
 
 La configuration e-mail (SMTP) et les moyens de paiement (numéros Orange Money/Wave) se font ensuite directement dans Paramètres, sans intervention technique — pas besoin de les mettre dans `.env`.
 
+## Déploiement en production
+
+```bash
+composer install --no-dev --optimize-autoloader
+npm install && npm run build
+
+cp .env.example .env      # puis éditer .env (voir ci-dessous)
+php artisan key:generate
+
+php artisan migrate --force   # jamais --seed en production : voir plus bas
+php artisan storage:link
+
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+**Dans `.env` de production**, en plus des identifiants de base de données réels :
+
+- `APP_ENV=production`, `APP_DEBUG=false` — une page d'erreur en debug expose la stack trace (chemins serveur, requêtes SQL) à n'importe quel visiteur.
+- `APP_URL` doit être l'URL réelle du site (`https://...`), exactement — une valeur incorrecte casse les liens absolus (images, e-mails transactionnels, redirections après paiement).
+- `SESSION_SECURE_COOKIE=true` une fois le site servi en HTTPS, pour que le cookie de session ne soit jamais transmis en clair.
+- Les identifiants e-mail SMTP et les numéros Wave/Orange Money **ne se configurent pas dans `.env`** : ils se saisissent dans l'admin (Paramètres → E-mail, Paramètres → Paiement) après la première connexion.
+
+**Ne jamais lancer `php artisan migrate --seed` en production** : `DatabaseSeeder` crée des données de démonstration (comptes `admin@boutique.test` / `vendeuse@boutique.test` avec le mot de passe codé en dur `password`, ~48 produits factices, ~27 commandes factices). `migrate --force` seul ne l'exécute pas.
+
+**Créer le tout premier compte administrateur** avec la commande interactive dédiée (mot de passe jamais écrit en clair dans le code ou les logs) :
+
+```bash
+php artisan app:create-admin
+```
+
+Elle refuse de s'exécuter si un compte admin existe déjà — pour un compte supplémentaire, utiliser `/admin/utilisateurs` une fois connecté.
+
+Sur certains hébergements mutualisés (terminal SSH web, panneau « exécuter une commande »), la saisie masquée du mot de passe ne fonctionne pas correctement et la commande échoue avec « Le champ mot de passe est obligatoire » alors qu'un mot de passe a bien été tapé. Dans ce cas, utiliser les options à la place :
+
+```bash
+php artisan app:create-admin --name="Nom complet" --email="admin@exemple.com" --password="motdepasse"
+```
+
+**Avant d'ouvrir la boutique au public**, compléter dans l'admin : Paramètres → Identité (nom, logo), Paramètres → E-mail (SMTP réel), Paramètres → Paiement (numéros Wave/Orange Money, activation du paiement à la livraison) et Paramètres → Conditions générales (texte juridique adapté à la boutique).
+
+Vérifier aussi que `storage/` et `bootstrap/cache/` sont accessibles en écriture par le serveur web.
+
 ## Notes de conception
 
 - Les montants sont stockés en centimes (entiers) partout en base ; seul l'affichage (symbole, nombre de décimales) dépend de la devise choisie dans Paramètres.

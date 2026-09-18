@@ -7,6 +7,10 @@
 
         <title>{{ $title ?? $storeName }}</title>
 
+        @if ($storeSetting?->logoUrl())
+            <link rel="icon" href="{{ $storeSetting->logoUrl() }}">
+        @endif
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,7 +18,7 @@
         @vite(['resources/scss/shop.scss', 'resources/js/shop.js'])
     </head>
     <body class="shop">
-        <div class="shop-announcement">Livraison partout — paiement via {{ \App\Models\StoreSetting::current()->enabledPaymentMethodsLabel() }}</div>
+        <div class="shop-announcement">Livraison partout, paiement via {{ \App\Models\StoreSetting::current()->enabledPaymentMethodsLabel() }}</div>
 
         <header class="shop-header" x-data="mobileNav()">
             <div class="shop-container shop-header__bar">

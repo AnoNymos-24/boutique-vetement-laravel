@@ -7,6 +7,10 @@
 
         <title>{{ $title ?? 'Tableau de bord' }} — {{ $storeName }}</title>
 
+        @if ($logoUrl = \App\Models\StoreSetting::current()->logoUrl())
+            <link rel="icon" href="{{ $logoUrl }}">
+        @endif
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">

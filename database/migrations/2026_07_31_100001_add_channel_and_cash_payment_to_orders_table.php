@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,7 +14,12 @@ return new class extends Migration
                 ->after('order_number');
         });
 
-        DB::statement("ALTER TABLE orders MODIFY payment_method ENUM('orange_money', 'wave', 'especes') NULL");
+        // Schema Builder plutôt qu'un DB::statement() MySQL brut : ce dernier
+        // faisait planter toute la suite de tests (sqlite en mémoire) et toute
+        // tentative d'installation sur un autre pilote que MySQL.
+        Schema::table('orders', function (Blueprint $table) {
+            $table->enum('payment_method', ['orange_money', 'wave', 'especes'])->nullable()->change();
+        });
     }
 
     public function down(): void
@@ -24,6 +28,8 @@ return new class extends Migration
             $table->dropColumn('channel');
         });
 
-        DB::statement("ALTER TABLE orders MODIFY payment_method ENUM('orange_money', 'wave') NULL");
+        Schema::table('orders', function (Blueprint $table) {
+            $table->enum('payment_method', ['orange_money', 'wave'])->nullable()->change();
+        });
     }
 };

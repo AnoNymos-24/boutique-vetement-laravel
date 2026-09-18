@@ -22,8 +22,11 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
+        // whereHas plutôt que having('products_count', ...) sur le sous-select
+        // de withCount() : ce dernier fonctionne sur MySQL mais est un HAVING
+        // sans GROUP BY invalide sur d'autres pilotes (ex. sqlite des tests).
         $categories = Category::withCount(['products' => fn ($q) => $q->where('status', 'active')])
-            ->having('products_count', '>', 0)
+            ->whereHas('products', fn ($q) => $q->where('status', 'active'))
             ->get()
             ->map(function ($category) {
                 $category->cover = Product::where('category_id', $category->id)

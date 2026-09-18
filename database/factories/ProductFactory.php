@@ -31,7 +31,10 @@ class ProductFactory extends Factory
 
         return [
             'name' => fake()->randomElement(self::$names),
-            'category_id' => Category::inRandomOrder()->value('id'),
+            // Sur une base vierge (tests, tinker) il n'existe encore aucune
+            // catégorie : category_id est NOT NULL, donc on en crée une plutôt
+            // que d'échouer avec une contrainte d'intégrité violée.
+            'category_id' => Category::inRandomOrder()->value('id') ?? Category::create(['name' => 'Non classé'])->id,
             'description' => fake()->paragraph(3),
             'price' => $price,
             // Coût d'achat ~45-65% du prix de vente, pour une marge réaliste.
