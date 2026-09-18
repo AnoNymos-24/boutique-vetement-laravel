@@ -1,4 +1,11 @@
 @guest('customer')
+    @php
+        // $errors est normalement toujours partagé (middleware ShareErrorsFromSession),
+        // mais seulement pour une route qui matche — une 404 sur une URL qui ne
+        // correspond à aucune route ne passe jamais par ce middleware, et ce
+        // partial est inclus sur TOUTES les pages boutique via layouts/shop.
+        $errors ??= new \Illuminate\Support\ViewErrorBag();
+    @endphp
     <x-modal name="customer-login" :show="$errors->has('email')" focusable>
         <div style="padding: var(--shop-space-2xl);">
             <p class="shop-eyebrow" style="margin-bottom: var(--shop-space-xs);">Bienvenue</p>

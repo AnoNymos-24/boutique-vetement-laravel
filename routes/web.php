@@ -27,7 +27,12 @@ Route::prefix('admin')->middleware('no-cache')->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        Route::resource('produits', ProductController::class)->parameters(['produits' => 'product'])->names('products');
+        // show/edit/update exclus : ProductController ne les implémente pas
+        // (pas de fiche produit ni de formulaire de modification côté admin
+        // pour l'instant) — sans ce ->except(), ces routes existaient quand
+        // même et plantaient en 500 ("Call to undefined method") au lieu de
+        // renvoyer une 404 propre.
+        Route::resource('produits', ProductController::class)->except(['show', 'edit', 'update'])->parameters(['produits' => 'product'])->names('products');
         Route::delete('/produits-bulk', [ProductController::class, 'bulkDestroy'])->name('products.bulk-destroy');
 
         Route::get('/stock', [StockController::class, 'index'])->name('stock');

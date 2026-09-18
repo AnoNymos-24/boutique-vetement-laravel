@@ -59,10 +59,10 @@
                         <x-dropdown align="right">
                             <x-slot name="trigger">
                                 <button type="button" class="user-menu-trigger">
-                                    <div class="avatar">{{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}</div>
+                                    <div class="avatar">{{ strtoupper(substr(auth()->user()?->name ?? 'U', 0, 1)) }}</div>
                                     <div class="user-menu-trigger__info">
-                                        <div class="user-menu-trigger__name">{{ auth()->user()->name }}</div>
-                                        <div class="user-menu-trigger__role">{{ auth()->user()->role === 'admin' ? 'Administrateur' : 'Vendeur' }}</div>
+                                        <div class="user-menu-trigger__name">{{ auth()->user()?->name }}</div>
+                                        <div class="user-menu-trigger__role">{{ auth()->user()?->role === 'admin' ? 'Administrateur' : 'Vendeur' }}</div>
                                     </div>
                                     <x-icon name="chevron-down" class="icon text-muted" />
                                 </button>
