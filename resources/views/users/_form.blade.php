@@ -31,7 +31,7 @@
         {{ $user ? 'Nouveau mot de passe' : 'Mot de passe' }}
         @unless ($user) <span class="required-mark">*</span> @endunless
     </x-input-label>
-    <x-text-input id="password" type="password" name="password" @required(! $user) autocomplete="new-password" />
+    <x-text-input id="password" type="password" name="password" :required="! $user" minlength="8" autocomplete="new-password" />
     <p class="form-hint">{{ $user ? 'Laisser vide pour conserver le mot de passe actuel.' : 'Minimum 8 caractères.' }}</p>
     <x-input-error :messages="$errors->get('password')" />
 </div>
