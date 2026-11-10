@@ -53,11 +53,16 @@ class AuthenticatedCustomerSessionController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
 
-        // L'email appartient soit à un compte équipe, soit à un client — jamais les
-        // deux à la fois en pratique (tables indépendantes), mais si ça arrivait,
-        // l'équipe est prioritaire pour rester déterministe.
-        if (User::where('email', $email)->exists()) {
-            return $this->attemptStaffLogin($request, $credentials, $remember, $throttleKey);
+        // L'email appartient le plus souvent soit à un compte équipe, soit à un
+        // client (tables indépendantes), mais la même personne peut avoir les
+        // deux avec des mots de passe différents (ex. l'admin a aussi testé la
+        // boutique avec sa propre adresse). L'équipe reste prioritaire quand le
+        // mot de passe correspond, mais on retente côté client avant d'abandonner
+        // si ce n'est pas le cas — sans ce repli, un compte client qui partage son
+        // e-mail avec un compte équipe devient définitivement injoignable depuis
+        // /connexion, quel que soit le mot de passe tapé.
+        if (User::where('email', $email)->exists() && Auth::guard('web')->attempt($credentials, $remember)) {
+            return $this->handleStaffLoginSuccess($request, $throttleKey);
         }
 
         if (! Auth::guard('customer')->attempt($credentials, $remember)) {
@@ -80,16 +85,8 @@ class AuthenticatedCustomerSessionController extends Controller
     /**
      * @throws ValidationException
      */
-    private function attemptStaffLogin(Request $request, array $credentials, bool $remember, string $throttleKey): RedirectResponse
+    private function handleStaffLoginSuccess(Request $request, string $throttleKey): RedirectResponse
     {
-        if (! Auth::guard('web')->attempt($credentials, $remember)) {
-            RateLimiter::hit($throttleKey);
-
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
-        }
-
         if (! Auth::guard('web')->user()->is_active) {
             Auth::guard('web')->logout();
 
