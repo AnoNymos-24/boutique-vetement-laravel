@@ -21,15 +21,20 @@ class CanonicalHostTest extends TestCase
 
         $response = $this->get('http://www.exemple.com/boutique?search=caftan');
 
-        $response->assertRedirect('https://exemple.com/boutique?search=caftan');
+        // Schéma préservé tel que vu par la requête (jamais forcé en https) :
+        // comparer/forcer le schéma créait une boucle de redirection infinie
+        // derrière un proxy qui termine le HTTPS en amont (ex. Hostinger).
+        $response->assertRedirect('http://exemple.com/boutique?search=caftan');
         $response->assertStatus(301);
     }
 
-    public function test_matching_host_is_not_redirected(): void
+    public function test_matching_host_is_not_redirected_regardless_of_scheme(): void
     {
         config(['app.url' => 'https://exemple.com']);
 
-        $response = $this->get('https://exemple.com/');
+        // http alors que APP_URL est https : ne doit PAS rediriger (c'est
+        // exactement le cas d'un proxy qui termine le HTTPS en amont).
+        $response = $this->get('http://exemple.com/');
 
         $response->assertOk();
     }

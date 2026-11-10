@@ -16,24 +16,26 @@ use Symfony\Component\HttpFoundation\Response;
  * sans message d'erreur clair — symptôme exact de "la réinitialisation ou la
  * connexion ne fonctionne pas, mais seulement pour certaines clientes".
  * On redirige donc systématiquement vers l'hôte unique défini par APP_URL.
+ *
+ * Volontairement limité à l'hôte, jamais au schéma (http/https) : derrière
+ * un proxy qui termine le HTTPS en amont (cas de nombreux hébergeurs
+ * mutualisés, dont Hostinger) sans que Laravel soit configuré pour lui faire
+ * confiance, $request->getScheme() peut rapporter "http" même pour une vraie
+ * requête https — comparer le schéma créait alors une boucle de redirection
+ * infinie (Laravel redirige vers https, l'hébergeur renvoie vers Laravel en
+ * http, etc.).
  */
 class EnsureCanonicalHost
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $appUrl = (string) config('app.url');
-        $canonicalHost = parse_url($appUrl, PHP_URL_HOST);
-        $canonicalScheme = parse_url($appUrl, PHP_URL_SCHEME) ?: $request->getScheme();
+        $canonicalHost = parse_url((string) config('app.url'), PHP_URL_HOST);
 
-        if (! $canonicalHost || $canonicalHost === 'localhost') {
+        if (! $canonicalHost || $canonicalHost === 'localhost' || $canonicalHost === $request->getHost()) {
             return $next($request);
         }
 
-        if ($canonicalHost === $request->getHost() && $canonicalScheme === $request->getScheme()) {
-            return $next($request);
-        }
-
-        $url = $canonicalScheme.'://'.$canonicalHost.$request->getRequestUri();
+        $url = $request->getScheme().'://'.$canonicalHost.$request->getRequestUri();
 
         return redirect()->to($url, 301);
     }
