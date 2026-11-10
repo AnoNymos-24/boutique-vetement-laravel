@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Banner extends Model
 {
@@ -31,7 +30,7 @@ class Banner extends Model
 
     public function imageUrl(): string
     {
-        return Storage::disk('public')->url($this->image_path);
+        return route('media.show', ['path' => $this->image_path]);
     }
 
     public function isScheduled(): bool

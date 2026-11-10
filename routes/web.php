@@ -13,6 +13,7 @@ use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Shop\MediaController;
 use App\Http\Controllers\Settings\CategoryController;
 use App\Http\Controllers\Settings\IdentityController;
 use App\Http\Controllers\Settings\MailController;
@@ -22,6 +23,12 @@ use App\Http\Controllers\Settings\TaxonomyController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+// Hors des groupes no-cache (admin et boutique) : une image a vocation à être
+// mise en cache normalement par le navigateur, contrairement aux pages. Voir
+// MediaController pour la raison (lien symbolique public/storage bloqué par
+// certains hébergeurs, ex. 403 constaté en production sur Hostinger).
+Route::get('/media/{path}', [MediaController::class, 'show'])->where('path', '.*')->name('media.show');
 
 Route::prefix('admin')->middleware('no-cache')->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {

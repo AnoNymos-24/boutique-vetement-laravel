@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class StoreSetting extends Model
 {
@@ -169,7 +168,7 @@ class StoreSetting extends Model
 
     public function logoUrl(): ?string
     {
-        return $this->logo_path ? Storage::disk('public')->url($this->logo_path) : null;
+        return $this->logo_path ? route('media.show', ['path' => $this->logo_path]) : null;
     }
 
     public function socialLinks(): array
