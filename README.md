@@ -71,8 +71,9 @@ php artisan view:cache
 **Dans `.env` de production**, en plus des identifiants de base de données réels :
 
 - `APP_ENV=production`, `APP_DEBUG=false` — une page d'erreur en debug expose la stack trace (chemins serveur, requêtes SQL) à n'importe quel visiteur.
-- `APP_URL` doit être l'URL réelle du site (`https://...`), exactement — une valeur incorrecte casse les liens absolus (images, e-mails transactionnels, redirections après paiement).
+- `APP_URL` doit être l'URL réelle du site (`https://...`), exactement — une valeur incorrecte casse les liens absolus (images, e-mails transactionnels, redirections après paiement) **et** les URL des images produits (générées via `Storage::disk('public')->url()`, qui se base sur `APP_URL`).
 - `SESSION_SECURE_COOKIE=true` une fois le site servi en HTTPS, pour que le cookie de session ne soit jamais transmis en clair.
+- Le site redirige automatiquement tout visiteur vers l'hôte/schéma exact défini par `APP_URL` (`App\Http\Middleware\EnsureCanonicalHost`) — si le domaine répond à la fois en `exemple.com` et `www.exemple.com`, sans ça chaque variante aurait son propre cookie de session, et une cliente pouvait réinitialiser son mot de passe sur l'une et se retrouver déconnectée sur l'autre sans message d'erreur clair.
 - Les identifiants e-mail SMTP et les numéros Wave/Orange Money **ne se configurent pas dans `.env`** : ils se saisissent dans l'admin (Paramètres → E-mail, Paramètres → Paiement) après la première connexion.
 
 **Ne jamais lancer `php artisan migrate --seed` en production** : `DatabaseSeeder` crée des données de démonstration (comptes `admin@boutique.test` / `vendeuse@boutique.test` avec le mot de passe codé en dur `password`, ~48 produits factices, ~27 commandes factices). `migrate --force` seul ne l'exécute pas.
@@ -92,6 +93,11 @@ php artisan app:create-admin --name="Nom complet" --email="admin@exemple.com" --
 ```
 
 **Avant d'ouvrir la boutique au public**, compléter dans l'admin : Paramètres → Identité (nom, logo), Paramètres → E-mail (SMTP réel), Paramètres → Paiement (numéros Wave/Orange Money, activation du paiement à la livraison) et Paramètres → Conditions générales (texte juridique adapté à la boutique).
+
+**Si les images produits ne s'affichent pas après le déploiement (erreur 403 sur `/storage/...`)**, dans l'ordre :
+1. `ls -la public/storage` sur le serveur — doit être un **lien symbolique** valide vers `storage/app/public`, pas un dossier vide. Certains hébergements mutualisés bloquent par défaut le suivi des liens symboliques par Apache, ce qui renvoie 403 même si le fichier existe réellement sur le disque — `public/.htaccess` force désormais `Options +FollowSymLinks` pour éviter ça.
+2. Si le lien est absent ou cassé : supprimer `public/storage` s'il existe déjà comme dossier vide, puis relancer `php artisan storage:link`.
+3. Vérifier que `APP_URL` correspond exactement au domaine réel (voir ci-dessus) — sinon les URL générées pointent vers le mauvais hôte même si le fichier existe bien sur le disque.
 
 Vérifier aussi que `storage/` et `bootstrap/cache/` sont accessibles en écriture par le serveur web.
 

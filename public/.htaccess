@@ -1,3 +1,10 @@
+# public/storage est un lien symbolique (php artisan storage:link) vers
+# storage/app/public. Sur certains hébergements mutualisés, Apache refuse de
+# suivre les liens symboliques par défaut et renvoie 403 Forbidden sur toutes
+# les images produits même si le fichier existe réellement sur le disque —
+# cette directive l'autorise explicitement pour tout le dossier public/.
+Options +FollowSymLinks
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes

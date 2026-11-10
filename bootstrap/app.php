@@ -11,6 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Avant toute autre chose (donc avant que la session ne démarre et
+        // que son cookie ne soit scellé sur l'hôte de la requête) : impose
+        // l'hôte unique défini par APP_URL. Voir EnsureCanonicalHost pour le
+        // bug précis que ça évite (www vs sans www = deux sessions distinctes).
+        $middleware->prepend(\App\Http\Middleware\EnsureCanonicalHost::class);
+
         // Un seul formulaire de connexion pour tout le monde (équipe et clients) — voir
         // Shop\Auth\AuthenticatedCustomerSessionController::store(), qui détecte le type
         // de compte et redirige vers /admin ou /mon-compte en conséquence.
